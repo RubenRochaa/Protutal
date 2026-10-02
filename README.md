@@ -24,12 +24,12 @@ Quando as etapas do Notion forem aprovadas pelo professor, as versões finais vi
 | `design/` | Interface (UI/UX) | Esboços das telas, wireframes e links do Figma. |
 | `src/` | Código-Fonte | O código real da aplicação (Backend e Frontend). |
 
-## 👥 A Equipe CosNexus
+## 👥 A Equipe Protutal
 Estamos empolgados em desenvolver esta solução! Conheça os integrantes do grupo:
 
 * 👤 **Arthur Souza Soares** - [@ArthurSouzaS](https://github.com/ArthurSouzaS)
 * 👤 **Cesar Castro Rodrigues** - [@CesarCastroR](https://github.com/CesarCastroR)
-* 👤 **Luisa Santos Carvalho** - [@luisasantoscarvalho1](https://github.com/luisasantoscarvalho1)
+* 👤 **Luisa Santos Carvalho** - [@luisasantoscarvalho](https://github.com/luisasantoscarvalho)
 * 👤 **Ruben Rocha Barbosa** - [@RubenRochaa](https://github.com/RubenRochaa)
 
 Equipe Protutal - 2026
