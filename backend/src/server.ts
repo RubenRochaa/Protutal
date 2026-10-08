@@ -6,6 +6,7 @@ import path from 'path'
 
 import { router } from './routes'
 import fileUpload from 'express-fileupload';
+import { AppError } from './errors/AppError';
 
 dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
@@ -24,6 +25,13 @@ app.use(
 )
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+    if (err instanceof AppError) {
+        // erro lançado pela aplicação com status HTTP definido (ex.: 400, 409)
+        return res.status(err.statusCode).json({
+            error: err.message
+        })
+    }
+
     if (err instanceof Error) {
         // se for uma instância de Error, então é um erro conhecido
         return res.status(400).json({
