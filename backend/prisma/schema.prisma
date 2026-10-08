@@ -14,4 +14,276 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// criar uma migration: yarn prisma migrate dev
+// criar uma migration: npx prisma migrate dev
+
+model Professor {
+  id_professor     Int     @id @default(autoincrement())
+  nome             String  @db.VarChar(150)
+  email            String  @unique @db.VarChar(255)
+  senha            String  @db.VarChar(255)
+  email_confirmado Boolean @default(false)
+
+  salas      Sala[]
+  pedidos    Pedido_tutoria[]
+  avisos     Aviso[]
+  avaliacoes Avaliacao_tutor[]
+
+  @@map("professor")
+}
+
+model Aluno {
+  id_aluno         Int     @id @default(autoincrement())
+  nome             String  @db.VarChar(150)
+  email            String  @unique @db.VarChar(255)
+  senha            String  @db.VarChar(255)
+  email_confirmado Boolean @default(false)
+
+  matriculas Matricula[]
+  pedidos    Pedido_tutoria[]
+  tutor      Tutor?
+  tutorias   Tutoria[]
+  respostas  Resposta[]
+  notas      Nota[]
+  mensagens  Mensagem[]
+
+  @@map("aluno")
+}
+
+model Sala {
+  id_sala      Int    @id @default(autoincrement())
+  nome         String @db.VarChar(100)
+  ano_letivo   Int    @db.SmallInt
+  id_professor Int
+
+  professor   Professor    @relation(fields: [id_professor], references: [id_professor])
+  matriculas  Matricula[]
+  tutor_salas Tutor_sala[]
+  conteudos   Conteudo[]
+  avisos      Aviso[]
+
+  @@map("sala")
+}
+
+model Matricula {
+  id_matricula Int @id @default(autoincrement())
+  id_aluno     Int
+  id_sala      Int
+
+  aluno Aluno @relation(fields: [id_aluno], references: [id_aluno])
+  sala  Sala  @relation(fields: [id_sala], references: [id_sala])
+
+  @@map("matricula")
+}
+
+model Pedido_tutoria {
+  id_pedido        Int       @id @default(autoincrement())
+  id_aluno         Int
+  status           String    @default("pendente") @db.VarChar(10)
+  data_solicitacao DateTime  @default(now()) @db.Timestamp
+  data_decisao     DateTime? @db.Timestamp
+  id_professor     Int?
+
+  aluno     Aluno      @relation(fields: [id_aluno], references: [id_aluno])
+  professor Professor? @relation(fields: [id_professor], references: [id_professor])
+  tutor     Tutor?
+
+  @@map("pedido_tutoria")
+}
+
+model Tutor {
+  id_tutor  Int @id @default(autoincrement())
+  id_aluno  Int @unique
+  id_pedido Int @unique
+
+  aluno       Aluno          @relation(fields: [id_aluno], references: [id_aluno])
+  pedido      Pedido_tutoria @relation(fields: [id_pedido], references: [id_pedido])
+  tutor_salas Tutor_sala[]
+
+  @@map("tutor")
+}
+
+model Tutor_sala {
+  id_tutor_sala   Int       @id @default(autoincrement())
+  id_tutor        Int
+  id_sala         Int
+  data_definicao  DateTime  @default(now()) @db.Timestamp
+  pode_criar_ativ Boolean   @default(false)
+  data_revogacao  DateTime? @db.Timestamp
+
+  tutor      Tutor             @relation(fields: [id_tutor], references: [id_tutor])
+  sala       Sala              @relation(fields: [id_sala], references: [id_sala])
+  tutorias   Tutoria[]
+  atividades Atividade[]
+  materiais  Material[]
+  avaliacoes Avaliacao_tutor[]
+
+  @@map("tutor_sala")
+}
+
+model Tutoria {
+  id_tutoria        Int       @id @default(autoincrement())
+  id_tutor_sala     Int
+  id_aluno          Int
+  meta_aprendizagem String?   @db.Text
+  status            String    @default("ativa") @db.VarChar(10)
+  data_inicio       DateTime  @default(now()) @db.Timestamp
+  data_fim          DateTime? @db.Timestamp
+
+  tutor_sala    Tutor_sala               @relation(fields: [id_tutor_sala], references: [id_tutor_sala])
+  aluno         Aluno                    @relation(fields: [id_aluno], references: [id_aluno])
+  destinatarios Atividade_destinatario[]
+  feedbacks     Feedback[]
+  mensagens     Mensagem[]
+
+  @@map("tutoria")
+}
+
+model Conteudo {
+  id_conteudo Int    @id @default(autoincrement())
+  id_sala     Int
+  nome        String @db.VarChar(100)
+
+  sala       Sala        @relation(fields: [id_sala], references: [id_sala])
+  atividades Atividade[]
+
+  @@map("conteudo")
+}
+
+model Atividade {
+  id_atividade  Int      @id @default(autoincrement())
+  id_tutor_sala Int
+  id_conteudo   Int
+  titulo        String   @db.VarChar(150)
+  descricao     String?  @db.Text
+  tipo          String?  @db.VarChar(50)
+  data_entrega  DateTime @db.Timestamp
+
+  tutor_sala    Tutor_sala               @relation(fields: [id_tutor_sala], references: [id_tutor_sala])
+  conteudo      Conteudo                 @relation(fields: [id_conteudo], references: [id_conteudo])
+  destinatarios Atividade_destinatario[]
+  respostas     Resposta[]
+  notas         Nota[]
+
+  @@map("atividade")
+}
+
+model Atividade_destinatario {
+  id_att_destinatario Int @id @default(autoincrement())
+  id_atividade        Int
+  id_tutoria          Int
+
+  atividade Atividade @relation(fields: [id_atividade], references: [id_atividade])
+  tutoria   Tutoria   @relation(fields: [id_tutoria], references: [id_tutoria])
+
+  @@map("atividade_destinatario")
+}
+
+model Resposta {
+  id_resposta   Int      @id @default(autoincrement())
+  id_atividade  Int
+  id_aluno      Int
+  texto         String?  @db.Text
+  conteudo_file String?  @db.VarChar(500)
+  data_envio    DateTime @default(now()) @db.Timestamp
+
+  atividade Atividade @relation(fields: [id_atividade], references: [id_atividade])
+  aluno     Aluno     @relation(fields: [id_aluno], references: [id_aluno])
+
+  @@map("resposta")
+}
+
+model Nota {
+  id_nota      Int     @id @default(autoincrement())
+  id_aluno     Int
+  id_atividade Int
+  valor        Decimal @db.Decimal(4, 2)
+  comentario   String? @db.Text
+
+  aluno        Aluno              @relation(fields: [id_aluno], references: [id_aluno])
+  atividade    Atividade          @relation(fields: [id_atividade], references: [id_atividade])
+  contestacoes Contestacao_nota[]
+
+  @@map("nota")
+}
+
+model Contestacao_nota {
+  id_contestacao Int       @id @default(autoincrement())
+  id_nota        Int
+  comentario     String    @db.Text
+  status         String    @default("pendente") @db.VarChar(10)
+  data_envio     DateTime  @default(now()) @db.Timestamp
+  decisao        String?   @db.Text
+  data_resolucao DateTime? @db.Timestamp
+
+  nota Nota @relation(fields: [id_nota], references: [id_nota])
+
+  @@map("contestacao_nota")
+}
+
+model Feedback {
+  id_feedback  Int      @id @default(autoincrement())
+  id_tutoria   Int
+  etapa        Int      @db.SmallInt
+  nota         Decimal  @db.Decimal(4, 2)
+  comentario   String?  @db.Text
+  rubrica_file String?  @db.VarChar(500)
+  data         DateTime @default(now()) @db.Timestamp
+
+  tutoria Tutoria @relation(fields: [id_tutoria], references: [id_tutoria])
+
+  @@map("feedback")
+}
+
+model Mensagem {
+  id_mensagem Int      @id @default(autoincrement())
+  id_tutoria  Int
+  id_aluno    Int
+  assunto     String?  @db.VarChar(150)
+  texto       String   @db.Text
+  data_envio  DateTime @default(now()) @db.Timestamp
+
+  tutoria Tutoria @relation(fields: [id_tutoria], references: [id_tutoria])
+  aluno   Aluno   @relation(fields: [id_aluno], references: [id_aluno])
+
+  @@map("mensagem")
+}
+
+model Aviso {
+  id_aviso        Int      @id @default(autoincrement())
+  id_sala         Int
+  id_professor    Int
+  titulo          String   @db.VarChar(150)
+  conteudo        String   @db.Text
+  data_publicacao DateTime @default(now()) @db.Timestamp
+
+  sala      Sala      @relation(fields: [id_sala], references: [id_sala])
+  professor Professor @relation(fields: [id_professor], references: [id_professor])
+
+  @@map("aviso")
+}
+
+model Material {
+  id_material   Int      @id @default(autoincrement())
+  id_tutor_sala Int
+  titulo        String   @db.VarChar(150)
+  descricao     String?  @db.Text
+  arquivo       String   @db.VarChar(500)
+  data_envio    DateTime @default(now()) @db.Timestamp
+
+  tutor_sala Tutor_sala @relation(fields: [id_tutor_sala], references: [id_tutor_sala])
+
+  @@map("material")
+}
+
+model Avaliacao_tutor {
+  id_avaliacao  Int      @id @default(autoincrement())
+  id_tutor_sala Int
+  id_professor  Int
+  comentario    String   @db.Text
+  data          DateTime @default(now()) @db.Timestamp
+
+  tutor_sala Tutor_sala @relation(fields: [id_tutor_sala], references: [id_tutor_sala])
+  professor  Professor  @relation(fields: [id_professor], references: [id_professor])
+
+  @@map("avaliacao_tutor")
+}
