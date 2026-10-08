@@ -13,6 +13,17 @@ Toda a documentação viva, requisitos, regras de negócio e o nosso log diário
 
 ---
 
+## 👨‍💻 Stack Tecnológica
+
+| Camada | Tecnologia | Responsabilidade |
+| :--- | :--- | :--- |
+| `Backend` | Node.js, Express e TypeScript  | API, regras de negócio e autenticação |
+| `Frontend` | Next.js, React e TypeScript | Painel administrativo e interface web |
+| `Aplicativo mobile` | React Native, Expo e TypeScript | Operação e acompanhamento pelo celular |
+| `Banco de dados` | PostgreSQL e Prisma ORM | Persistência e relacionamento dos dados |
+
+---
+
 ## 📂 Guia de Pastas deste Repositório
 
 Quando as etapas do Notion forem aprovadas pelo professor, as versões finais virão para cá:
