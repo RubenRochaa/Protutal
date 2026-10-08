@@ -25,7 +25,7 @@
     // Stricter Typechecking Options
     "noUncheckedIndexedAccess": true,
     "exactOptionalPropertyTypes": false,
-    // mudei isso para false, pois estava dando erro, isso aconteceu após eu mudar o "strict" para false, pois estava dando erro no token.
+    // mudei isso para false, pois estava dando erro, isso aconteceu após eu mudar o "strict" para false, pois estava dando erro no token, isso aconteceu na página 433.
 
     // Style Options
     // "noImplicitReturns": true,

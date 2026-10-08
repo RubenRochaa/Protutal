@@ -13,3 +13,5 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+// criar uma migration: yarn prisma migrate dev

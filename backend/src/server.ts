@@ -1,4 +1,4 @@
-import "dotenv/config";
+import dotenv from "dotenv";
 import express, { Request, Response, NextFunction } from 'express'
 import 'express-async-errors'
 import cors from 'cors'
@@ -6,6 +6,8 @@ import path from 'path'
 
 import { router } from './routes'
 import fileUpload from 'express-fileupload';
+
+dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
 const app = express();
 app.use(express.json());
@@ -24,12 +26,12 @@ app.use(
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     if (err instanceof Error) {
         // se for uma instância de Error, então é um erro conhecido
-        res.status(400).json({
+        return res.status(400).json({
             error: err.message
         })
     }
 
-    res.status(500).json({
+    return res.status(500).json({
         status: 'error',
         message: 'Internal server error'
     })
