@@ -1,0 +1,49 @@
+import dotenv from "dotenv";
+import express, { Request, Response, NextFunction } from 'express'
+import 'express-async-errors'
+import cors from 'cors'
+import path from 'path'
+
+import { router } from './routes'
+import fileUpload from 'express-fileupload';
+import { AppError } from './errors/AppError';
+
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
+
+const app = express();
+app.use(express.json());
+app.use(cors());
+app.use(fileUpload({
+    limits: { fileSize: 50 * 1024 * 1024 } // Enviar imagem de no máximo 50mb
+}))
+app.use(router);
+
+// Acessar url da Imagem ex: localhost:3333/files/nome-imagem.png
+app.use(
+    '/files',
+    express.static(path.resolve(__dirname, '..', 'tmp'))
+)
+
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+    if (err instanceof AppError) {
+        // erro lançado pela aplicação com status HTTP definido (ex.: 400, 409)
+        return res.status(err.statusCode).json({
+            error: err.message
+        })
+    }
+
+    if (err instanceof Error) {
+        // se for uma instância de Error, então é um erro conhecido
+        return res.status(400).json({
+            error: err.message
+        })
+    }
+
+    return res.status(500).json({
+        status: 'error',
+        message: 'Internal server error'
+    })
+    
+})
+
+app.listen(3333, () => console.log('Servidor online!!!!!!!!!'))
