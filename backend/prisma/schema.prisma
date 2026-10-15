@@ -84,7 +84,7 @@ model Sala {
   professor   Professor        @relation(fields: [id_professor], references: [id_professor])
   matriculas  Matricula[]
   tutor_salas Tutor_sala[]
-  conteudos   Conteudo[]
+  conteudos   Sala_conteudo[]
   avisos      Aviso[]
   pedidos     Pedido_tutoria[]
 
@@ -170,13 +170,24 @@ model Tutoria {
 
 model Conteudo {
   id_conteudo Int    @id @default(autoincrement())
-  id_sala     Int
-  nome        String @db.VarChar(100)
+  nome        String @unique @db.VarChar(100)
 
-  sala       Sala        @relation(fields: [id_sala], references: [id_sala])
+  salas      Sala_conteudo[]
   atividades Atividade[]
 
   @@map("conteudo")
+}
+
+model Sala_conteudo {
+  id_sala_conteudo Int @id @default(autoincrement())
+  id_sala          Int
+  id_conteudo      Int
+
+  sala     Sala     @relation(fields: [id_sala], references: [id_sala])
+  conteudo Conteudo @relation(fields: [id_conteudo], references: [id_conteudo])
+
+  @@unique([id_sala, id_conteudo])
+  @@map("sala_conteudo")
 }
 
 model Atividade {

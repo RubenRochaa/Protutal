@@ -11,6 +11,7 @@ import { ListSalaController } from './controllers/professor/ListSalaController';
 import { ListAlunoController } from './controllers/professor/ListAlunoController';
 import { CreateMatriculaController } from './controllers/professor/CreateMatriculaController';
 import { ListAlunosSalaController } from './controllers/professor/ListAlunosSalaController';
+import { CreateConteudoController } from './controllers/professor/CreateConteudoController';
 
 import { isAuthenticated } from './middlewares/isAuthenticated';
 import { isProfessor } from './middlewares/isProfessor';
@@ -36,5 +37,8 @@ router.get('/alunos', isAuthenticated, isProfessor, new ListAlunoController().ha
 // -- ROTAS MATRÍCULA (somente professor autenticado) --
 router.post('/salas/:id/matriculas', isAuthenticated, isProfessor, new CreateMatriculaController().handle);
 router.get('/salas/:id/alunos', isAuthenticated, isProfessor, new ListAlunosSalaController().handle);
+
+// -- ROTAS CONTEÚDO (somente professor autenticado) --
+router.post('/salas/:id/conteudos', isAuthenticated, isProfessor, new CreateConteudoController().handle);
 
 export { router };
