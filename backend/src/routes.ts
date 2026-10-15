@@ -17,6 +17,8 @@ import { CreatePedidoTutoriaController } from './controllers/aluno/CreatePedidoT
 import { ListPedidosTutoriaController } from './controllers/professor/ListPedidosTutoriaController';
 import { AceitarPedidoTutoriaController } from './controllers/professor/AceitarPedidoTutoriaController';
 
+import { PermissaoAtividadesSalaController } from './controllers/professor/PermissaoAtividadesSalaController';
+
 import { isAuthenticated } from './middlewares/isAuthenticated';
 import { isProfessor } from './middlewares/isProfessor';
 import { isAluno } from './middlewares/isAluno';
@@ -52,5 +54,9 @@ router.post('/pedidos-tutoria', isAuthenticated, isAluno, new CreatePedidoTutori
 // professor lista e aceita os pedidos das próprias salas
 router.get('/pedidos-tutoria', isAuthenticated, isProfessor, new ListPedidosTutoriaController().handle);
 router.patch('/pedidos-tutoria/:id/aceitar', isAuthenticated, isProfessor, new AceitarPedidoTutoriaController().handle);
+
+// -- ROTAS PERMISSÃO DE ATIVIDADES (somente professor autenticado) --
+// concede ou revoga, para todos os tutores ativos da sala, a permissão de criar atividades
+router.patch('/salas/:id/permissao-atividades', isAuthenticated, isProfessor, new PermissaoAtividadesSalaController().handle);
 
 export { router };
