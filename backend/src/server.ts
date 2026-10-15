@@ -8,7 +8,7 @@ import { router } from './routes'
 import fileUpload from 'express-fileupload';
 import { AppError } from './errors/AppError';
 
-dotenv.config({ path: path.resolve(__dirname, '../../.env') });
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 const app = express();
 app.use(express.json());
