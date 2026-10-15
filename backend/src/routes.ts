@@ -13,8 +13,13 @@ import { CreateMatriculaController } from './controllers/professor/CreateMatricu
 import { ListAlunosSalaController } from './controllers/professor/ListAlunosSalaController';
 import { CreateConteudoController } from './controllers/professor/CreateConteudoController';
 
+import { CreatePedidoTutoriaController } from './controllers/aluno/CreatePedidoTutoriaController';
+import { ListPedidosTutoriaController } from './controllers/professor/ListPedidosTutoriaController';
+import { AceitarPedidoTutoriaController } from './controllers/professor/AceitarPedidoTutoriaController';
+
 import { isAuthenticated } from './middlewares/isAuthenticated';
 import { isProfessor } from './middlewares/isProfessor';
+import { isAluno } from './middlewares/isAluno';
 
 
 const router = Router();
@@ -40,5 +45,12 @@ router.get('/salas/:id/alunos', isAuthenticated, isProfessor, new ListAlunosSala
 
 // -- ROTAS CONTEÚDO (somente professor autenticado) --
 router.post('/salas/:id/conteudos', isAuthenticated, isProfessor, new CreateConteudoController().handle);
+
+// -- ROTAS PEDIDO DE TUTORIA --
+// aluno pede para ser tutor numa sala em que está matriculado
+router.post('/pedidos-tutoria', isAuthenticated, isAluno, new CreatePedidoTutoriaController().handle);
+// professor lista e aceita os pedidos das próprias salas
+router.get('/pedidos-tutoria', isAuthenticated, isProfessor, new ListPedidosTutoriaController().handle);
+router.patch('/pedidos-tutoria/:id/aceitar', isAuthenticated, isProfessor, new AceitarPedidoTutoriaController().handle);
 
 export { router };
