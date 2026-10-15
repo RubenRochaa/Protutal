@@ -60,17 +60,6 @@ IMPORTANTE: o banco PostgreSQL é compartilhado por todo o grupo. Um comando err
 - Senhas sempre armazenadas com hash. Nunca retorne a senha (nem o hash) em nenhuma resposta da API.
 - Nunca faça commit do arquivo `.env`. Ao criar uma variável de ambiente nova, atualize o `.env.example`.
 
-## Escopo atual (Sprint 2)
-
-Somente estas rotas. O restante (pedido de tutoria, atividades, notas, chat, dashboards) fica para sprints futuras.
-
-1. `POST /professores`: cadastro de professor com validação do domínio do e-mail
-2. `POST /alunos`: cadastro de aluno (sem gerar pedido de tutoria nesta sprint)
-3. `POST /salas`: professor cria uma sala
-4. `GET /salas`: lista as salas de um professor
-
-Nesta sprint não há login nem confirmação de e-mail por mensagem.
-
 ## Git
 
 - Estratégia de branches: main/develop/feature-x
