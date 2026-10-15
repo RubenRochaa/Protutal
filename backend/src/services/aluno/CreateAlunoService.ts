@@ -11,7 +11,13 @@ interface AlunoRequest {
 class CreateAlunoService {
     async execute({ nome, email, senha }: AlunoRequest) {
 
-        if (!nome || !email || !senha) {
+        // os três campos precisam ser texto não vazio (número, array ou objeto quebrariam
+        // o email.split mais abaixo e virariam erro 500)
+        if (
+            typeof nome !== "string" || nome.trim() === "" ||
+            typeof email !== "string" || email.trim() === "" ||
+            typeof senha !== "string" || senha === ""
+        ) {
             throw new AppError("Nome, email e senha são obrigatórios", 400);
         }
 

@@ -11,6 +11,12 @@ interface AuthAlunoRequest {
 class AuthAlunoService {
     async execute({ email, senha }: AuthAlunoRequest) {
 
+        // os dois campos precisam ser texto não vazio: sem isso o Prisma ignoraria
+        // email undefined (pegando o primeiro aluno) ou aceitaria um objeto como filtro
+        if (typeof email !== "string" || email.trim() === "" || typeof senha !== "string" || senha === "") {
+            throw new AppError("Email e senha são obrigatórios", 400);
+        }
+
         const aluno = await prismaClient.aluno.findFirst({
             where: {
                 email: email

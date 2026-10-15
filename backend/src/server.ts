@@ -24,26 +24,36 @@ app.use(
     express.static(path.resolve(__dirname, '..', 'tmp'))
 )
 
+// nenhuma rota nem arquivo estático respondeu: 404 em JSON (em vez da página HTML do Express)
+app.use((req: Request, res: Response) => {
+    res.status(404).json({
+        error: 'Rota não encontrada'
+    })
+})
+
+// handler global de erros: precisa ter os 4 parâmetros para o Express reconhecê-lo
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     if (err instanceof AppError) {
-        // erro lançado pela aplicação com status HTTP definido (ex.: 400, 409)
+        // erro lançado pela aplicação com status HTTP definido (ex.: 400, 401, 404, 409)
         return res.status(err.statusCode).json({
             error: err.message
         })
     }
 
-    if (err instanceof Error) {
-        // se for uma instância de Error, então é um erro conhecido
+    // corpo com JSON mal formado: o express.json() lança SyntaxError com a propriedade "body"
+    if (err instanceof SyntaxError && 'body' in err) {
         return res.status(400).json({
-            error: err.message
+            error: 'JSON inválido no corpo da requisição'
         })
     }
 
+    // erro inesperado (ex.: falha no banco): loga no console para o grupo investigar
+    // e responde mensagem genérica, sem vazar detalhes internos para o cliente
+    console.error(err)
+
     return res.status(500).json({
-        status: 'error',
-        message: 'Internal server error'
+        error: 'Erro interno do servidor'
     })
-    
 })
 
 app.listen(3333, () => console.log('Servidor online!!!!!!!!!'))
