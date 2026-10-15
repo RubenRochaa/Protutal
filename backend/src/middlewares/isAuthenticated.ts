@@ -3,10 +3,11 @@ import { verify } from "jsonwebtoken"
 
 interface Payload {
     sub: string;
+    email: string;
 }
 
 export function isAuthenticated(
-    req: Request, 
+    req: Request,
     res: Response,
     next: NextFunction
 ){
@@ -15,24 +16,34 @@ export function isAuthenticated(
     const authToken = req.headers.authorization;
 
     if(!authToken) {
-        res.status(401).end();
+        // o return interrompe a função aqui; sem ele o código seguia e quebrava no split
+        res.status(401).json({ error: "Token não informado" });
+        return;
     }
 
+    // formato esperado do header: "Bearer <token>"
     const [, token] = authToken.split(" ")
+
+    if(!token) {
+        res.status(401).json({ error: "Token mal formatado" });
+        return;
+    }
 
     try{
         // validar o token
-        const { sub } = verify(
+        const { sub, email } = verify(
             token,
             process.env.JWT_SECRET
         ) as Payload;
 
-        // recuperar o id do token e colocar dentro de uma variável user_id dentro do Request
+        // recuperar o id e o email do token e colocar dentro do Request
         req.user_id = sub;
+        req.user_email = email;
 
         next();
 
     } catch(err) {
-        res.status(401).end();
+        res.status(401).json({ error: "Token inválido" });
+        return;
     }
 }

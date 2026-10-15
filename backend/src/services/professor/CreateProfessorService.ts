@@ -22,7 +22,7 @@ class CreateProfessorService {
         }
 
         // Domínios aceitos vêm da variável de ambiente, separados por vírgula
-        const dominiosPermitidos = (process.env.DOMINIOS_PERMITIDOS || "")
+        const dominiosPermitidos = (process.env.DOMINIOS_PERMITIDOS_PROFESSOR || "")
             .split(",")
             .map((dominio) => dominio.trim().toLowerCase())
             .filter((dominio) => dominio !== "");

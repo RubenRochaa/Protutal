@@ -22,7 +22,7 @@ class CreateAlunoService {
         }
 
         // Domínios aceitos vêm da variável de ambiente, separados por vírgula
-        const dominiosPermitidos = (process.env.DOMINIOS_PERMITIDOS || "")
+        const dominiosPermitidos = (process.env.DOMINIOS_PERMITIDOS_ALUNO || "")
             .split(",")
             .map((dominio) => dominio.trim().toLowerCase())
             .filter((dominio) => dominio !== "");
