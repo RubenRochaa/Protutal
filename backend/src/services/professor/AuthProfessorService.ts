@@ -11,6 +11,12 @@ interface AuthProfessorRequest {
 class AuthProfessorService {
     async execute({ email, senha }: AuthProfessorRequest) {
 
+        // os dois campos precisam ser texto não vazio: sem isso o Prisma ignoraria
+        // email undefined (pegando o primeiro professor) ou aceitaria um objeto como filtro
+        if (typeof email !== "string" || email.trim() === "" || typeof senha !== "string" || senha === "") {
+            throw new AppError("Email e senha são obrigatórios", 400);
+        }
+
         const professor = await prismaClient.professor.findFirst({
             where: {
                 email: email
