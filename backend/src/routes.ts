@@ -11,13 +11,19 @@ import { ListSalaController } from './controllers/professor/ListSalaController';
 import { ListAlunoController } from './controllers/professor/ListAlunoController';
 import { CreateMatriculaController } from './controllers/professor/CreateMatriculaController';
 import { ListAlunosSalaController } from './controllers/professor/ListAlunosSalaController';
+import { ListTutoresSalaController } from './controllers/professor/ListTutoresSalaController';
 import { CreateConteudoController } from './controllers/professor/CreateConteudoController';
 
 import { CreatePedidoTutoriaController } from './controllers/aluno/CreatePedidoTutoriaController';
 import { ListPedidosTutoriaController } from './controllers/professor/ListPedidosTutoriaController';
 import { AceitarPedidoTutoriaController } from './controllers/professor/AceitarPedidoTutoriaController';
+import { RecusarPedidoTutoriaController } from './controllers/professor/RecusarPedidoTutoriaController';
 
 import { PermissaoAtividadesSalaController } from './controllers/professor/PermissaoAtividadesSalaController';
+
+import { CreateTutoriaController } from './controllers/professor/CreateTutoriaController';
+
+import { CreateAtividadeController } from './controllers/aluno/CreateAtividadeController';
 
 import { isAuthenticated } from './middlewares/isAuthenticated';
 import { isProfessor } from './middlewares/isProfessor';
@@ -44,6 +50,7 @@ router.get('/alunos', isAuthenticated, isProfessor, new ListAlunoController().ha
 // -- ROTAS MATRÍCULA (somente professor autenticado) --
 router.post('/salas/:id/matriculas', isAuthenticated, isProfessor, new CreateMatriculaController().handle);
 router.get('/salas/:id/alunos', isAuthenticated, isProfessor, new ListAlunosSalaController().handle);
+router.get('/salas/:id/tutores', isAuthenticated, isProfessor, new ListTutoresSalaController().handle);
 
 // -- ROTAS CONTEÚDO (somente professor autenticado) --
 router.post('/salas/:id/conteudos', isAuthenticated, isProfessor, new CreateConteudoController().handle);
@@ -51,12 +58,21 @@ router.post('/salas/:id/conteudos', isAuthenticated, isProfessor, new CreateCont
 // -- ROTAS PEDIDO DE TUTORIA --
 // aluno pede para ser tutor numa sala em que está matriculado
 router.post('/pedidos-tutoria', isAuthenticated, isAluno, new CreatePedidoTutoriaController().handle);
-// professor lista e aceita os pedidos das próprias salas
+// professor lista, aceita e recusa os pedidos das próprias salas
 router.get('/pedidos-tutoria', isAuthenticated, isProfessor, new ListPedidosTutoriaController().handle);
 router.patch('/pedidos-tutoria/:id/aceitar', isAuthenticated, isProfessor, new AceitarPedidoTutoriaController().handle);
+router.patch('/pedidos-tutoria/:id/recusar', isAuthenticated, isProfessor, new RecusarPedidoTutoriaController().handle);
 
 // -- ROTAS PERMISSÃO DE ATIVIDADES (somente professor autenticado) --
 // concede ou revoga, para todos os tutores ativos da sala, a permissão de criar atividades
 router.patch('/salas/:id/permissao-atividades', isAuthenticated, isProfessor, new PermissaoAtividadesSalaController().handle);
+
+// -- ROTAS TUTORIA (somente professor autenticado) --
+// liga um tutor ativo da sala (Tutor_sala) a um aluno matriculado na mesma sala
+router.post('/tutorias', isAuthenticated, isProfessor, new CreateTutoriaController().handle);
+
+// -- ROTAS ATIVIDADE (somente aluno autenticado que seja tutor da tutoria) --
+// o tutor cria uma atividade para o aluno que ele tutora (destinatário pela tutoria)
+router.post('/atividades', isAuthenticated, isAluno, new CreateAtividadeController().handle);
 
 export { router };
