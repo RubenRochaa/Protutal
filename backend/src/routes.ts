@@ -24,6 +24,7 @@ import { PermissaoAtividadesSalaController } from './controllers/professor/Permi
 import { CreateTutoriaController } from './controllers/professor/CreateTutoriaController';
 
 import { CreateAtividadeController } from './controllers/aluno/CreateAtividadeController';
+import { CreateRespostaController } from './controllers/aluno/CreateRespostaController';
 
 import { isAuthenticated } from './middlewares/isAuthenticated';
 import { isProfessor } from './middlewares/isProfessor';
@@ -74,5 +75,9 @@ router.post('/tutorias', isAuthenticated, isProfessor, new CreateTutoriaControll
 // -- ROTAS ATIVIDADE (somente aluno autenticado que seja tutor da tutoria) --
 // o tutor cria uma atividade para o aluno que ele tutora (destinatário pela tutoria)
 router.post('/atividades', isAuthenticated, isAluno, new CreateAtividadeController().handle);
+
+// -- ROTAS RESPOSTA (somente aluno autenticado que seja destinatário da atividade) --
+// o aluno tutorado envia a resposta (arquivo obrigatório + texto opcional) via multipart/form-data
+router.post('/atividades/:id/respostas', isAuthenticated, isAluno, new CreateRespostaController().handle);
 
 export { router };
