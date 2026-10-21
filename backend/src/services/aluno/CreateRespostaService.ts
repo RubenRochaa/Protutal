@@ -5,12 +5,6 @@ import { UploadedFile } from "express-fileupload";
 
 import { v2 as cloudinary, UploadApiResponse } from "cloudinary";
 
-cloudinary.config({
-    cloud_name: process.env.CLOUDINARY_NAME,
-    api_key: process.env.CLOUDINARY_KEY,
-    api_secret: process.env.CLOUDINARY_SECRET,
-});
-
 interface RespostaRequest {
     id_aluno: number;
     id_atividade: number;
@@ -99,6 +93,15 @@ class CreateRespostaService {
         if (respostaExistente) {
             throw new AppError("Você já respondeu esta atividade", 409);
         }
+
+        // configura aqui (e não no topo do arquivo) porque o .env só é
+        // carregado pelo server.ts depois que todos os imports já executaram
+        cloudinary.config({
+            cloud_name: process.env.CLOUDINARY_NAME,
+            api_key: process.env.CLOUDINARY_KEY,
+            api_secret: process.env.CLOUDINARY_SECRET,
+        });
+
 
         // o upload só acontece depois de todas as validações,
         // para não deixar arquivo "órfão" no Cloudinary quando a requisição é recusada.
