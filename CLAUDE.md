@@ -71,3 +71,18 @@ IMPORTANTE: o banco PostgreSQL é compartilhado por todo o grupo. Um comando err
 - Para professor: xxxxxxx.xxx@portalsesi.org.br
 - Para aluno: xxxxxxxx.xxx@portalsesisp.org.br
 - Nenhum outro domínio é aceito. emitir toast de erro.
+
+## Histórico de alterações no schema
+
+### 2026-10-21 — migration `20261021142111_desempenho_faixa_etapa`
+- Novo enum `TipoAtividade`: aula_invertida, prova_alternativa, prova_dissertativa, projeto,
+  interpretacao_imagens, exercicios_livro, interpretacao_mapas, analise_graficos, mapa_mental,
+  pesquisa, estudo_caso, trabalho_campo, teatro, atividade_extracurricular, autoavaliacao.
+- `Atividade.tipo`: deixou de ser texto livre opcional (`VARCHAR(50)`) e passou a ser `TipoAtividade` obrigatório.
+- `Atividade.etapa`: nova coluna obrigatória (`SMALLINT`, 1 a 3, CHECK `atividade_etapa_check`).
+- Nova tabela `faixa_desempenho` (model `Faixa_desempenho`): tabela de parâmetros que classifica
+  a média do aluno por conteúdo. Colunas `id_faixa`, `nome` (único), `nota_min`, `nota_max`
+  (0 a 10; CHECK `nota_min <= nota_max`). Sem relacionamentos.
+- A migration recria a coluna `tipo` e adiciona `etapa` sem default: só aplica com a tabela `atividade` vazia.
+- Pendências: `CreateAtividadeService` (rota `POST /atividades`) e `prisma/seed.ts` ainda não
+  enviam `tipo` como enum nem `etapa`.

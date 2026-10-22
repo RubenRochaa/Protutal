@@ -3,7 +3,7 @@ import { CreateAtividadeService } from "../../services/aluno/CreateAtividadeServ
 
 class CreateAtividadeController {
     async handle(req: Request, res: Response) {
-        const { titulo, descricao, prazo, tipo, id_conteudo, id_tutoria } = req.body;
+        const { titulo, descricao, prazo, tipo, etapa, id_conteudo, id_tutoria } = req.body;
 
         // o aluno (tutor) vem do token (preenchido pelo isAuthenticated),
         // nunca do corpo da requisição
@@ -18,6 +18,7 @@ class CreateAtividadeController {
             titulo,
             descricao,
             tipo,
+            etapa,
             prazo
         });
 

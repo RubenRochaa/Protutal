@@ -35,6 +35,24 @@ enum StatusContestacao {
   recusada
 }
 
+enum TipoAtividade {
+  aula_invertida
+  prova_alternativa
+  prova_dissertativa
+  projeto
+  interpretacao_imagens
+  exercicios_livro
+  interpretacao_mapas
+  analise_graficos
+  mapa_mental
+  pesquisa
+  estudo_caso
+  trabalho_campo
+  teatro
+  atividade_extracurricular
+  autoavaliacao
+}
+
 // ==================== MODELS ====================
 
 model Professor {
@@ -196,7 +214,8 @@ model Atividade {
   id_conteudo   Int
   titulo        String   @db.VarChar(150)
   descricao     String?  @db.Text
-  tipo          String?  @db.VarChar(50)
+  tipo          TipoAtividade
+  etapa         Int      @db.SmallInt // 1ª, 2ª ou 3ª etapa (CHECK na migration)
   data_entrega  DateTime @db.Timestamp
 
   tutor_sala    Tutor_sala               @relation(fields: [id_tutor_sala], references: [id_tutor_sala])
@@ -333,4 +352,14 @@ model Avaliacao_tutor {
   professor  Professor  @relation(fields: [id_professor], references: [id_professor])
 
   @@map("avaliacao_tutor")
+}
+
+// tabela de parâmetros: classifica a média do aluno por conteúdo.
+model Faixa_desempenho {
+  id_faixa Int     @id @default(autoincrement())
+  nome     String  @unique @db.VarChar(50)
+  nota_min Decimal @db.Decimal(4, 2) // 0 a 10 (CHECK na migration)
+  nota_max Decimal @db.Decimal(4, 2) // 0 a 10 (CHECK na migration)
+
+  @@map("faixa_desempenho")
 }
