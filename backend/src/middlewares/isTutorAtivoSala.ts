@@ -39,33 +39,68 @@ export async function isTutorAtivoSala(
 
     const id_usuario = Number(req.user_id);
 
-    // Professor e Aluno são tabelas separadas e os ids podem se repetir,
-    // então sempre conferimos o par id + email (mesmo critério do isProfessor/isAluno).
-
     // 1) professor dono da sala
+    if (await isProfessorDonoSala(sala.id_professor, id_usuario, req.user_email)) {
+        return next();
+    }
+
+    // 2) aluno que é tutor ativo desta sala
+    if (await isTutorAtivo({ id_usuario, email: req.user_email, id_sala })) {
+        return next();
+    }
+
+    throw new AppError("Você não tem permissão para acessar esta sala", 403);
+}
+
+// As duas funções abaixo também são usadas por outros middlewares
+// (ex.: isTutorCriadorOuProfessorAtividade), para a regra ficar num lugar só.
+// Professor e Aluno são tabelas separadas e os ids podem se repetir,
+// então sempre conferimos o par id + email (mesmo critério do isProfessor/isAluno).
+
+// o usuário logado é o professor cujo id é id_professor_sala (dono da sala)?
+export async function isProfessorDonoSala(
+    id_professor_sala: number,
+    id_usuario: number,
+    email: string
+) {
     const professor = await prismaClient.professor.findFirst({
         where: {
             id_professor: id_usuario,
-            email: req.user_email
+            email: email
         },
         select: {
             id_professor: true
         }
     });
 
-    if (professor && sala.id_professor === professor.id_professor) {
-        return next();
+    return !!professor && professor.id_professor === id_professor_sala;
+}
+
+interface TutorAtivoRequest {
+    id_usuario: number;
+    email: string;
+    id_sala?: number;       // tutor ativo de qualquer vínculo nesta sala
+    id_tutor_sala?: number; // tutor ativo deste vínculo específico
+}
+
+// o usuário logado é um aluno com vínculo de tutor ativo (data_revogacao nula = não revogado)?
+export async function isTutorAtivo({ id_usuario, email, id_sala, id_tutor_sala }: TutorAtivoRequest) {
+
+    // sem nenhum dos dois filtros o Prisma ignoraria os campos undefined
+    // e aceitaria qualquer vínculo ativo do aluno
+    if (id_sala === undefined && id_tutor_sala === undefined) {
+        return false;
     }
 
-    // 2) aluno que é tutor ativo desta sala (data_revogacao nula = vínculo não revogado)
     const tutorSala = await prismaClient.tutor_sala.findFirst({
         where: {
             id_sala: id_sala,
+            id_tutor_sala: id_tutor_sala,
             data_revogacao: null,
             tutor: {
                 aluno: {
                     id_aluno: id_usuario,
-                    email: req.user_email
+                    email: email
                 }
             }
         },
@@ -74,9 +109,5 @@ export async function isTutorAtivoSala(
         }
     });
 
-    if (tutorSala) {
-        return next();
-    }
-
-    throw new AppError("Você não tem permissão para acessar esta sala", 403);
+    return !!tutorSala;
 }
