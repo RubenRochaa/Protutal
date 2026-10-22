@@ -26,11 +26,13 @@ import { CreateTutoriaController } from './controllers/professor/CreateTutoriaCo
 
 import { CreateAtividadeController } from './controllers/aluno/CreateAtividadeController';
 import { CreateRespostaController } from './controllers/aluno/CreateRespostaController';
+import { ListRespostasAtividadeController } from './controllers/professor/ListRespostasAtividadeController';
 
 import { isAuthenticated } from './middlewares/isAuthenticated';
 import { isProfessor } from './middlewares/isProfessor';
 import { isAluno } from './middlewares/isAluno';
 import { isTutorAtivoSala } from './middlewares/isTutorAtivoSala';
+import { isTutorCriadorOuProfessorAtividade } from './middlewares/isTutorCriadorOuProfessorAtividade';
 
 
 const router = Router();
@@ -84,5 +86,8 @@ router.post('/atividades', isAuthenticated, isAluno, new CreateAtividadeControll
 // -- ROTAS RESPOSTA (somente aluno autenticado que seja destinatário da atividade) --
 // o aluno tutorado envia a resposta (arquivo obrigatório + texto opcional) via multipart/form-data
 router.post('/atividades/:id/respostas', isAuthenticated, isAluno, new CreateRespostaController().handle);
+// listar: tutor que criou a atividade (vínculo ativo) ou professor dono da sala;
+// traz todos os destinatários, com resposta, nota e status de entrega
+router.get('/atividades/:id/respostas', isAuthenticated, isTutorCriadorOuProfessorAtividade, new ListRespostasAtividadeController().handle);
 
 export { router };
