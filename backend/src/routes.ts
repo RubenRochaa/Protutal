@@ -13,6 +13,7 @@ import { CreateMatriculaController } from './controllers/professor/CreateMatricu
 import { ListAlunosSalaController } from './controllers/professor/ListAlunosSalaController';
 import { ListTutoresSalaController } from './controllers/professor/ListTutoresSalaController';
 import { CreateConteudoController } from './controllers/professor/CreateConteudoController';
+import { ListConteudosSalaController } from './controllers/professor/ListConteudosSalaController';
 
 import { CreatePedidoTutoriaController } from './controllers/aluno/CreatePedidoTutoriaController';
 import { ListPedidosTutoriaController } from './controllers/professor/ListPedidosTutoriaController';
@@ -29,6 +30,7 @@ import { CreateRespostaController } from './controllers/aluno/CreateRespostaCont
 import { isAuthenticated } from './middlewares/isAuthenticated';
 import { isProfessor } from './middlewares/isProfessor';
 import { isAluno } from './middlewares/isAluno';
+import { isTutorAtivoSala } from './middlewares/isTutorAtivoSala';
 
 
 const router = Router();
@@ -53,8 +55,11 @@ router.post('/salas/:id/matriculas', isAuthenticated, isProfessor, new CreateMat
 router.get('/salas/:id/alunos', isAuthenticated, isProfessor, new ListAlunosSalaController().handle);
 router.get('/salas/:id/tutores', isAuthenticated, isProfessor, new ListTutoresSalaController().handle);
 
-// -- ROTAS CONTEÚDO (somente professor autenticado) --
+// -- ROTAS CONTEÚDO --
+// cadastrar: somente professor autenticado
 router.post('/salas/:id/conteudos', isAuthenticated, isProfessor, new CreateConteudoController().handle);
+// listar: professor dono da sala ou aluno que seja tutor ativo da sala
+router.get('/salas/:id/conteudos', isAuthenticated, isTutorAtivoSala, new ListConteudosSalaController().handle);
 
 // -- ROTAS PEDIDO DE TUTORIA --
 // aluno pede para ser tutor numa sala em que está matriculado
