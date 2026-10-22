@@ -1,5 +1,6 @@
 import prismaClient from "../../prisma";
 import { AppError } from "../../errors/AppError";
+import { TipoAtividade } from "../../generated/prisma";
 
 interface AtividadeRequest {
     id_aluno: number;
@@ -7,12 +8,13 @@ interface AtividadeRequest {
     id_conteudo: number;
     titulo: string;
     descricao?: string;
-    tipo?: string;
+    tipo: string;
+    etapa: number;
     prazo: string;
 }
 
 class CreateAtividadeService {
-    async execute({ id_aluno, id_tutoria, id_conteudo, titulo, descricao, tipo, prazo }: AtividadeRequest) {
+    async execute({ id_aluno, id_tutoria, id_conteudo, titulo, descricao, tipo, etapa, prazo }: AtividadeRequest) {
 
         // id_tutoria é obrigatório: identifica o aluno tutorado que vai receber a atividade
         if (id_tutoria === undefined || id_tutoria === null || !Number.isInteger(Number(id_tutoria)) || Number(id_tutoria) <= 0) {
@@ -32,17 +34,32 @@ class CreateAtividadeService {
             throw new AppError("O titulo deve ter no máximo 150 caracteres", 400);
         }
 
-        // descricao e tipo são opcionais no schema, mas se vierem precisam ser texto
+        // descricao é opcional no schema, mas se vier precisa ser texto
         if (descricao !== undefined && descricao !== null && typeof descricao !== "string") {
             throw new AppError("O campo descricao deve ser um texto", 400);
         }
 
-        if (tipo !== undefined && tipo !== null && typeof tipo !== "string") {
-            throw new AppError("O campo tipo deve ser um texto", 400);
+        // tipo é obrigatório e precisa ser um dos valores do enum TipoAtividade
+        // (a lista vem do client gerado pelo Prisma, então acompanha o schema)
+        const tiposValidos = Object.values(TipoAtividade) as string[];
+
+        if (typeof tipo !== "string" || tipo.trim() === "") {
+            throw new AppError("O campo tipo é obrigatório", 400);
         }
 
-        if (typeof tipo === "string" && tipo.trim().length > 50) {
-            throw new AppError("O tipo deve ter no máximo 50 caracteres", 400);
+        if (!tiposValidos.includes(tipo.trim())) {
+            throw new AppError(`Tipo inválido. Valores aceitos: ${tiposValidos.join(", ")}`, 400);
+        }
+
+        // etapa é obrigatória e só aceita 1, 2 ou 3 (o banco também tem um CHECK para isso)
+        if (
+            etapa === undefined ||
+            etapa === null ||
+            typeof etapa === "boolean" ||
+            !Number.isInteger(Number(etapa)) ||
+            ![1, 2, 3].includes(Number(etapa))
+        ) {
+            throw new AppError("O campo etapa é obrigatório e deve ser 1, 2 ou 3", 400);
         }
 
         // prazo é obrigatório, precisa ser uma data válida (ex.: "2026-10-30T23:59:00") e estar no futuro
@@ -142,7 +159,8 @@ class CreateAtividadeService {
                 id_conteudo: idConteudo,
                 titulo: titulo.trim(),
                 descricao: typeof descricao === "string" && descricao.trim() !== "" ? descricao.trim() : null,
-                tipo: typeof tipo === "string" && tipo.trim() !== "" ? tipo.trim() : null,
+                tipo: tipo.trim() as TipoAtividade,
+                etapa: Number(etapa),
                 data_entrega: dataEntrega,
                 destinatarios: {
                     create: {
@@ -157,6 +175,7 @@ class CreateAtividadeService {
                 titulo: true,
                 descricao: true,
                 tipo: true,
+                etapa: true,
                 data_entrega: true,
                 destinatarios: {
                     select: {
