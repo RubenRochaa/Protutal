@@ -39,6 +39,7 @@ import { CreateRespostaController } from './controllers/aluno/CreateRespostaCont
 import { ListRespostasAtividadeController } from './controllers/professor/ListRespostasAtividadeController';
 import { ListAtividadesAlunoController } from './controllers/aluno/ListAtividadesAlunoController';
 import { CreateNotaController } from './controllers/aluno/CreateNotaController';
+import { CreateContestacaoNotaController } from './controllers/aluno/CreateContestacaoNotaController';
 import { ListTutoriasTutorController } from './controllers/aluno/ListTutoriasTutorController';
 import { ListTutoriasAlunoController } from './controllers/aluno/ListTutoriasAlunoController';
 import { CreateMaterialController } from './controllers/aluno/CreateMaterialController';
@@ -150,6 +151,12 @@ router.get('/atividades/:id/respostas', isAuthenticated, isTutorCriadorOuProfess
 // a permissão é conferida no service (e não num middleware) para respeitar a ordem
 // das validações: corpo inválido (400) -> atividade inexistente (404) -> sem permissão (403)
 router.post('/atividades/:id/notas', isAuthenticated, new CreateNotaController().handle);
+
+// -- ROTAS CONTESTAÇÃO DE NOTA (somente o aluno dono da nota) --
+// o aluno contesta a nota recebida, só enquanto a tutoria estiver ativa (RN14), e uma única vez por nota.
+// a permissão é conferida no service, na ordem: id/corpo inválido (400) -> nota inexistente (404)
+// -> não é dono ou tutoria finalizada (403) -> nota já contestada (409)
+router.post('/notas/:id/contestacoes', isAuthenticated, isAluno, new CreateContestacaoNotaController().handle);
 
 // -- ROTAS DO ALUNO LOGADO (somente aluno autenticado) --
 // atenção: se um dia existir uma rota /alunos/:id, ela deve ficar DEPOIS das rotas /alunos/me/...,
