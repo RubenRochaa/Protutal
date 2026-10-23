@@ -1,0 +1,19 @@
+.form{
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.rodape{
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--gray-700);
+}
+
+.link{
+    color: var(--red-700);
+
+    &:hover{
+        text-decoration: underline;
+    }
+}
