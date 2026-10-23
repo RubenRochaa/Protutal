@@ -33,7 +33,7 @@
 ### Professor (16)
 
 * Detalhar sala: `GET /salas/:id` - (P1)
-* Listar conteúdos da sala: `GET /salas/:id/conteudos` (também usada pelo tutor, para escolher o conteúdo da atividade) - (P2)
+* Listar conteúdos da sala: `GET /salas/:id/conteudos` (também usada pelo tutor, para escolher o conteúdo da atividade) - (P2) - feito
 * Publicar aviso na sala: `POST /salas/:id/avisos` (RF10) - (P3)
 * Listar tutorias da sala: `GET /salas/:id/tutorias` (RF3) - (P4)
 * Definir meta de aprendizagem da tutoria: `PATCH /tutorias/:id/meta` (RF16) - (P5)
@@ -52,8 +52,8 @@
 ### Tutor (8)
 
 * Listar seus tutorados: `GET /tutores/me/tutorias` - (T1)
-* Listar atividades que criou: `GET /tutores/me/atividades` - (T2)
-* Lançar nota e comentário na resposta do aluno: `POST /atividades/:id/notas` (RF21; `id_aluno` no corpo) - (T3)
+* Listar atividades que criou: `GET /tutores/me/atividades` - (T2) - feito
+* Lançar nota e comentário na resposta do aluno: `POST /atividades/:id/notas` (RF21; `id_aluno` no corpo) - (T3) - feito
 * Resolver contestação de nota: `PATCH /contestacoes/:id/resolver` (RF29/UC06; mantém ou ajusta a nota) - (T4)
 * Anexar material de apoio: `POST /salas/:id/materiais` (RF25; upload no Cloudinary) - (T5)
 * Ver o próprio desempenho: `GET /tutores/me/desempenho` (RF23) - (T6)
@@ -62,7 +62,7 @@
 
 ### Aluno (10)
 
-* Listar atividades destinadas a ele: `GET /alunos/me/atividades` (RF30) - (A1)
+* Listar atividades destinadas a ele: `GET /alunos/me/atividades` (RF30) - (A1) - feito
 * Detalhar atividade: `GET /atividades/:id` - (A2)
 * Ver a própria tutoria (tutor e meta): `GET /alunos/me/tutorias` - (A3)
 * Listar avisos da sala: `GET /salas/:id/avisos` - (A4)

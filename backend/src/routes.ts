@@ -12,6 +12,7 @@ import { ListAlunoController } from './controllers/professor/ListAlunoController
 import { CreateMatriculaController } from './controllers/professor/CreateMatriculaController';
 import { ListAlunosSalaController } from './controllers/professor/ListAlunosSalaController';
 import { ListTutoresSalaController } from './controllers/professor/ListTutoresSalaController';
+import { ListTutoriasSalaController } from './controllers/professor/ListTutoriasSalaController';
 import { CreateConteudoController } from './controllers/professor/CreateConteudoController';
 import { ListConteudosSalaController } from './controllers/professor/ListConteudosSalaController';
 
@@ -58,6 +59,8 @@ router.get('/alunos', isAuthenticated, isProfessor, new ListAlunoController().ha
 router.post('/salas/:id/matriculas', isAuthenticated, isProfessor, new CreateMatriculaController().handle);
 router.get('/salas/:id/alunos', isAuthenticated, isProfessor, new ListAlunosSalaController().handle);
 router.get('/salas/:id/tutores', isAuthenticated, isProfessor, new ListTutoresSalaController().handle);
+// tutorias da sala (tutor, aluno tutorado, status e meta); filtro opcional ?status=ativa|finalizada
+router.get('/salas/:id/tutorias', isAuthenticated, isProfessor, new ListTutoriasSalaController().handle);
 
 // -- ROTAS CONTEÚDO --
 // cadastrar: somente professor autenticado
