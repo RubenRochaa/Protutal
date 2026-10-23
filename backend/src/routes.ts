@@ -46,6 +46,7 @@ import { CreateMaterialController } from './controllers/aluno/CreateMaterialCont
 import { ListMateriaisSalaController } from './controllers/professor/ListMateriaisSalaController';
 import { ListTiposAtividadeController } from './controllers/professor/ListTiposAtividadeController';
 import { CreateMensagemController } from './controllers/aluno/CreateMensagemController';
+import { ListMensagensTutoriaController } from './controllers/aluno/ListMensagensTutoriaController';
 
 import { isAuthenticated } from './middlewares/isAuthenticated';
 import { isProfessor } from './middlewares/isProfessor';
@@ -119,6 +120,10 @@ router.patch('/tutorias/:id/reabrir', isAuthenticated, isProfessor, new ReabrirT
 // a participação é conferida no service, na ordem: id inválido (400) -> não encontrada (404)
 // -> não participa (403) -> tutoria finalizada (409) -> corpo inválido (400) -> tutorado com assunto (403)
 router.post('/tutorias/:id/mensagens', isAuthenticated, isAluno, new CreateMensagemController().handle);
+// lista as mensagens da tutoria (mais antiga primeiro); tutoria finalizada também lista (histórico).
+// filtro opcional ?tipo=comunicado (só mensagens com assunto). a participação é conferida no service, na ordem:
+// id inválido (400) -> não encontrada (404) -> não participa (403) -> tutor revogado (403) -> ?tipo inválido (400)
+router.get('/tutorias/:id/mensagens', isAuthenticated, isAluno, new ListMensagensTutoriaController().handle);
 
 // -- ROTAS TUTOR DA SALA (somente professor autenticado) --
 // revoga o tutor da sala (data_revogacao) e finaliza as tutorias ativas dele numa transação;

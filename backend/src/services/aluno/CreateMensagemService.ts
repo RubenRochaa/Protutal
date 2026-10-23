@@ -1,5 +1,6 @@
 import prismaClient from "../../prisma";
 import { AppError } from "../../errors/AppError";
+import { buscarParticipanteTutoria } from "../../helpers/buscarParticipanteTutoria";
 
 interface MensagemRequest {
     id_tutoria: number;
@@ -11,48 +12,9 @@ interface MensagemRequest {
 class CreateMensagemService {
     async execute({ id_tutoria, id_aluno, texto, assunto }: MensagemRequest) {
 
-        // 1) o id da tutoria vem da URL (/tutorias/:id/mensagens) e precisa ser um inteiro positivo
-        if (!Number.isInteger(id_tutoria) || id_tutoria <= 0) {
-            throw new AppError("O id da tutoria deve ser um número inteiro", 400);
-        }
-
-        // o tutor é descoberto pelo caminho Tutoria -> Tutor_sala -> Tutor -> Aluno
-        const tutoria = await prismaClient.tutoria.findUnique({
-            where: {
-                id_tutoria: id_tutoria
-            },
-            select: {
-                id_tutoria: true,
-                id_aluno: true,
-                status: true,
-                tutor_sala: {
-                    select: {
-                        tutor: {
-                            select: {
-                                id_aluno: true
-                            }
-                        }
-                    }
-                }
-            }
-        });
-
-        if (!tutoria) {
-            throw new AppError("Tutoria não encontrada", 404);
-        }
-
-        // 2) só os dois participantes da tutoria: o aluno tutorado (Tutoria.id_aluno)
-        // ou o aluno que é o tutor (Tutor.id_aluno). o isAluno da rota já garantiu
-        // que o id do token é de um aluno
-        let remetente: "tutor" | "tutorado";
-
-        if (tutoria.id_aluno === id_aluno) {
-            remetente = "tutorado";
-        } else if (tutoria.tutor_sala.tutor.id_aluno === id_aluno) {
-            remetente = "tutor";
-        } else {
-            throw new AppError("Você não participa desta tutoria", 403);
-        }
+        // 1) e 2) id inválido (400) -> tutoria não encontrada (404) -> não participa (403).
+        // a verificação é compartilhada com a rota de listagem (GET /tutorias/:id/mensagens)
+        const { tutoria, papel: remetente } = await buscarParticipanteTutoria(id_tutoria, id_aluno);
 
         // 3) mesmo código de regra de negócio das rotas de finalizar e reabrir (409).
         // não é preciso conferir data_revogacao do Tutor_sala: a revogação finaliza
