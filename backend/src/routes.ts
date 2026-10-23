@@ -32,6 +32,7 @@ import { ListRespostasAtividadeController } from './controllers/professor/ListRe
 import { ListAtividadesAlunoController } from './controllers/aluno/ListAtividadesAlunoController';
 import { CreateNotaController } from './controllers/aluno/CreateNotaController';
 import { ListTutoriasTutorController } from './controllers/aluno/ListTutoriasTutorController';
+import { CreateMaterialController } from './controllers/aluno/CreateMaterialController';
 
 import { isAuthenticated } from './middlewares/isAuthenticated';
 import { isProfessor } from './middlewares/isProfessor';
@@ -116,5 +117,11 @@ router.get('/alunos/me/atividades', isAuthenticated, isAluno, new ListAtividades
 // senão o Express trata "me" como :id
 // lista os tutorados do tutor logado (aluno, status, meta e sala); filtro opcional ?status=ativa|finalizada
 router.get('/tutores/me/tutorias', isAuthenticated, isTutor, new ListTutoriasTutorController().handle);
+
+// -- ROTAS MATERIAL DE APOIO --
+// anexar: tutor ativo da sala com pelo menos uma tutoria ativa nela (RN14), via multipart/form-data
+// (titulo obrigatório, descricao opcional, file obrigatório: .pdf .doc .docx .xls .xlsx .csv, até 10 MB).
+// o isAluno vem antes para o professor dono não passar pelo isTutorAtivoSala
+router.post('/salas/:id/materiais', isAuthenticated, isAluno, isTutorAtivoSala, new CreateMaterialController().handle);
 
 export { router };
