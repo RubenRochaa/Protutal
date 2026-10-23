@@ -1,5 +1,6 @@
 import prismaClient from "../../prisma";
 import { AppError } from "../../errors/AppError";
+import { calcularStatusEntrega } from "../../helpers/calcularStatusEntrega";
 
 interface ListRespostasAtividadeRequest {
     id_atividade: number;
@@ -85,13 +86,7 @@ class ListRespostasAtividadeService {
             const nota = notas[0] ?? null;
 
             // status calculado (não fica salvo no banco)
-            let status: "pendente" | "entregue" | "entregue_com_atraso" = "pendente";
-
-            if (resposta) {
-                status = resposta.data_envio.getTime() <= atividade.data_entrega.getTime()
-                    ? "entregue"
-                    : "entregue_com_atraso";
-            }
+            const status = calcularStatusEntrega(atividade.data_entrega, resposta?.data_envio ?? null);
 
             return {
                 aluno,

@@ -27,6 +27,7 @@ import { CreateTutoriaController } from './controllers/professor/CreateTutoriaCo
 import { CreateAtividadeController } from './controllers/aluno/CreateAtividadeController';
 import { CreateRespostaController } from './controllers/aluno/CreateRespostaController';
 import { ListRespostasAtividadeController } from './controllers/professor/ListRespostasAtividadeController';
+import { ListAtividadesAlunoController } from './controllers/aluno/ListAtividadesAlunoController';
 
 import { isAuthenticated } from './middlewares/isAuthenticated';
 import { isProfessor } from './middlewares/isProfessor';
@@ -89,5 +90,10 @@ router.post('/atividades/:id/respostas', isAuthenticated, isAluno, new CreateRes
 // listar: tutor que criou a atividade (vínculo ativo) ou professor dono da sala;
 // traz todos os destinatários, com resposta, nota e status de entrega
 router.get('/atividades/:id/respostas', isAuthenticated, isTutorCriadorOuProfessorAtividade, new ListRespostasAtividadeController().handle);
+
+// -- ROTAS ATIVIDADES DO ALUNO (somente aluno autenticado) --
+// lista as atividades em que o aluno logado é destinatário (nunca as que ele criou como tutor);
+// filtros opcionais: ?status=pendente|entregue|entregue_com_atraso e ?etapa=1|2|3
+router.get('/alunos/me/atividades', isAuthenticated, isAluno, new ListAtividadesAlunoController().handle);
 
 export { router };
