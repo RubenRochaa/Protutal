@@ -1,0 +1,156 @@
+// Desktop (1280): logo, links, ícone e "Sair" na mesma linha.
+// Tablet e celular (até 768): links escondidos; o botão de menu abre a lista embaixo do header.
+
+.header{
+    position: relative;
+    z-index: 10;
+    background-color: var(--white);
+    box-shadow: var(--shadow-card);
+}
+
+.conteudo{
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    max-width: 1280px;
+    height: 84px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+.logo{
+    flex-shrink: 0;
+    color: var(--red-700);
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.logoPr{
+    color: var(--gray-700);
+}
+
+.nav{
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.link, .linkAtivo{
+    font-weight: 600;
+    font-size: 1.05rem;
+    white-space: nowrap;
+}
+
+.link{
+    color: var(--black);
+
+    &:hover{
+        color: var(--red-700);
+    }
+}
+
+.linkAtivo{
+    color: var(--red-700);
+}
+
+.acoes{
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-left: auto;
+}
+
+.usuario{
+    width: 48px;
+    height: 48px;
+    color: var(--gray-700);
+    stroke-width: 1.5;
+}
+
+.sair{
+    padding: 6px 18px;
+    border: 0;
+    border-radius: var(--radius-pill);
+    background-color: var(--red-700);
+    color: var(--white);
+    font-weight: 600;
+    transition: background-color 0.2s;
+
+    &:hover:not(:disabled){
+        background-color: var(--red-900);
+    }
+
+    &:disabled{
+        opacity: 0.6;
+    }
+}
+
+.botaoMenu{
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    border: 0;
+    background: transparent;
+    color: var(--black);
+}
+
+@media (max-width: 768px){
+    .conteudo{
+        gap: 12px;
+        height: 64px;
+        padding: 0 16px;
+    }
+
+    .logo{
+        font-size: 1.5rem;
+    }
+
+    .usuario{
+        width: 36px;
+        height: 36px;
+    }
+
+    .acoes{
+        gap: 10px;
+    }
+
+    .botaoMenu{
+        display: flex;
+    }
+
+    // Lista de links que abre embaixo do header
+    .nav{
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+        background-color: var(--white);
+        box-shadow: var(--shadow-card);
+    }
+
+    .navAberto{
+        display: flex;
+    }
+
+    .link, .linkAtivo{
+        padding: 14px 16px;
+        border-top: 1px solid var(--gray-300);
+    }
+}
+
+@media (max-width: 375px){
+    .logo{
+        font-size: 1.3rem;
+    }
+
+    .sair{
+        padding: 6px 14px;
+    }
+}
