@@ -11,6 +11,8 @@ import { handleLogout } from './actions'
 interface LinkMenu {
     label: string;
     href: string;
+    // Funcionalidade sem rota na API: aparece desabilitada com o selo "Em breve" (href é ignorado)
+    emBreve?: boolean;
 }
 
 interface Props {
@@ -21,6 +23,7 @@ interface Props {
 // Assim "Início" (/aluno) não fica vermelho junto com "Minhas atividades" (/aluno/atividades)
 function hrefAtivo(links: LinkMenu[], pathname: string){
     const candidatos = links
+        .filter((link) => !link.emBreve)
         .filter((link) => pathname === link.href || pathname.startsWith(link.href + "/"))
         .sort((a, b) => b.href.length - a.href.length)
 
@@ -56,7 +59,11 @@ export function Header({ links }: Props){
                 id="menu-principal"
                 className={menuAberto ? `${styles.nav} ${styles.navAberto}` : styles.nav}
                 >
-                    {links.map((link) => (
+                    {links.map((link) => link.emBreve ? (
+                        <span key={link.label} className={styles.linkEmBreve} aria-disabled="true" title="Em breve">
+                            {link.label} <span className={styles.emBreve}>Em breve</span>
+                        </span>
+                    ) : (
                         <Link
                         key={link.href}
                         href={link.href}

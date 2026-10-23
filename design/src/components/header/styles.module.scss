@@ -55,6 +55,27 @@
     color: var(--red-700);
 }
 
+// Link de funcionalidade que ainda não tem rota na API
+.linkEmBreve{
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--gray-500);
+    font-weight: 600;
+    font-size: 1.05rem;
+    white-space: nowrap;
+    cursor: not-allowed;
+}
+
+.emBreve{
+    padding: 2px 8px;
+    border-radius: var(--radius-pill);
+    background-color: var(--gray-300);
+    color: var(--gray-700);
+    font-size: 0.7rem;
+    font-weight: 500;
+}
+
 .acoes{
     display: flex;
     align-items: center;
@@ -139,7 +160,7 @@
         display: flex;
     }
 
-    .link, .linkAtivo{
+    .link, .linkAtivo, .linkEmBreve{
         padding: 14px 16px;
         border-top: 1px solid var(--gray-300);
     }

@@ -40,3 +40,18 @@ export function validarCadastro(nome: string, email: string, senha: string): str
 
     return null
 }
+
+// Mesmas regras do CreateSalaService (POST /salas), com mensagens mais amigáveis.
+// Se o erro vier da API, a mensagem mostrada é a da API.
+export function validarSala(nome: string, serie: string, anoLetivo: string): string | null {
+    if(nome.trim() === "") return "O nome é obrigatório";
+    if(nome.trim().length > 100) return "O nome deve ter no máximo 100 caracteres";
+
+    if(serie === "") return "A série é obrigatória";
+    if(!["1", "2", "3"].includes(serie)) return "A série deve ser 1, 2 ou 3";
+
+    if(anoLetivo.trim() === "") return "O ano letivo é obrigatório";
+    if(!Number.isInteger(Number(anoLetivo))) return "O ano letivo deve ser um número inteiro";
+
+    return null
+}

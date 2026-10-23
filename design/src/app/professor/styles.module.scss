@@ -1,0 +1,77 @@
+// Desktop (1280): duas turmas por linha, como no Figma.
+// Tablet e celular (até 768): uma turma por linha.
+
+.main{
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 24px 32px 48px;
+}
+
+.topo{
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 24px;
+}
+
+.grade{
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 28px;
+}
+
+// Dentro do card: nome da turma à esquerda, pílula "Ver tutores e tutorados" à direita
+.turma{
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.info{
+    min-width: 72px;
+}
+
+.nome{
+    color: var(--red-700);
+    font-size: 1.2rem;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+}
+
+.detalhe{
+    color: var(--gray-700);
+    font-size: 0.8rem;
+}
+
+.link{
+    flex: 1;
+    min-width: 180px;
+    border-radius: var(--radius-card);
+    transition: transform 0.2s;
+
+    &:hover{
+        transform: translateY(-2px);
+    }
+}
+
+@media (max-width: 768px){
+    .main{
+        padding: 20px 16px 40px;
+    }
+
+    .grade{
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+}
+
+@media (max-width: 375px){
+    .topo{
+        margin-bottom: 20px;
+    }
+
+    // Nome em cima e pílula embaixo, ocupando a largura toda
+    .link{
+        flex-basis: 100%;
+    }
+}

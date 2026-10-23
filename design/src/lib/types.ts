@@ -12,3 +12,12 @@ export interface ActionState {
     // (nunca devolva a senha aqui)
     valores?: Record<string, string>;
 }
+
+// Sala (turma) como a API devolve em GET /salas e POST /salas
+export interface Sala {
+    id_sala: number;
+    nome: string;
+    serie: number;
+    ano_letivo: number;
+    id_professor: number;
+}
