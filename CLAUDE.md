@@ -86,3 +86,5 @@ IMPORTANTE: o banco PostgreSQL é compartilhado por todo o grupo. Um comando err
 - A migration recria a coluna `tipo` e adiciona `etapa` sem default: só aplica com a tabela `atividade` vazia.
 - Pendências: `CreateAtividadeService` (rota `POST /atividades`) e `prisma/seed.ts` ainda não
   enviam `tipo` como enum nem `etapa`.
+
+caso seja criação de design/frontend, use @CLAUDE_DESIGN.md
