@@ -42,6 +42,7 @@ import { CreateNotaController } from './controllers/aluno/CreateNotaController';
 import { CreateContestacaoNotaController } from './controllers/aluno/CreateContestacaoNotaController';
 import { ListTutoriasTutorController } from './controllers/aluno/ListTutoriasTutorController';
 import { ListTutoriasAlunoController } from './controllers/aluno/ListTutoriasAlunoController';
+import { ListContestacoesAlunoController } from './controllers/aluno/ListContestacoesAlunoController';
 import { CreateMaterialController } from './controllers/aluno/CreateMaterialController';
 import { ListMateriaisSalaController } from './controllers/professor/ListMateriaisSalaController';
 import { ListTiposAtividadeController } from './controllers/professor/ListTiposAtividadeController';
@@ -172,6 +173,10 @@ router.get('/alunos/me/atividades', isAuthenticated, isAluno, new ListAtividades
 // lista as tutorias em que o aluno logado é o tutorado (nunca as que ele conduz como tutor),
 // com tutor (só o nome), sala, status e meta; ativas primeiro; filtro opcional ?status=ativa|finalizada
 router.get('/alunos/me/tutorias', isAuthenticated, isAluno, new ListTutoriasAlunoController().handle);
+// histórico das contestações das notas do aluno logado, de tutorias ativas e finalizadas (UC06, passo 4; RN14),
+// com nota, atividade (etapa e conteúdo) e tutor (só o nome); mais recentes primeiro;
+// filtro opcional ?status=pendente|aceita|recusada
+router.get('/alunos/me/contestacoes', isAuthenticated, isAluno, new ListContestacoesAlunoController().handle);
 
 // -- ROTAS TUTOR (somente aluno autenticado com vínculo de tutor ativo) --
 // atenção: se um dia existir uma rota /tutores/:id, ela deve ficar DEPOIS das rotas /tutores/me/...,
