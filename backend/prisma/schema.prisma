@@ -16,12 +16,53 @@ datasource db {
 
 // criar uma migration: npx prisma migrate dev
 
+// ==================== ENUMS ====================
+
+enum StatusPedido {
+  pendente
+  aceito
+  recusado
+}
+
+enum StatusTutoria {
+  ativa
+  finalizada
+}
+
+enum StatusContestacao {
+  pendente
+  aceita
+  recusada
+}
+
+enum TipoAtividade {
+  aula_invertida
+  prova_alternativa
+  prova_dissertativa
+  projeto
+  interpretacao_imagens
+  exercicios_livro
+  interpretacao_mapas
+  analise_graficos
+  mapa_mental
+  pesquisa
+  estudo_caso
+  trabalho_campo
+  teatro
+  atividade_extracurricular
+  autoavaliacao
+}
+
+// ==================== MODELS ====================
+
 model Professor {
-  id_professor     Int     @id @default(autoincrement())
-  nome             String  @db.VarChar(150)
-  email            String  @unique @db.VarChar(255)
-  senha            String  @db.VarChar(255)
-  email_confirmado Boolean @default(false)
+  id_professor      Int       @id @default(autoincrement())
+  nome              String    @db.VarChar(150)
+  email             String    @unique @db.VarChar(255)
+  senha             String    @db.VarChar(255)
+  email_confirmado  Boolean   @default(false)
+  token_confirmacao String?   @unique @db.VarChar(255)
+  token_expiracao   DateTime? @db.Timestamp
 
   salas      Sala[]
   pedidos    Pedido_tutoria[]
@@ -32,11 +73,13 @@ model Professor {
 }
 
 model Aluno {
-  id_aluno         Int     @id @default(autoincrement())
-  nome             String  @db.VarChar(150)
-  email            String  @unique @db.VarChar(255)
-  senha            String  @db.VarChar(255)
-  email_confirmado Boolean @default(false)
+  id_aluno          Int       @id @default(autoincrement())
+  nome              String    @db.VarChar(150)
+  email             String    @unique @db.VarChar(255)
+  senha             String    @db.VarChar(255)
+  email_confirmado  Boolean   @default(false)
+  token_confirmacao String?   @unique @db.VarChar(255)
+  token_expiracao   DateTime? @db.Timestamp
 
   matriculas Matricula[]
   pedidos    Pedido_tutoria[]
@@ -52,14 +95,16 @@ model Aluno {
 model Sala {
   id_sala      Int    @id @default(autoincrement())
   nome         String @db.VarChar(100)
-  ano_letivo   Int    @db.SmallInt
+  serie        Int    @db.SmallInt // 1º, 2º ou 3º ano do Ensino Médio (CHECK na migration)
+  ano_letivo   Int    @db.SmallInt // ex.: 2026
   id_professor Int
 
-  professor   Professor    @relation(fields: [id_professor], references: [id_professor])
+  professor   Professor        @relation(fields: [id_professor], references: [id_professor])
   matriculas  Matricula[]
   tutor_salas Tutor_sala[]
-  conteudos   Conteudo[]
+  conteudos   Sala_conteudo[]
   avisos      Aviso[]
+  pedidos     Pedido_tutoria[]
 
   @@map("sala")
 }
@@ -72,18 +117,21 @@ model Matricula {
   aluno Aluno @relation(fields: [id_aluno], references: [id_aluno])
   sala  Sala  @relation(fields: [id_sala], references: [id_sala])
 
+  @@unique([id_aluno, id_sala])
   @@map("matricula")
 }
 
 model Pedido_tutoria {
-  id_pedido        Int       @id @default(autoincrement())
+  id_pedido        Int          @id @default(autoincrement())
   id_aluno         Int
-  status           String    @default("pendente") @db.VarChar(10)
-  data_solicitacao DateTime  @default(now()) @db.Timestamp
-  data_decisao     DateTime? @db.Timestamp
-  id_professor     Int?
+  id_sala          Int // sala escolhida pelo aluno; o professor da sala analisa o pedido
+  status           StatusPedido @default(pendente)
+  data_solicitacao DateTime     @default(now()) @db.Timestamp
+  data_decisao     DateTime?    @db.Timestamp
+  id_professor     Int? // professor que decidiu o pedido (aceitou ou recusou)
 
   aluno     Aluno      @relation(fields: [id_aluno], references: [id_aluno])
+  sala      Sala       @relation(fields: [id_sala], references: [id_sala])
   professor Professor? @relation(fields: [id_professor], references: [id_professor])
   tutor     Tutor?
 
@@ -121,13 +169,13 @@ model Tutor_sala {
 }
 
 model Tutoria {
-  id_tutoria        Int       @id @default(autoincrement())
+  id_tutoria        Int           @id @default(autoincrement())
   id_tutor_sala     Int
   id_aluno          Int
-  meta_aprendizagem String?   @db.Text
-  status            String    @default("ativa") @db.VarChar(10)
-  data_inicio       DateTime  @default(now()) @db.Timestamp
-  data_fim          DateTime? @db.Timestamp
+  meta_aprendizagem String?       @db.Text
+  status            StatusTutoria @default(ativa)
+  data_inicio       DateTime      @default(now()) @db.Timestamp
+  data_fim          DateTime?     @db.Timestamp
 
   tutor_sala    Tutor_sala               @relation(fields: [id_tutor_sala], references: [id_tutor_sala])
   aluno         Aluno                    @relation(fields: [id_aluno], references: [id_aluno])
@@ -140,13 +188,24 @@ model Tutoria {
 
 model Conteudo {
   id_conteudo Int    @id @default(autoincrement())
-  id_sala     Int
-  nome        String @db.VarChar(100)
+  nome        String @unique @db.VarChar(100)
 
-  sala       Sala        @relation(fields: [id_sala], references: [id_sala])
+  salas      Sala_conteudo[]
   atividades Atividade[]
 
   @@map("conteudo")
+}
+
+model Sala_conteudo {
+  id_sala_conteudo Int @id @default(autoincrement())
+  id_sala          Int
+  id_conteudo      Int
+
+  sala     Sala     @relation(fields: [id_sala], references: [id_sala])
+  conteudo Conteudo @relation(fields: [id_conteudo], references: [id_conteudo])
+
+  @@unique([id_sala, id_conteudo])
+  @@map("sala_conteudo")
 }
 
 model Atividade {
@@ -155,7 +214,8 @@ model Atividade {
   id_conteudo   Int
   titulo        String   @db.VarChar(150)
   descricao     String?  @db.Text
-  tipo          String?  @db.VarChar(50)
+  tipo          TipoAtividade
+  etapa         Int      @db.SmallInt // 1ª, 2ª ou 3ª etapa (CHECK na migration)
   data_entrega  DateTime @db.Timestamp
 
   tutor_sala    Tutor_sala               @relation(fields: [id_tutor_sala], references: [id_tutor_sala])
@@ -175,6 +235,7 @@ model Atividade_destinatario {
   atividade Atividade @relation(fields: [id_atividade], references: [id_atividade])
   tutoria   Tutoria   @relation(fields: [id_tutoria], references: [id_tutoria])
 
+  @@unique([id_atividade, id_tutoria])
   @@map("atividade_destinatario")
 }
 
@@ -189,31 +250,34 @@ model Resposta {
   atividade Atividade @relation(fields: [id_atividade], references: [id_atividade])
   aluno     Aluno     @relation(fields: [id_aluno], references: [id_aluno])
 
+  @@unique([id_atividade, id_aluno])
   @@map("resposta")
 }
 
 model Nota {
-  id_nota      Int     @id @default(autoincrement())
-  id_aluno     Int
-  id_atividade Int
-  valor        Decimal @db.Decimal(4, 2)
-  comentario   String? @db.Text
+  id_nota         Int      @id @default(autoincrement())
+  id_aluno        Int
+  id_atividade    Int
+  valor           Decimal  @db.Decimal(4, 2) // 0 a 10 (CHECK na migration)
+  comentario      String?  @db.Text
+  data_lancamento DateTime @default(now()) @db.Timestamp
 
   aluno        Aluno              @relation(fields: [id_aluno], references: [id_aluno])
   atividade    Atividade          @relation(fields: [id_atividade], references: [id_atividade])
   contestacoes Contestacao_nota[]
 
+  @@unique([id_atividade, id_aluno])
   @@map("nota")
 }
 
 model Contestacao_nota {
-  id_contestacao Int       @id @default(autoincrement())
+  id_contestacao Int               @id @default(autoincrement())
   id_nota        Int
-  comentario     String    @db.Text
-  status         String    @default("pendente") @db.VarChar(10)
-  data_envio     DateTime  @default(now()) @db.Timestamp
-  decisao        String?   @db.Text
-  data_resolucao DateTime? @db.Timestamp
+  comentario     String            @db.Text
+  status         StatusContestacao @default(pendente)
+  data_envio     DateTime          @default(now()) @db.Timestamp
+  decisao        String?           @db.Text
+  data_resolucao DateTime?         @db.Timestamp
 
   nota Nota @relation(fields: [id_nota], references: [id_nota])
 
@@ -223,27 +287,28 @@ model Contestacao_nota {
 model Feedback {
   id_feedback  Int      @id @default(autoincrement())
   id_tutoria   Int
-  etapa        Int      @db.SmallInt
-  nota         Decimal  @db.Decimal(4, 2)
+  etapa        Int      @db.SmallInt // 1ª, 2ª ou 3ª etapa (CHECK na migration)
+  nota         Decimal  @db.Decimal(4, 2) // 0 a 10 (CHECK na migration)
   comentario   String?  @db.Text
   rubrica_file String?  @db.VarChar(500)
   data         DateTime @default(now()) @db.Timestamp
 
   tutoria Tutoria @relation(fields: [id_tutoria], references: [id_tutoria])
 
+  @@unique([id_tutoria, etapa])
   @@map("feedback")
 }
 
 model Mensagem {
-  id_mensagem Int      @id @default(autoincrement())
-  id_tutoria  Int
-  id_aluno    Int
-  assunto     String?  @db.VarChar(150)
-  texto       String   @db.Text
-  data_envio  DateTime @default(now()) @db.Timestamp
+  id_mensagem  Int      @id @default(autoincrement())
+  id_tutoria   Int
+  id_remetente Int // id_aluno de quem enviou (tutor ou aluno tutorado)
+  assunto      String?  @db.VarChar(150)
+  texto        String   @db.Text
+  data_envio   DateTime @default(now()) @db.Timestamp
 
-  tutoria Tutoria @relation(fields: [id_tutoria], references: [id_tutoria])
-  aluno   Aluno   @relation(fields: [id_aluno], references: [id_aluno])
+  tutoria   Tutoria @relation(fields: [id_tutoria], references: [id_tutoria])
+  remetente Aluno   @relation(fields: [id_remetente], references: [id_aluno])
 
   @@map("mensagem")
 }
@@ -279,6 +344,7 @@ model Avaliacao_tutor {
   id_avaliacao  Int      @id @default(autoincrement())
   id_tutor_sala Int
   id_professor  Int
+  nota          Decimal  @db.Decimal(4, 2) // 0 a 10 (CHECK na migration)
   comentario    String   @db.Text
   data          DateTime @default(now()) @db.Timestamp
 
@@ -286,4 +352,14 @@ model Avaliacao_tutor {
   professor  Professor  @relation(fields: [id_professor], references: [id_professor])
 
   @@map("avaliacao_tutor")
+}
+
+// tabela de parâmetros: classifica a média do aluno por conteúdo.
+model Faixa_desempenho {
+  id_faixa Int     @id @default(autoincrement())
+  nome     String  @unique @db.VarChar(50)
+  nota_min Decimal @db.Decimal(4, 2) // 0 a 10 (CHECK na migration)
+  nota_max Decimal @db.Decimal(4, 2) // 0 a 10 (CHECK na migration)
+
+  @@map("faixa_desempenho")
 }

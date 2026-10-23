@@ -1,5 +1,3 @@
-# Como contribuir com o Protutal
-
 Este documento descreve o workflow de branches e as regras de pull request adotados pelo grupo no repositório do Protutal.
 
 ## Workflow de branches

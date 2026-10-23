@@ -1,0 +1,1190 @@
+type: collection.insomnia.rest/5.0
+schema_version: "5.1"
+name: Protutal
+meta:
+  id: wrk_b70606cc16634d9ba12261bae70d1825
+  created: 1792670324228
+  modified: 1792670324228
+  description: ""
+collection:
+  - name: Aluno
+    meta:
+      id: fld_8b0ffe231f934472a49ced5898ee552b
+      created: 1792017744284
+      modified: 1792017744284
+      sortKey: -1792017744284
+      description: ""
+    children:
+      - url: "{{ _.base_url }}/alunos"
+        name: 01 - Cadastro
+        meta:
+          id: req_cdbad949aacc42e7ba82dfda0c55816c
+          created: 1792018053961
+          modified: 1792175652990
+          isPrivate: false
+          description: ""
+          sortKey: -1792018056242
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "nome": "Lucas Moreira Dias",
+              "email": "lucas.dias@portalsesisp.org.br",
+              "senha": "1234"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/sessao/alunos"
+        name: 02 - Login
+        meta:
+          id: req_cc9dcfdb026a4167adda5657896d88e5
+          created: 1792018218972
+          modified: 1792690727630
+          isPrivate: false
+          description: ""
+          sortKey: -1792018006258
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "email": "ana.lima@portalsesisp.org.br",
+              "senha": "1234"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/pedidos-tutoria"
+        name: 11 - Pedido de tutoria
+        meta:
+          id: req_846044db34614b3e9ad1c7b2a6076836
+          created: 1792084636326
+          modified: 1792174517745
+          isPrivate: false
+          description: ""
+          sortKey: -1792017981266
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "id_sala": 1
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        authentication:
+          type: bearer
+          token: "{{ _.token_aluno }}"
+          prefix: Bearer
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/atividades/5/respostas"
+        name: 19 - Envio de Resposta
+        meta:
+          id: req_cc5a91c1cf3249d1b45fc40f8daf6e9c
+          created: 1792177369926
+          modified: 1792674348538
+          isPrivate: false
+          description: ""
+          sortKey: -1792017968770
+        method: POST
+        body:
+          mimeType: multipart/form-data
+          params:
+            - name: file
+              value: ""
+              description: ""
+              disabled: false
+              fileName: C:\Users\44892421820\Documents\Documentacao_e_Dicionario_de_Dados_Registros_Validos_Cosmetico_V1.pdf
+              type: file
+            - name: texto
+              value: minha resposta
+              description: ""
+              disabled: false
+        headers:
+          - name: Content-Type
+            value: multipart/form-data
+        authentication:
+          type: bearer
+          token: "{{ _.token_aluno }}"
+          prefix: Bearer
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Professor
+    meta:
+      id: fld_0db516c5ab5f41819d759ff93015b37a
+      created: 1792017805663
+      modified: 1792150873729
+      sortKey: -1792017805663
+      description: ""
+    children:
+      - url: "{{ _.base_url }}/professores"
+        name: 03 - Cadastro
+        meta:
+          id: req_5fd9722a58cc4ba2888ee3c19211d3de
+          created: 1792017956274
+          modified: 1792169908008
+          isPrivate: false
+          description: ""
+          sortKey: -1792017956274
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "nome": "Rafael Gomes Teixeira",
+              "email": "rafael.teixeira@portalsesi.org.br",
+              "senha": "1234"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/sessao/professores"
+        name: 04 - Login
+        meta:
+          id: req_35aa1170d90547279f4a13600661ff6c
+          created: 1792018212760
+          modified: 1792169923313
+          isPrivate: false
+          description: ""
+          sortKey: -1791638506966.625
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "email": "marcos.ribeiro@portalsesi.org.br",
+              "senha": "1234"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/salas"
+        name: 05 - Criar Sala
+        meta:
+          id: req_cb343d008c4e4257a70644e0b2b03fff
+          created: 1792023021169
+          modified: 1792170044185
+          isPrivate: false
+          description: ""
+          sortKey: -1791259057659.25
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            { 
+            	"nome": "Geografia - 1º ano B", 
+            	"serie": 1, 
+            	"ano_letivo": 2026 
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        authentication:
+          type: bearer
+          token: "{{ _.token_professor }}"
+          prefix: Bearer
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/salas"
+        name: 06 - Listar Salas
+        meta:
+          id: req_a1b22b4aedd9454a97bca0085d6b9e88
+          created: 1792023311817
+          modified: 1792169973910
+          isPrivate: false
+          description: ""
+          sortKey: -1790879608351.875
+        method: GET
+        body:
+          mimeType: application/json
+          text: ""
+        headers:
+          - name: Content-Type
+            value: application/json
+        authentication:
+          type: bearer
+          token: "{{ _.token_professor }}"
+          prefix: Bearer
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/alunos?busca=lucas"
+        name: 07 - Listar Alunos
+        meta:
+          id: req_808fedc1bd534212a7c6a762b5e107bd
+          created: 1792029010244
+          modified: 1792170679341
+          isPrivate: false
+          description: ""
+          sortKey: -1790689883698.1875
+        method: GET
+        body:
+          mimeType: application/json
+          text: ""
+        headers:
+          - name: Content-Type
+            value: application/json
+        authentication:
+          type: bearer
+          token: "{{ _.token_professor }}"
+          prefix: Bearer
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/salas/1/matriculas"
+        name: 08 - Matricular Aluno
+        meta:
+          id: req_6e6c82d4c9844af499ff3795e13ff5b5
+          created: 1792030344083
+          modified: 1792174452878
+          isPrivate: false
+          description: ""
+          sortKey: -1791069333005.5625
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            { 
+            	"id_aluno": 11
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        authentication:
+          type: bearer
+          token: "{{ _.token_professor }}"
+          prefix: Bearer
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/salas/1/alunos"
+        name: 09 - Listar alunos da sala
+        meta:
+          id: req_47cfb8f37e7c4818880df3faa69161a5
+          created: 1792030500929
+          modified: 1792170650084
+          isPrivate: false
+          description: ""
+          sortKey: -1790974470678.7188
+        method: GET
+        body:
+          mimeType: application/json
+          text: ""
+        headers:
+          - name: Content-Type
+            value: application/json
+        authentication:
+          type: bearer
+          token: "{{ _.token_professor }}"
+          prefix: Bearer
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/pedidos-tutoria"
+        name: 12 - Ver pedidos de tutoria
+        meta:
+          id: req_147d00925c0f414bad10e4729676803a
+          created: 1792084805133
+          modified: 1792671666408
+          isPrivate: false
+          description: ""
+          sortKey: -1790595021371.3438
+        method: GET
+        body:
+          mimeType: application/json
+          text: ""
+        headers:
+          - name: Content-Type
+            value: application/json
+        authentication:
+          type: bearer
+          token: "{{ _.token_professor }}"
+          prefix: Bearer
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/pedidos-tutoria/5/aceitar"
+        name: 13 - Aceitar pedido de tutoria
+        meta:
+          id: req_fa45e58f12144ce0b562157509e08abe
+          created: 1792085251564
+          modified: 1792671699728
+          isPrivate: false
+          description: ""
+          sortKey: -1790547590207.9219
+        method: PATCH
+        body:
+          mimeType: application/json
+          text: |-
+            { 
+            	"id_sala": 1
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        authentication:
+          type: bearer
+          token: "{{ _.token_professor }}"
+          prefix: Bearer
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/salas/1/permissao-atividades"
+        name: 17 - Permitir envio de atividades
+        meta:
+          id: req_8a2d6b6514614573b7c0acefcdfb84d0
+          created: 1792150915796
+          modified: 1792171556905
+          isPrivate: false
+          description: ""
+          sortKey: -1790535732417.0664
+        method: PATCH
+        body:
+          mimeType: application/json
+          text: |-
+            { 
+            	"pode_criar_ativ": true
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        authentication:
+          type: bearer
+          token: "{{ _.token_professor }}"
+          prefix: Bearer
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/pedidos-tutoria/5/recusar"
+        name: 14 - Recusar pedido de tutoria
+        meta:
+          id: req_e06f4a95b41f4ac0abf626096f817942
+          created: 1792154234459
+          modified: 1792170923077
+          isPrivate: false
+          description: ""
+          sortKey: -1790541661312.4941
+        method: PATCH
+        body:
+          mimeType: application/json
+          text: |-
+            { 
+            	"id_sala": 1
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        authentication:
+          type: bearer
+          token: "{{ _.token_professor }}"
+          prefix: Bearer
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/salas/1/tutores"
+        name: 15 - Listar Tutores da sala
+        meta:
+          id: req_a5bcf70dda444b2b9704aaf98e1bfc72
+          created: 1792154790815
+          modified: 1792171029898
+          isPrivate: false
+          description: ""
+          sortKey: -1790642452534.7656
+        method: GET
+        body:
+          mimeType: application/json
+          text: ""
+        headers:
+          - name: Content-Type
+            value: application/json
+        authentication:
+          type: bearer
+          token: "{{ _.token_professor }}"
+          prefix: Bearer
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/tutorias"
+        name: 16 - Definir tutoria
+        meta:
+          id: req_a314d599ab3242f08447c9a7d539d51c
+          created: 1792157497455
+          modified: 1792671766210
+          isPrivate: false
+          description: ""
+          sortKey: -1790998186260.4297
+        method: POST
+        body:
+          mimeType: application/json
+          text: >-
+            {
+              "id_tutor_sala": 4,
+              "id_aluno": 1,
+              "meta_aprendizagem": "Interpretar escalas e projeções cartográficas."
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        authentication:
+          type: bearer
+          token: "{{ _.token_professor }}"
+          prefix: Bearer
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/salas/1/conteudos"
+        name: 10 - Definir Conteúdo
+        meta:
+          id: req_abcbfbacad02408e8f81a082a802867a
+          created: 1792158147245
+          modified: 1792170568211
+          isPrivate: false
+          description: ""
+          sortKey: -1791010044051.2852
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            { 
+            	"nome": "Hidrografia" 
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        authentication:
+          type: bearer
+          token: "{{ _.token_professor }}"
+          prefix: Bearer
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/salas/1/conteudos"
+        name: 20 - Listar conteúdo da sala (professor)
+        meta:
+          id: req_2b76854de8f34b6ab17ed267bae73ff5
+          created: 1792690854713
+          modified: 1792690895167
+          isPrivate: false
+          description: ""
+          sortKey: -1790535732317.0664
+        method: GET
+        body:
+          mimeType: application/json
+          text: ""
+        headers:
+          - name: Content-Type
+            value: application/json
+        authentication:
+          type: bearer
+          token: "{{ _.token_professor }}"
+          prefix: Bearer
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Erros
+    meta:
+      id: fld_96d46d11810441a08f83df96de913c12
+      created: 1792062516090
+      modified: 1792250000000
+      sortKey: -1792062516090
+      description: Um caso de erro por rota. O status e a mensagem esperados estão na
+        descrição de cada requisição.
+    children:
+      - name: Professor
+        meta:
+          id: fld_70029ccbc2c149098e6cbe57f18cdaae
+          created: 1792062544409
+          modified: 1792250000000
+          sortKey: -1792062547557
+          description: ""
+        children:
+          - url: "{{ _.base_url }}/salas/1/matriculas"
+            name: Matricular Aluno - aluno inexistente
+            meta:
+              id: req_2a7fabfbf2cd4bc48dd48ed27eadde43
+              created: 1792062544409
+              modified: 1792250000000
+              isPrivate: false
+              description: >-
+                Esperado: 404 - Aluno não encontrado
+
+                Caso: id_aluno 99999, que não existe.
+
+                Pré-requisito: a sala 1 precisa ser do professor do token; se
+                não for, a resposta é 403.
+              sortKey: -1792250000600
+            method: POST
+            body:
+              mimeType: application/json
+              text: |-
+                {
+                  "id_aluno": 99999
+                }
+            headers:
+              - name: Content-Type
+                value: application/json
+            authentication:
+              type: bearer
+              token: "{{ _.token_professor }}"
+              prefix: Bearer
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: "{{ _.base_url }}/salas/99999/alunos"
+            name: Listar alunos da sala - sala inexistente
+            meta:
+              id: req_4638c3b39c384fec9250603c1f6f68fa
+              created: 1792062544409
+              modified: 1792250000000
+              isPrivate: false
+              description: |-
+                Esperado: 404 - Sala não encontrada
+                Caso: id de sala 99999, que não existe.
+              sortKey: -1792250000500
+            method: GET
+            headers:
+              - name: Content-Type
+                value: application/json
+            authentication:
+              type: bearer
+              token: "{{ _.token_professor }}"
+              prefix: Bearer
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: "{{ _.base_url }}/professores"
+            name: Cadastro - domínio de aluno
+            meta:
+              id: req_4d45449d203c47d587397e90dd192965
+              created: 1792062544409
+              modified: 1792670771368
+              isPrivate: false
+              description: >-
+                Esperado: 400 - Domínio de email não permitido
+
+                Caso: professor tentando se cadastrar com e-mail
+                @portalsesisp.org.br (domínio de aluno).
+              sortKey: -1792250001100
+            method: POST
+            body:
+              mimeType: application/json
+              text: |-
+                {
+                  "nome": "Professor de Teste",
+                  "email": "profess.abc@portalsesisp.org.br",
+                  "senha": "SenhaTeste123"
+                }
+            headers:
+              - name: Content-Type
+                value: application/json
+            authentication:
+              type: bearer
+              token: "{{}}"
+              prefix: "Beaken "
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: "{{ _.base_url }}/alunos"
+            name: Listar Alunos - token inválido
+            meta:
+              id: req_6c0bda38e5ef414fb505095bf5e2deaa
+              created: 1792062544409
+              modified: 1792146798757
+              isPrivate: false
+              description: >-
+                Esperado: 401 - Token inválido
+
+                Caso: header "Bearer token-invalido", que não passa no verify do
+                JWT.
+              sortKey: -1792250000700
+            method: GET
+            headers:
+              - name: Content-Type
+                value: application/json
+            authentication:
+              type: bearer
+              token: token-invalido
+              prefix: Bearer
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: "{{ _.base_url }}/salas"
+            name: Criar Sala - token de aluno
+            meta:
+              id: req_a8cce47acf0c45319b86b02247934400
+              created: 1792062544409
+              modified: 1792146774876
+              isPrivate: false
+              description: >-
+                Esperado: 403 - Acesso permitido somente para professores
+
+                Caso: token de aluno em rota de professor (middleware
+                isProfessor).
+              sortKey: -1792250000900
+            method: POST
+            body:
+              mimeType: application/json
+              text: |-
+                {
+                  "nome": "Geografia 2A",
+                  "serie": 2,
+                  "ano_letivo": 2026
+                }
+            headers:
+              - name: Content-Type
+                value: application/json
+            authentication:
+              type: bearer
+              token: "{{ _.token_aluno }}"
+              prefix: Bearer
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: "{{ _.base_url }}/sessao/professores"
+            name: Login - sem senha
+            meta:
+              id: req_c22e6dc7e9774d85877b956c3ec280fe
+              created: 1792062544409
+              modified: 1792250000000
+              isPrivate: false
+              description: |-
+                Esperado: 400 - Email e senha são obrigatórios
+                Caso: corpo sem o campo senha.
+              sortKey: -1792250001000
+            method: POST
+            body:
+              mimeType: application/json
+              text: |-
+                {
+                  "email": "marcos.ribeiro@portalsesi.org.br"
+                }
+            headers:
+              - name: Content-Type
+                value: application/json
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: "{{ _.base_url }}/salas"
+            name: Listar Salas - sem token
+            meta:
+              id: req_fb4f95b4ed61422cb0fa03ce07a1f904
+              created: 1792062544409
+              modified: 1792250000000
+              isPrivate: false
+              description: >-
+                Esperado: 401 - Token não informado
+
+                Caso: requisição sem o header Authorization (middleware
+                isAuthenticated).
+              sortKey: -1792250000800
+            method: GET
+            headers:
+              - name: Content-Type
+                value: application/json
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: "{{ _.base_url }}/salas/1/permissao-atividades"
+            name: Permissão de atividades - valor em texto
+            meta:
+              id: req_588607cb601f4d3cac34456994f86ea3
+              created: 1792250000000
+              modified: 1792250000000
+              isPrivate: false
+              description: >-
+                Esperado: 400 - O campo pode_criar_ativ é obrigatório e deve ser
+                true ou false
+
+                Caso: pode_criar_ativ enviado como texto ("true") em vez de
+                booleano.
+              sortKey: -1792250000100
+            method: PATCH
+            body:
+              mimeType: application/json
+              text: |-
+                {
+                  "pode_criar_ativ": "true"
+                }
+            headers:
+              - name: Content-Type
+                value: application/json
+            authentication:
+              type: bearer
+              token: "{{ _.token_professor }}"
+              prefix: Bearer
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: "{{ _.base_url }}/pedidos-tutoria/99999/aceitar"
+            name: Aceitar pedido de tutoria - pedido inexistente
+            meta:
+              id: req_da874da12111488789b55f1824d91c6d
+              created: 1792250000000
+              modified: 1792250000000
+              isPrivate: false
+              description: |-
+                Esperado: 404 - Pedido de tutoria não encontrado
+                Caso: id de pedido 99999, que não existe.
+              sortKey: -1792250000200
+            method: PATCH
+            body:
+              mimeType: application/json
+              text: |-
+                {
+                  "id_sala": 1
+                }
+            headers:
+              - name: Content-Type
+                value: application/json
+            authentication:
+              type: bearer
+              token: "{{ _.token_professor }}"
+              prefix: Bearer
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: "{{ _.base_url }}/salas/1/conteudos"
+            name: Postar Conteúdo na Sala - sem nome
+            meta:
+              id: req_e831d1c9c94948a0a60278826aede501
+              created: 1792250000000
+              modified: 1792250000000
+              isPrivate: false
+              description: >-
+                Esperado: 400 - O campo nome é obrigatório
+
+                Caso: corpo sem o campo nome.
+
+                Pré-requisito: a sala 1 precisa ser do professor do token; se
+                não for, a resposta é 403.
+              sortKey: -1792250000400
+            method: POST
+            body:
+              mimeType: application/json
+              text: "{}"
+            headers:
+              - name: Content-Type
+                value: application/json
+            authentication:
+              type: bearer
+              token: "{{ _.token_professor }}"
+              prefix: Bearer
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: "{{ _.base_url }}/pedidos-tutoria"
+            name: Ver pedidos de tutoria - token de aluno
+            meta:
+              id: req_eb488b6e742a4acd90001f35ff3ca5b1
+              created: 1792250000000
+              modified: 1792250000000
+              isPrivate: false
+              description: >-
+                Esperado: 403 - Acesso permitido somente para professores
+
+                Caso: token de aluno em rota de professor (middleware
+                isProfessor).
+              sortKey: -1792250000300
+            method: GET
+            headers:
+              - name: Content-Type
+                value: application/json
+            authentication:
+              type: bearer
+              token: "{{ _.token_aluno }}"
+              prefix: Bearer
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+      - name: Aluno
+        meta:
+          id: fld_8f7bc05727f3453a89ffb41362bfc29c
+          created: 1792250000000
+          modified: 1792250000000
+          sortKey: -1792062547600
+          description: ""
+        children:
+          - url: "{{ _.base_url }}/alunos"
+            name: Cadastro - domínio de professor
+            meta:
+              id: req_20cf1da36e3c471c9101e108cde21110
+              created: 1792250000000
+              modified: 1792250000000
+              isPrivate: false
+              description: >-
+                Esperado: 400 - Domínio de email não permitido
+
+                Caso: aluno tentando se cadastrar com e-mail @portalsesi.org.br
+                (domínio de professor).
+              sortKey: -1792250000300
+            method: POST
+            body:
+              mimeType: application/json
+              text: |-
+                {
+                  "nome": "Aluno de Teste",
+                  "email": "alun.abc@portalsesi.org.br",
+                  "senha": "SenhaTeste123"
+                }
+            headers:
+              - name: Content-Type
+                value: application/json
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: "{{ _.base_url }}/sessao/alunos"
+            name: Login - senha incorreta
+            meta:
+              id: req_6bfc552653dd4c60914e765b8bac2e97
+              created: 1792250000000
+              modified: 1792250000000
+              isPrivate: false
+              description: |-
+                Esperado: 401 - Email ou senha incorretos
+                Caso: e-mail do aluno de teste com a senha errada.
+              sortKey: -1792250000200
+            method: POST
+            body:
+              mimeType: application/json
+              text: |-
+                {
+                  "email": "lucas.dias@portalsesisp.org.br",
+                  "senha": "SenhaErrada999"
+                }
+            headers:
+              - name: Content-Type
+                value: application/json
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: "{{ _.base_url }}/pedidos-tutoria"
+            name: Pedido de tutoria - token de professor
+            meta:
+              id: req_d46a1c1f4e984273988a5d0874c8c978
+              created: 1792250000000
+              modified: 1792250000000
+              isPrivate: false
+              description: |-
+                Esperado: 403 - Acesso permitido somente para alunos
+                Caso: token de professor em rota de aluno (middleware isAluno).
+              sortKey: -1792250000100
+            method: POST
+            body:
+              mimeType: application/json
+              text: |-
+                {
+                  "id_sala": 1
+                }
+            headers:
+              - name: Content-Type
+                value: application/json
+            authentication:
+              type: bearer
+              token: "{{ _.token_professor }}"
+              prefix: Bearer
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+  - name: Tutor
+    meta:
+      id: fld_072da0c4084e48bfa2ce3473bdded371
+      created: 1792158099458
+      modified: 1792168729431
+      sortKey: -1792017744184
+      description: ""
+    children:
+      - url: "{{ _.base_url }}/atividades"
+        name: 18 - Postar Atividade para seus alunos
+        meta:
+          id: req_c500a2c7c5864942ba4ab38b0f7cc56b
+          created: 1792081443029
+          modified: 1792673808355
+          isPrivate: false
+          description: ""
+          sortKey: -1792158156725
+        method: POST
+        body:
+          mimeType: application/json
+          text: >-
+            	{
+              "id_tutoria": 3,
+              "id_conteudo": 3,
+              "titulo": "Coordenadas geográficas",
+              "descricao": "Localize as capitais indicadas usando latitude e longitude.",
+              "tipo": "interpretacao_mapas",
+              "etapa": 3,
+              "prazo": "2026-11-20T23:59:59"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        authentication:
+          type: bearer
+          token: "{{ _.token_aluno_tutor }}"
+          prefix: Bearer
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/salas/1/conteudos"
+        name: 20 - Listar conteúdo da sala
+        meta:
+          id: req_1075e09f3eb8430ebde72f0a8acf5227
+          created: 1792690590228
+          modified: 1792690805354
+          isPrivate: false
+          description: ""
+          sortKey: -1792088106483.5
+        method: GET
+        body:
+          mimeType: application/json
+          text: ""
+        headers:
+          - name: Content-Type
+            value: application/json
+        authentication:
+          type: bearer
+          token: "{{ _.token_aluno_tutor }}"
+          prefix: Bearer
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/atividades/1/respostas"
+        name: 21 - Listar Respostas enviadas
+        meta:
+          id: req_8c4d363b242d4719833f4c5892b83f3d
+          created: 1792697085043
+          modified: 1792697217930
+          isPrivate: false
+          description: ""
+          sortKey: -1792053081362.75
+        method: GET
+        body:
+          mimeType: application/json
+          text: ""
+        headers:
+          - name: Content-Type
+            value: application/json
+        authentication:
+          type: bearer
+          token: "{{ _.token_aluno_tutor }}"
+          prefix: Bearer
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_73cf523882204bb492d1d4f74e02d8e0
+    created: 1792017716434
+    modified: 1792017716434
+environments:
+  name: Base Environment
+  meta:
+    id: env_30e4673b1b6842bf98c0f8b2c31e5d90
+    created: 1791479389397
+    modified: 1792690745337
+    isPrivate: false
+  data:
+    base_url: http://localhost:3333
+    token_professor: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub21lIjoiTWFyY29zIEFudMO0bmlvIFJpYmVpcm8iLCJlbWFpbCI6Im1hcmNvcy5yaWJlaXJvQHBvcnRhbHNlc2kub3JnLmJyIiwiaWF0IjoxNzkyNjcxMDEzLCJleHAiOjE3OTUyNjMwMTMsInN1YiI6IjEifQ.gKjJcWZNky_ezFmFiCBKyfol_zCuTXwgMsBRBSaIztQ
+    token_aluno_tutor: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub21lIjoiQW5hIEJlYXRyaXogTGltYSIsImVtYWlsIjoiYW5hLmxpbWFAcG9ydGFsc2VzaXNwLm9yZy5iciIsImlhdCI6MTc5MjY5MDczMSwiZXhwIjoxNzk1MjgyNzMxLCJzdWIiOiIxIn0.T2OAujuxAoXJa0alNVi7YLYBviiZXlQyDYjsfS7UUj8
+    token_aluno: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub21lIjoiRmVsaXBlIEFyYcO6am8gVGVpeGVpcmEiLCJlbWFpbCI6ImZlbGlwZS50ZWl4ZWlyYUBwb3J0YWxzZXNpc3Aub3JnLmJyIiwiaWF0IjoxNzkyNjczNzIxLCJleHAiOjE3OTUyNjU3MjEsInN1YiI6IjYifQ.8tlBLLwaNcySQGxOvoNv8u65fD-VO68MDhY_Z4nlTMc
