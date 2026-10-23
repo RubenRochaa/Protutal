@@ -26,6 +26,7 @@ import { PermissaoAtividadesSalaController } from './controllers/professor/Permi
 
 import { CreateTutoriaController } from './controllers/professor/CreateTutoriaController';
 import { UpdateMetaTutoriaController } from './controllers/professor/UpdateMetaTutoriaController';
+import { FinalizarTutoriaController } from './controllers/professor/FinalizarTutoriaController';
 
 import { CreateAtividadeController } from './controllers/aluno/CreateAtividadeController';
 import { CreateRespostaController } from './controllers/aluno/CreateRespostaController';
@@ -93,6 +94,9 @@ router.patch('/salas/:id/permissao-atividades', isAuthenticated, isProfessor, ne
 router.post('/tutorias', isAuthenticated, isProfessor, new CreateTutoriaController().handle);
 // define ou substitui a meta de aprendizagem; só o professor dono da sala e só em tutoria ativa
 router.patch('/tutorias/:id/meta', isAuthenticated, isProfessor, new UpdateMetaTutoriaController().handle);
+// finaliza a tutoria (status finalizada + data_fim); só o professor dono da sala,
+// só tutoria ativa e sem contestação de nota pendente (RN15)
+router.patch('/tutorias/:id/finalizar', isAuthenticated, isProfessor, new FinalizarTutoriaController().handle);
 
 // -- ROTAS ATIVIDADE (somente aluno autenticado que seja tutor da tutoria) --
 // o tutor cria uma atividade para o aluno que ele tutora (destinatário pela tutoria)
