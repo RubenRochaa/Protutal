@@ -1,5 +1,6 @@
 import prismaClient from "../../prisma";
 import { AppError } from "../../errors/AppError";
+import { contarContestacoesPendentes } from "../../helpers/contarContestacoesPendentes";
 
 interface FinalizarTutoriaRequest {
     id_tutoria: number;
@@ -52,18 +53,10 @@ class FinalizarTutoriaService {
             throw new AppError(MENSAGEM_JA_FINALIZADA, 409);
         }
 
-        // RN15: contestações pendentes desta tutoria, pelo caminho
-        // Contestacao_nota -> Nota (do aluno tutorado) -> Atividade (criada pelo mesmo Tutor_sala da tutoria)
-        const pendentes = await prismaClient.contestacao_nota.count({
-            where: {
-                status: "pendente",
-                nota: {
-                    id_aluno: tutoria.id_aluno,
-                    atividade: {
-                        id_tutor_sala: tutoria.id_tutor_sala
-                    }
-                }
-            }
+        // RN15: contestações pendentes desta tutoria (do aluno tutorado, nas atividades do mesmo Tutor_sala)
+        const pendentes = await contarContestacoesPendentes({
+            id_tutor_sala: tutoria.id_tutor_sala,
+            id_aluno: tutoria.id_aluno
         });
 
         if (pendentes > 0) {
