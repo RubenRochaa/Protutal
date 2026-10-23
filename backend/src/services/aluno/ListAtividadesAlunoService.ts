@@ -1,6 +1,7 @@
 import prismaClient from "../../prisma";
 import { AppError } from "../../errors/AppError";
 import { calcularStatusEntrega, STATUS_ENTREGA, StatusEntrega } from "../../helpers/calcularStatusEntrega";
+import { podeResponderAtividade } from "../../helpers/podeResponderAtividade";
 
 interface ListAtividadesAlunoRequest {
     id_aluno: number;
@@ -141,9 +142,8 @@ class ListAtividadesAlunoService {
                 status: calcularStatusEntrega(atividade.data_entrega, resposta?.data_envio ?? null),
                 // valor é Decimal no Prisma e iria para o JSON como texto ("8.5"); convertemos para número
                 nota: nota ? { valor: Number(nota.valor), comentario: nota.comentario } : null,
-                // mesmo critério do POST /atividades/:id/respostas: tutoria ativa e ainda sem resposta
-                // (o prazo não bloqueia: depois dele a entrega fica como entregue_com_atraso)
-                pode_responder: destinatario?.tutoria.status === "ativa" && !resposta
+                // mesmo critério do POST /atividades/:id/respostas (regra no helper)
+                pode_responder: podeResponderAtividade(destinatario?.tutoria.status, !!resposta)
             };
         });
 

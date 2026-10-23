@@ -32,6 +32,7 @@ import { RevogarTutorSalaController } from './controllers/professor/RevogarTutor
 import { CreateAvaliacaoTutorController } from './controllers/professor/CreateAvaliacaoTutorController';
 
 import { CreateAtividadeController } from './controllers/aluno/CreateAtividadeController';
+import { DetailAtividadeController } from './controllers/aluno/DetailAtividadeController';
 import { CreateRespostaController } from './controllers/aluno/CreateRespostaController';
 import { ListRespostasAtividadeController } from './controllers/professor/ListRespostasAtividadeController';
 import { ListAtividadesAlunoController } from './controllers/aluno/ListAtividadesAlunoController';
@@ -117,6 +118,10 @@ router.post('/tutores-sala/:id/avaliacoes', isAuthenticated, isProfessor, new Cr
 // -- ROTAS ATIVIDADE (somente aluno autenticado que seja tutor da tutoria) --
 // o tutor cria uma atividade para o aluno que ele tutora (destinatário pela tutoria)
 router.post('/atividades', isAuthenticated, isAluno, new CreateAtividadeController().handle);
+// detalhar: o aluno destinatário (tutoria ativa ou finalizada) ou o tutor que criou a atividade
+// (vínculo ativo); o retorno traz "perfil" ("aluno" ou "tutor") com a visão de cada um.
+// a permissão é conferida no service, na ordem: id inválido (400) -> não encontrada (404) -> sem permissão (403)
+router.get('/atividades/:id', isAuthenticated, isAluno, new DetailAtividadeController().handle);
 
 // -- ROTAS RESPOSTA (somente aluno autenticado que seja destinatário da atividade) --
 // o aluno tutorado envia a resposta (arquivo obrigatório + texto opcional) via multipart/form-data
