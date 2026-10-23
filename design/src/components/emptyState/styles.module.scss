@@ -1,0 +1,23 @@
+.quadro{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 170px;
+    padding: 24px;
+    border-radius: var(--radius-card);
+    background-color: var(--white);
+    box-shadow: var(--shadow-card);
+}
+
+.mensagem{
+    max-width: 280px;
+    font-weight: 500;
+    line-height: 1.5;
+}
+
+@media (max-width: 375px){
+    .quadro{
+        min-height: 130px;
+        padding: 20px 16px;
+    }
+}
