@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 4, "column": 0}, "map": {"version":3,"sources":["file:///C:/Users/44892421820/Documents/p04_pizzaria_RubenRocha/frontend/src/app/dashboard/components/button/index.tsx"],"sourcesContent":["\"use client\"\r\n\r\nimport styles from './styles.module.scss'\r\nimport { useFormStatus } from 'react-dom'\r\n\r\ninterface Props {\r\n    name: string;\r\n}\r\n\r\nexport function Button({ name }: Props){\r\n    const { pending } = useFormStatus();\r\n\r\n    return (\r\n        <button type='submit' disabled={pending} className={styles.button}>\r\n            {pending ? \"Carregando...\" : name}\r\n        </button>\r\n    )\r\n}"],"names":["Button","name","pending","type","disabled","className","button"],"mappings":";;;;;AAEA;AACA;;;AAHA;;;AASO,SAASA,OAAO,EAAEC,IAAI,EAAS;;IAClC,MAAM,EAAEC,OAAO,EAAE,GAAG,IAAA,qLAAa;IAEjC,qBACI,6LAAC;QAAOC,MAAK;QAASC,UAAUF;QAASG,WAAW,oLAAM,CAACC,MAAM;kBAC5DJ,UAAU,kBAAkBD;;;;;;AAGzC;GARgBD;;QACQ,qLAAa;;;KADrBA"}},
-    {"offset": {"line": 44, "column": 0}, "map": {"version":3,"sources":["turbopack:///[project]/src/app/dashboard/components/button/styles.module.scss [app-client] (css module)"],"sourcesContent":["__turbopack_context__.v({\n  \"button\": \"styles-module-scss-module__Qrektq__button\",\n});\n"],"names":[],"mappings":"AAAA;AACA;AACA"}}]
-}

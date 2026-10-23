@@ -1,6 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 1, "column": 0}, "map": {"version":3,"sources":["turbopack:///C:/Users/44892421820/Documents/p04_pizzaria_RubenRocha/frontend/src/app/globals.scss"],"sourcesContent":["* {\r\n  margin: 0;\r\n  padding: 0;\r\n  box-sizing: border-box;\r\n  outline: 0;\r\n}\r\n\r\n:root {\r\n  --white: #FFF;\r\n  --black: #000;\r\n\r\n  --dark-900: #101026;\r\n  --dark-700: #1d1d2e;\r\n\r\n  --gray-100: #E1E1E6;\r\n  --green-900: #3ff3a3;\r\n  --red-900: #ff3f4b;\r\n\r\n}\r\n\r\nbutton {\r\n    cursor: pointer\r\n}\r\n\r\na {\r\n    color: inherit;\r\n    text-decoration: none;\r\n}\r\n\r\nbody {\r\n    background: var(--dark-700);\r\n}\r\n\r\nbody, input, textarea, select, button {\r\n    font: 400, 1rem sans-serif;\r\n}\r\n\r\n@media (max-width: 720px){\r\n    html{\r\n        font-size: 87,5%;\r\n    }\r\n}\r\n\r\n@media (max-width: 1000px){\r\n    html{\r\n        font-size: 93,75%;\r\n    }\r\n}"],"names":[],"mappings":"AAAA;;;;;;;AAOA;;;;;;;;;;AAaA;;;;AAIA;;;;;AAKA;;;;AAIA;;;;AAIA;EACI;;;;;AAKJ;EACI"}}]
-}
