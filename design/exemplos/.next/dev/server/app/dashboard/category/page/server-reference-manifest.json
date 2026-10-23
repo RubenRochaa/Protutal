@@ -1,0 +1,16 @@
+{
+  "node": {
+    "405b9661af99f45de82d786a503aff294717f84629": {
+      "workers": {
+        "app/dashboard/category/page": {
+          "moduleId": "[project]/.next-internal/server/app/dashboard/category/page/actions.js { ACTIONS_MODULE0 => \"[project]/src/app/dashboard/category/page.tsx [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false,
+          "codeHash": null
+        }
+      },
+      "exportedName": "$$RSC_SERVER_ACTION_0",
+      "filename": "src/app/dashboard/category/page.tsx"
+    }
+  },
+  "edge": {}
+}

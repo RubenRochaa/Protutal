@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 1, "column": 0}, "map": {"version":3,"sources":["turbopack:///C:/Users/44892421820/Documents/p04_pizzaria_RubenRocha/frontend/src/app/dashboard/category/styles.module.scss"],"sourcesContent":[".container{\r\n    max-width: 720px;\r\n    margin: 20px auto;\r\n    padding: 0 16px;\r\n\r\n    display: flex;\r\n    flex-direction: column;\r\n\r\n    h1{\r\n        color: var(--white);\r\n    }\r\n\r\n  }\r\n\r\n  .form{\r\n    display: flex;\r\n    gap: 16px;\r\n    flex-direction: column;\r\n    margin: 16px 0;\r\n  }\r\n\r\n  .input{\r\n    height: 40px;\r\n    border: 0;\r\n    background-color: var(--dark-900);\r\n    border-radius: 8px;\r\n    padding: 0 16px;\r\n    color: var(--white);\r\n    border: 1px solid var(--grey-100);\r\n  }"],"names":[],"mappings":"AAAA;;;;;;;;AAQI;;;;AAMF;;;;;;;AAOA"}},
+    {"offset": {"line": 31, "column": 0}, "map": {"version":3,"sources":["turbopack:///C:/Users/44892421820/Documents/p04_pizzaria_RubenRocha/frontend/src/app/dashboard/components/button/styles.module.scss"],"sourcesContent":["\r\n.button{\r\n    height: 40px;\r\n    border-radius: 8px;\r\n    border: 0;\r\n    background-color: var(--green-900);\r\n    font-weight: bold;\r\n    font-size: 16px;\r\n    color: var(--white);\r\n}"],"names":[],"mappings":"AACA"}}]
+}

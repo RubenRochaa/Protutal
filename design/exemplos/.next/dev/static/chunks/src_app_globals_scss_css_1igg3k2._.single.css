@@ -1,0 +1,48 @@
+/* [project]/src/app/globals.scss.css [app-client] (css) */
+* {
+  box-sizing: border-box;
+  outline: 0;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --white: #fff;
+  --black: #000;
+  --dark-900: #101026;
+  --dark-700: #1d1d2e;
+  --gray-100: #e1e1e6;
+  --green-900: #3ff3a3;
+  --red-900: #ff3f4b;
+}
+
+button {
+  cursor: pointer;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+body {
+  background: var(--dark-700);
+}
+
+body, input, textarea, select, button {
+  font: 400,1rem sans-serif;
+}
+
+@media (max-width: 720px) {
+  html {
+    font-size: 87,5%;
+  }
+}
+
+@media (max-width: 1000px) {
+  html {
+    font-size: 93,75%;
+  }
+}
+
+/*# sourceMappingURL=src_app_globals_scss_css_1igg3k2._.single.css.map*/

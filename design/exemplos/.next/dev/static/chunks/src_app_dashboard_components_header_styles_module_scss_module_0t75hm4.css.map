@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 1, "column": 0}, "map": {"version":3,"sources":["turbopack:///C:/Users/44892421820/Documents/p04_pizzaria_RubenRocha/frontend/src/app/dashboard/components/header/styles.module.scss"],"sourcesContent":[".headerContainer{\r\n    height: 5rem;\r\n   }\r\n\r\n   .headerContent {\r\n    max-width: 1280px;\r\n    height: 5rem;\r\n    margin: 0 auto;\r\n    padding: 0 16px;\r\n\r\n    display: flex;\r\n    align-items: center;\r\n    justify-content: space-between;\r\n    \r\n    nav{\r\n        display: flex;\r\n        align-items: center;\r\n        gap: 14px;\r\n\r\n      a{\r\n        color: var(--white);\r\n        text-decoration: none;\r\n        transition: color .8s;\r\n\r\n        &:hover{\r\n            color: var(--red-900);\r\n        }\r\n      } \r\n\r\n   button{\r\n    border: 0;\r\n    background: transparent;\r\n    margin-left: 16px;\r\n    transition: transform 0.5s;\r\n\r\n    &:hover{\r\n        transform: scale(1.2);\r\n    }\r\n   }\r\n\r\n  }\r\n}"],"names":[],"mappings":"AAAA;;;;AAIG;;;;;;;;;;AAUC;;;;;;AAKE;;;;;;AAKE;;;;AAKL;;;;;;;AAMC"}}]
+}

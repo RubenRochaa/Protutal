@@ -1,0 +1,39 @@
+{
+  "node": {
+    "40aea24d45409473abcaf0ff44eec496df6faaf96b": {
+      "workers": {
+        "app/page": {
+          "moduleId": "[project]/.next-internal/server/app/page/actions.js { ACTIONS_MODULE0 => \"[project]/src/app/page.tsx [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false,
+          "codeHash": null
+        }
+      },
+      "filename": "src/app/page.tsx",
+      "exportedName": "$$RSC_SERVER_ACTION_0"
+    },
+    "40830768bfd5831bb955c580ced63a67ee4109869e": {
+      "workers": {
+        "app/signup/page": {
+          "moduleId": "[project]/.next-internal/server/app/signup/page/actions.js { ACTIONS_MODULE0 => \"[project]/src/app/signup/page.tsx [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false,
+          "codeHash": null
+        }
+      },
+      "filename": "src/app/signup/page.tsx",
+      "exportedName": "$$RSC_SERVER_ACTION_0"
+    },
+    "405b9661af99f45de82d786a503aff294717f84629": {
+      "workers": {
+        "app/dashboard/category/page": {
+          "moduleId": "[project]/.next-internal/server/app/dashboard/category/page/actions.js { ACTIONS_MODULE0 => \"[project]/src/app/dashboard/category/page.tsx [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false,
+          "codeHash": null
+        }
+      },
+      "filename": "src/app/dashboard/category/page.tsx",
+      "exportedName": "$$RSC_SERVER_ACTION_0"
+    }
+  },
+  "edge": {},
+  "encryptionKey": "1Hx/ijfmoHeGb39eu/1g2tyogmY8AU1TXegxLDA3ks4="
+}

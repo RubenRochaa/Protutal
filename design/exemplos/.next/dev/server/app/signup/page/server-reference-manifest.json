@@ -1,0 +1,16 @@
+{
+  "node": {
+    "40830768bfd5831bb955c580ced63a67ee4109869e": {
+      "workers": {
+        "app/signup/page": {
+          "moduleId": "[project]/.next-internal/server/app/signup/page/actions.js { ACTIONS_MODULE0 => \"[project]/src/app/signup/page.tsx [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false,
+          "codeHash": null
+        }
+      },
+      "exportedName": "$$RSC_SERVER_ACTION_0",
+      "filename": "src/app/signup/page.tsx"
+    }
+  },
+  "edge": {}
+}

@@ -1,0 +1,42 @@
+/* [project]/src/app/dashboard/category/styles.module.scss.module.css [app-client] (css) */
+.styles-module-scss-module__EsHkSq__container {
+  flex-direction: column;
+  max-width: 720px;
+  margin: 20px auto;
+  padding: 0 16px;
+  display: flex;
+}
+
+.styles-module-scss-module__EsHkSq__container h1 {
+  color: var(--white);
+}
+
+.styles-module-scss-module__EsHkSq__form {
+  flex-direction: column;
+  gap: 16px;
+  margin: 16px 0;
+  display: flex;
+}
+
+.styles-module-scss-module__EsHkSq__input {
+  background-color: var(--dark-900);
+  height: 40px;
+  color: var(--white);
+  border: 0;
+  border: 1px solid var(--grey-100);
+  border-radius: 8px;
+  padding: 0 16px;
+}
+
+/* [project]/src/app/dashboard/components/button/styles.module.scss.module.css [app-client] (css) */
+.styles-module-scss-module__Qrektq__button {
+  background-color: var(--green-900);
+  height: 40px;
+  color: var(--white);
+  border: 0;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+/*# sourceMappingURL=src_app_dashboard_1ojlt-v._.css.map*/
