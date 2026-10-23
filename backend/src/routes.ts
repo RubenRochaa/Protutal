@@ -39,6 +39,7 @@ import { ListTutoriasTutorController } from './controllers/aluno/ListTutoriasTut
 import { ListTutoriasAlunoController } from './controllers/aluno/ListTutoriasAlunoController';
 import { CreateMaterialController } from './controllers/aluno/CreateMaterialController';
 import { ListMateriaisSalaController } from './controllers/professor/ListMateriaisSalaController';
+import { ListTiposAtividadeController } from './controllers/professor/ListTiposAtividadeController';
 
 import { isAuthenticated } from './middlewares/isAuthenticated';
 import { isProfessor } from './middlewares/isProfessor';
@@ -150,5 +151,9 @@ router.post('/salas/:id/materiais', isAuthenticated, isAluno, isTutorAtivoSala, 
 // listar: qualquer professor vê todos os materiais da sala; o tutor ativo vê os que ele anexou;
 // o aluno vê os dos tutores com quem tem ou teve tutoria na sala. A permissão é conferida no service
 router.get('/salas/:id/materiais', isAuthenticated, new ListMateriaisSalaController().handle);
+
+// -- ROTAS TIPOS DE ATIVIDADE (professor ou aluno autenticado) --
+// lista os valores do enum TipoAtividade com o rótulo em português, para o campo de seleção do front-end
+router.get('/tipos-atividade', isAuthenticated, new ListTiposAtividadeController().handle);
 
 export { router };
