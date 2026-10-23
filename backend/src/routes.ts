@@ -25,6 +25,7 @@ import { RecusarPedidoTutoriaController } from './controllers/professor/RecusarP
 import { PermissaoAtividadesSalaController } from './controllers/professor/PermissaoAtividadesSalaController';
 
 import { CreateTutoriaController } from './controllers/professor/CreateTutoriaController';
+import { UpdateMetaTutoriaController } from './controllers/professor/UpdateMetaTutoriaController';
 
 import { CreateAtividadeController } from './controllers/aluno/CreateAtividadeController';
 import { CreateRespostaController } from './controllers/aluno/CreateRespostaController';
@@ -90,6 +91,8 @@ router.patch('/salas/:id/permissao-atividades', isAuthenticated, isProfessor, ne
 // -- ROTAS TUTORIA (somente professor autenticado) --
 // liga um tutor ativo da sala (Tutor_sala) a um aluno matriculado na mesma sala
 router.post('/tutorias', isAuthenticated, isProfessor, new CreateTutoriaController().handle);
+// define ou substitui a meta de aprendizagem; só o professor dono da sala e só em tutoria ativa
+router.patch('/tutorias/:id/meta', isAuthenticated, isProfessor, new UpdateMetaTutoriaController().handle);
 
 // -- ROTAS ATIVIDADE (somente aluno autenticado que seja tutor da tutoria) --
 // o tutor cria uma atividade para o aluno que ele tutora (destinatário pela tutoria)
