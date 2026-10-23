@@ -8,6 +8,7 @@ import { AuthAlunoController } from './controllers/aluno/AuthAlunoController';
 
 import { CreateSalaController } from './controllers/professor/CreateSalaController';
 import { ListSalaController } from './controllers/professor/ListSalaController';
+import { DetailSalaController } from './controllers/professor/DetailSalaController';
 import { ListAlunoController } from './controllers/professor/ListAlunoController';
 import { CreateMatriculaController } from './controllers/professor/CreateMatriculaController';
 import { ListAlunosSalaController } from './controllers/professor/ListAlunosSalaController';
@@ -53,6 +54,8 @@ router.post('/sessao/alunos', new AuthAlunoController().handle);
 // -- ROTAS SALA (somente professor autenticado) --
 router.post('/salas', isAuthenticated, isProfessor, new CreateSalaController().handle);
 router.get('/salas', isAuthenticated, isProfessor, new ListSalaController().handle);
+// detalhar: somente o professor dono da sala (dados básicos + professor; sem alunos, tutores e conteúdos)
+router.get('/salas/:id', isAuthenticated, isProfessor, new DetailSalaController().handle);
 
 // -- ROTAS ALUNOS (somente professor autenticado) --
 router.get('/alunos', isAuthenticated, isProfessor, new ListAlunoController().handle);
