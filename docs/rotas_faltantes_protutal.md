@@ -75,7 +75,7 @@
 
 ### Tutor e aluno (2)
 
-* Enviar mensagem ou comunicado: `POST /tutorias/:id/mensagens` (RF2 e RF24; o comunicado é a mensagem com `assunto` preenchido) - (O1)
+* Enviar mensagem ou comunicado: `POST /tutorias/:id/mensagens` (RF2 e RF24; o comunicado é a mensagem com `assunto` preenchido) - (O1) - feito
 * Listar mensagens da tutoria: `GET /tutorias/:id/mensagens` - (O2)
 
 ### Comum (1)
