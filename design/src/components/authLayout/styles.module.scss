@@ -1,0 +1,109 @@
+// Desktop (1280): painel à esquerda + cartão à direita.
+// Tablet e celular (até 768): painel vira uma faixa no topo e o cartão fica embaixo.
+
+.container{
+    display: flex;
+    min-height: 100vh;
+}
+
+.painel{
+    position: relative;
+    overflow: hidden;
+    flex: 0 0 42%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(180deg, var(--red-700) 0%, var(--red-900) 55%, var(--red-dark) 100%);
+}
+
+.marcaDagua{
+    position: absolute;
+    inset: -50%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px 32px;
+    transform: rotate(-30deg);
+    opacity: 0.08;
+    pointer-events: none;
+    user-select: none;
+
+    span{
+        color: var(--white);
+        font-size: 1.5rem;
+        font-weight: 700;
+    }
+}
+
+.logo{
+    position: relative;
+    color: var(--white);
+    font-size: 2.25rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+.conteudo{
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 16px;
+}
+
+.cartao{
+    width: 100%;
+    max-width: 380px;
+    padding: 0 24px 20px;
+    border-radius: var(--radius-card);
+    background-color: var(--white);
+    box-shadow: var(--shadow-card);
+    overflow: hidden;
+}
+
+.abas{
+    display: flex;
+    margin: 0 -24px 20px;
+    background-color: var(--gray-300);
+    border-radius: var(--radius-card) var(--radius-card) var(--radius-pill) var(--radius-pill);
+}
+
+.aba, .abaAtiva{
+    flex: 1;
+    padding: 10px 0;
+    border-radius: var(--radius-pill);
+    text-align: center;
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+.aba{
+    color: var(--black);
+
+    &:hover{
+        color: var(--red-700);
+    }
+}
+
+.abaAtiva{
+    background-color: var(--red-700);
+    color: var(--white);
+}
+
+@media (max-width: 768px){
+    .container{
+        flex-direction: column;
+    }
+
+    .painel{
+        flex: 0 0 160px;
+    }
+
+    .logo{
+        font-size: 1.75rem;
+    }
+
+    .conteudo{
+        align-items: flex-start;
+        padding: 24px 16px;
+    }
+}

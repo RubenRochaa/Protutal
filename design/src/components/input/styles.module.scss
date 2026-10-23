@@ -1,0 +1,28 @@
+.campo{
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 100%;
+}
+
+.label{
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.input{
+    height: 40px;
+    padding: 0 12px;
+    border: 1px solid var(--border-input);
+    border-radius: var(--radius-input);
+    background-color: var(--white);
+    color: var(--black);
+
+    &::placeholder{
+        color: var(--gray-500);
+    }
+
+    &:focus{
+        border-color: var(--red-700);
+    }
+}
