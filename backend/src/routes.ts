@@ -28,6 +28,7 @@ import { CreateAtividadeController } from './controllers/aluno/CreateAtividadeCo
 import { CreateRespostaController } from './controllers/aluno/CreateRespostaController';
 import { ListRespostasAtividadeController } from './controllers/professor/ListRespostasAtividadeController';
 import { ListAtividadesAlunoController } from './controllers/aluno/ListAtividadesAlunoController';
+import { CreateNotaController } from './controllers/aluno/CreateNotaController';
 
 import { isAuthenticated } from './middlewares/isAuthenticated';
 import { isProfessor } from './middlewares/isProfessor';
@@ -90,6 +91,12 @@ router.post('/atividades/:id/respostas', isAuthenticated, isAluno, new CreateRes
 // listar: tutor que criou a atividade (vínculo ativo) ou professor dono da sala;
 // traz todos os destinatários, com resposta, nota e status de entrega
 router.get('/atividades/:id/respostas', isAuthenticated, isTutorCriadorOuProfessorAtividade, new ListRespostasAtividadeController().handle);
+
+// -- ROTAS NOTA (somente o tutor que criou a atividade, com vínculo ativo) --
+// o tutor lança nota e comentário para um aluno destinatário da atividade.
+// a permissão é conferida no service (e não num middleware) para respeitar a ordem
+// das validações: corpo inválido (400) -> atividade inexistente (404) -> sem permissão (403)
+router.post('/atividades/:id/notas', isAuthenticated, new CreateNotaController().handle);
 
 // -- ROTAS ATIVIDADES DO ALUNO (somente aluno autenticado) --
 // lista as atividades em que o aluno logado é destinatário (nunca as que ele criou como tutor);
