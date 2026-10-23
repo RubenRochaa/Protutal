@@ -44,6 +44,7 @@ import { ListTutoriasAlunoController } from './controllers/aluno/ListTutoriasAlu
 import { CreateMaterialController } from './controllers/aluno/CreateMaterialController';
 import { ListMateriaisSalaController } from './controllers/professor/ListMateriaisSalaController';
 import { ListTiposAtividadeController } from './controllers/professor/ListTiposAtividadeController';
+import { CreateMensagemController } from './controllers/aluno/CreateMensagemController';
 
 import { isAuthenticated } from './middlewares/isAuthenticated';
 import { isProfessor } from './middlewares/isProfessor';
@@ -111,6 +112,12 @@ router.patch('/tutorias/:id/finalizar', isAuthenticated, isProfessor, new Finali
 // reabre a tutoria (status ativa + data_fim null); só o professor dono da sala, só tutoria finalizada,
 // do ano letivo atual, com tutor não revogado e sem outra tutoria ativa do aluno na sala
 router.patch('/tutorias/:id/reabrir', isAuthenticated, isProfessor, new ReabrirTutoriaController().handle);
+
+// -- ROTAS MENSAGEM (somente aluno autenticado que participe da tutoria) --
+// o tutor ou o aluno tutorado envia mensagem; com assunto preenchido vira comunicado (só o tutor).
+// a participação é conferida no service, na ordem: id inválido (400) -> não encontrada (404)
+// -> não participa (403) -> tutoria finalizada (409) -> corpo inválido (400) -> tutorado com assunto (403)
+router.post('/tutorias/:id/mensagens', isAuthenticated, isAluno, new CreateMensagemController().handle);
 
 // -- ROTAS TUTOR DA SALA (somente professor autenticado) --
 // revoga o tutor da sala (data_revogacao) e finaliza as tutorias ativas dele numa transação;
