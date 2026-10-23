@@ -14,6 +14,7 @@ import { CreateMatriculaController } from './controllers/professor/CreateMatricu
 import { ListAlunosSalaController } from './controllers/professor/ListAlunosSalaController';
 import { ListTutoresSalaController } from './controllers/professor/ListTutoresSalaController';
 import { ListTutoriasSalaController } from './controllers/professor/ListTutoriasSalaController';
+import { ListAtividadesSalaController } from './controllers/professor/ListAtividadesSalaController';
 import { CreateConteudoController } from './controllers/professor/CreateConteudoController';
 import { ListConteudosSalaController } from './controllers/professor/ListConteudosSalaController';
 
@@ -78,6 +79,9 @@ router.get('/salas/:id/alunos', isAuthenticated, isProfessor, new ListAlunosSala
 router.get('/salas/:id/tutores', isAuthenticated, isProfessor, new ListTutoresSalaController().handle);
 // tutorias da sala (tutor, aluno tutorado, status e meta); filtro opcional ?status=ativa|finalizada
 router.get('/salas/:id/tutorias', isAuthenticated, isProfessor, new ListTutoriasSalaController().handle);
+// atividades lançadas pelos tutores na sala, com conteúdo, tutor e contagens de entrega; só o professor dono.
+// filtros opcionais ?etapa=1|2|3, ?id_conteudo= e ?id_tutor_sala=; o detalhe por aluno fica em /atividades/:id/respostas
+router.get('/salas/:id/atividades', isAuthenticated, isProfessor, new ListAtividadesSalaController().handle);
 
 // -- ROTAS CONTEÚDO --
 // cadastrar: somente professor autenticado
