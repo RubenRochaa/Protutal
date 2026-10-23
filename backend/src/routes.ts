@@ -37,6 +37,7 @@ import { CreateNotaController } from './controllers/aluno/CreateNotaController';
 import { ListTutoriasTutorController } from './controllers/aluno/ListTutoriasTutorController';
 import { ListTutoriasAlunoController } from './controllers/aluno/ListTutoriasAlunoController';
 import { CreateMaterialController } from './controllers/aluno/CreateMaterialController';
+import { ListMateriaisSalaController } from './controllers/professor/ListMateriaisSalaController';
 
 import { isAuthenticated } from './middlewares/isAuthenticated';
 import { isProfessor } from './middlewares/isProfessor';
@@ -140,5 +141,8 @@ router.get('/tutores/me/tutorias', isAuthenticated, isTutor, new ListTutoriasTut
 // (titulo obrigatório, descricao opcional, file obrigatório: .pdf .doc .docx .xls .xlsx .csv, até 10 MB).
 // o isAluno vem antes para o professor dono não passar pelo isTutorAtivoSala
 router.post('/salas/:id/materiais', isAuthenticated, isAluno, isTutorAtivoSala, new CreateMaterialController().handle);
+// listar: qualquer professor vê todos os materiais da sala; o tutor ativo vê os que ele anexou;
+// o aluno vê os dos tutores com quem tem ou teve tutoria na sala. A permissão é conferida no service
+router.get('/salas/:id/materiais', isAuthenticated, new ListMateriaisSalaController().handle);
 
 export { router };
