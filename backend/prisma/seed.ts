@@ -51,9 +51,9 @@ async function main() {
     // 3. sala (ids 1 a 3)
     await tx.sala.createMany({
       data: [
-        { nome: "Geografia - 1º ano A", ano_letivo: 2026, id_professor: 1 },
-        { nome: "Geografia - 2º ano A", ano_letivo: 2026, id_professor: 1 },
-        { nome: "Geografia - 3º ano A", ano_letivo: 2026, id_professor: 2 },
+        { nome: "Geografia - 1º ano A", serie: 1, ano_letivo: 2026, id_professor: 1 },
+        { nome: "Geografia - 2º ano A", serie: 2, ano_letivo: 2026, id_professor: 1 },
+        { nome: "Geografia - 3º ano A", serie: 3, ano_letivo: 2026, id_professor: 2 },
       ],
     });
 
@@ -69,23 +69,32 @@ async function main() {
     // 5. conteudo (ids 1 a 6)
     await tx.conteudo.createMany({
       data: [
-        { id_sala: 1, nome: "Cartografia" },
-        { id_sala: 1, nome: "Climatologia" },
-        { id_sala: 2, nome: "Urbanização" },
-        { id_sala: 2, nome: "Geografia agrária" },
-        { id_sala: 3, nome: "Globalização" },
-        { id_sala: 3, nome: "Geopolítica" },
+        { nome: "Cartografia" },
+        { nome: "Climatologia" },
+        { nome: "Urbanização" },
+        { nome: "Geografia agrária" },
+        { nome: "Globalização" },
+        { nome: "Geopolítica" },
+      ],
+    });
+
+    // 5.1 sala_conteudo (vínculo entre sala e conteúdo)
+    await tx.sala_conteudo.createMany({
+      data: [
+        { id_sala: 1, id_conteudo: 1 }, { id_sala: 1, id_conteudo: 2 },
+        { id_sala: 2, id_conteudo: 3 }, { id_sala: 2, id_conteudo: 4 },
+        { id_sala: 3, id_conteudo: 5 }, { id_sala: 3, id_conteudo: 6 },
       ],
     });
 
     // 6. pedido_tutoria (ids 1 a 5: três aceitos, um recusado, um pendente)
     await tx.pedido_tutoria.createMany({
       data: [
-        { id_aluno: 1, status: "aceito", data_solicitacao: dt("2026-02-10 10:00:00"), data_decisao: dt("2026-02-12 14:00:00"), id_professor: 1 },
-        { id_aluno: 5, status: "aceito", data_solicitacao: dt("2026-02-10 10:00:00"), data_decisao: dt("2026-02-12 14:00:00"), id_professor: 1 },
-        { id_aluno: 8, status: "aceito", data_solicitacao: dt("2026-02-10 10:00:00"), data_decisao: dt("2026-02-12 14:00:00"), id_professor: 2 },
-        { id_aluno: 7, status: "recusado", data_solicitacao: dt("2026-02-11 09:00:00"), data_decisao: dt("2026-02-13 11:00:00"), id_professor: 1 },
-        { id_aluno: 4, status: "pendente", data_solicitacao: dt("2026-10-05 16:30:00"), data_decisao: null, id_professor: null },
+        { id_aluno: 1, id_sala: 1, status: "aceito", data_solicitacao: dt("2026-02-10 10:00:00"), data_decisao: dt("2026-02-12 14:00:00"), id_professor: 1 },
+        { id_aluno: 5, id_sala: 2, status: "aceito", data_solicitacao: dt("2026-02-10 10:00:00"), data_decisao: dt("2026-02-12 14:00:00"), id_professor: 1 },
+        { id_aluno: 8, id_sala: 3, status: "aceito", data_solicitacao: dt("2026-02-10 10:00:00"), data_decisao: dt("2026-02-12 14:00:00"), id_professor: 2 },
+        { id_aluno: 7, id_sala: 2, status: "recusado", data_solicitacao: dt("2026-02-11 09:00:00"), data_decisao: dt("2026-02-13 11:00:00"), id_professor: 1 },
+        { id_aluno: 4, id_sala: 1, status: "pendente", data_solicitacao: dt("2026-10-05 16:30:00"), data_decisao: null, id_professor: null },
       ],
     });
 
@@ -117,12 +126,12 @@ async function main() {
       ],
     });
 
-    // 10. atividade (ids 1 a 3; coluna "tipo" fica nula)
+    // 10. atividade (ids 1 a 3)
     await tx.atividade.createMany({
       data: [
-        { id_tutor_sala: 1, id_conteudo: 1, titulo: "Leitura de mapas e escalas", descricao: "Calcule as distâncias reais a partir das escalas indicadas em cada mapa.", data_entrega: dt("2026-09-15 23:59:00") },
-        { id_tutor_sala: 1, id_conteudo: 2, titulo: "Climogramas do Brasil", descricao: "Identifique o tipo climático representado em cada climograma.", data_entrega: dt("2026-10-30 23:59:00") },
-        { id_tutor_sala: 3, id_conteudo: 5, titulo: "Blocos econômicos", descricao: "Compare os objetivos do Mercosul e da União Europeia.", data_entrega: dt("2026-05-20 23:59:00") },
+        { id_tutor_sala: 1, id_conteudo: 1, titulo: "Leitura de mapas e escalas", tipo: "interpretacao_mapas", etapa: 3, descricao: "Calcule as distâncias reais a partir das escalas indicadas em cada mapa.", data_entrega: dt("2026-09-15 23:59:00") },
+        { id_tutor_sala: 1, id_conteudo: 2, titulo: "Climogramas do Brasil", tipo: "analise_graficos", etapa: 3, descricao: "Identifique o tipo climático representado em cada climograma.", data_entrega: dt("2026-10-30 23:59:00") },
+        { id_tutor_sala: 3, id_conteudo: 5, titulo: "Blocos econômicos", tipo: "estudo_caso", etapa: 1, descricao: "Compare os objetivos do Mercosul e da União Europeia.", data_entrega: dt("2026-05-20 23:59:00") },
       ],
     });
 
@@ -154,11 +163,11 @@ async function main() {
       ],
     });
 
-    // 14. contestacao_nota (uma pendente em tutoria ativa, uma resolvida em tutoria finalizada)
+    // 14. contestacao_nota (uma pendente em tutoria ativa, uma recusada em tutoria finalizada)
     await tx.contestacao_nota.createMany({
       data: [
         { id_nota: 1, comentario: "Acredito que a questão 3 foi corrigida com a escala errada.", status: "pendente", data_envio: dt("2026-09-20 10:00:00"), decisao: null, data_resolucao: null },
-        { id_nota: 3, comentario: "Gostaria de revisão do critério de comparação.", status: "resolvida", data_envio: dt("2026-05-25 09:00:00"), decisao: "Nota mantida: a resposta não citou a livre circulação de pessoas.", data_resolucao: dt("2026-05-27 15:00:00") },
+        { id_nota: 3, comentario: "Gostaria de revisão do critério de comparação.", status: "recusada", data_envio: dt("2026-05-25 09:00:00"), decisao: "Nota mantida: a resposta não citou a livre circulação de pessoas.", data_resolucao: dt("2026-05-27 15:00:00") },
       ],
     });
 
@@ -172,12 +181,12 @@ async function main() {
       ],
     });
 
-    // 16. mensagem (id_aluno = remetente; o tutor também é aluno)
+    // 16. mensagem (id_remetente = id_aluno de quem enviou; o tutor também é aluno)
     await tx.mensagem.createMany({
       data: [
-        { id_tutoria: 1, id_aluno: 2, assunto: null, texto: "Ana, não entendi como converter cm para km.", data_envio: dt("2026-09-10 18:00:00") },
-        { id_tutoria: 1, id_aluno: 1, assunto: null, texto: "Divide por 100.000. Amanhã te mostro com um exemplo.", data_envio: dt("2026-09-10 18:12:00") },
-        { id_tutoria: 3, id_aluno: 5, assunto: "Encontro da semana", texto: "Nosso encontro passa para quinta-feira, no mesmo horário.", data_envio: dt("2026-10-01 09:00:00") },
+        { id_tutoria: 1, id_remetente: 2, assunto: null, texto: "Ana, não entendi como converter cm para km.", data_envio: dt("2026-09-10 18:00:00") },
+        { id_tutoria: 1, id_remetente: 1, assunto: null, texto: "Divide por 100.000. Amanhã te mostro com um exemplo.", data_envio: dt("2026-09-10 18:12:00") },
+        { id_tutoria: 3, id_remetente: 5, assunto: "Encontro da semana", texto: "Nosso encontro passa para quinta-feira, no mesmo horário.", data_envio: dt("2026-10-01 09:00:00") },
       ],
     });
 
@@ -200,8 +209,8 @@ async function main() {
     // 19. avaliacao_tutor
     await tx.avaliacao_tutor.createMany({
       data: [
-        { id_tutor_sala: 1, id_professor: 1, comentario: "Tutora organizada; os tutorados evoluíram em cartografia.", data: dt("2026-06-05 10:00:00") },
-        { id_tutor_sala: 3, id_professor: 2, comentario: "Bom domínio do conteúdo, mas demorou a corrigir as atividades.", data: dt("2026-06-30 16:00:00") },
+        { id_tutor_sala: 1, id_professor: 1, nota: "9.00", comentario: "Tutora organizada; os tutorados evoluíram em cartografia.", data: dt("2026-06-05 10:00:00") },
+        { id_tutor_sala: 3, id_professor: 2, nota: "7.00", comentario: "Bom domínio do conteúdo, mas demorou a corrigir as atividades.", data: dt("2026-06-30 16:00:00") },
       ],
     });
   });
