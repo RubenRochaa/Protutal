@@ -30,11 +30,13 @@ import { CreateRespostaController } from './controllers/aluno/CreateRespostaCont
 import { ListRespostasAtividadeController } from './controllers/professor/ListRespostasAtividadeController';
 import { ListAtividadesAlunoController } from './controllers/aluno/ListAtividadesAlunoController';
 import { CreateNotaController } from './controllers/aluno/CreateNotaController';
+import { ListTutoriasTutorController } from './controllers/aluno/ListTutoriasTutorController';
 
 import { isAuthenticated } from './middlewares/isAuthenticated';
 import { isProfessor } from './middlewares/isProfessor';
 import { isAluno } from './middlewares/isAluno';
 import { isTutorAtivoSala } from './middlewares/isTutorAtivoSala';
+import { isTutor } from './middlewares/isTutor';
 import { isTutorCriadorOuProfessorAtividade } from './middlewares/isTutorCriadorOuProfessorAtividade';
 
 
@@ -105,5 +107,11 @@ router.post('/atividades/:id/notas', isAuthenticated, new CreateNotaController()
 // lista as atividades em que o aluno logado é destinatário (nunca as que ele criou como tutor);
 // filtros opcionais: ?status=pendente|entregue|entregue_com_atraso e ?etapa=1|2|3
 router.get('/alunos/me/atividades', isAuthenticated, isAluno, new ListAtividadesAlunoController().handle);
+
+// -- ROTAS TUTOR (somente aluno autenticado com vínculo de tutor ativo) --
+// atenção: se um dia existir uma rota /tutores/:id, ela deve ficar DEPOIS das rotas /tutores/me/...,
+// senão o Express trata "me" como :id
+// lista os tutorados do tutor logado (aluno, status, meta e sala); filtro opcional ?status=ativa|finalizada
+router.get('/tutores/me/tutorias', isAuthenticated, isTutor, new ListTutoriasTutorController().handle);
 
 export { router };
