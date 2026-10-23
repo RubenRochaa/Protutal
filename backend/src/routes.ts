@@ -29,6 +29,7 @@ import { UpdateMetaTutoriaController } from './controllers/professor/UpdateMetaT
 import { FinalizarTutoriaController } from './controllers/professor/FinalizarTutoriaController';
 import { ReabrirTutoriaController } from './controllers/professor/ReabrirTutoriaController';
 import { RevogarTutorSalaController } from './controllers/professor/RevogarTutorSalaController';
+import { CreateAvaliacaoTutorController } from './controllers/professor/CreateAvaliacaoTutorController';
 
 import { CreateAtividadeController } from './controllers/aluno/CreateAtividadeController';
 import { CreateRespostaController } from './controllers/aluno/CreateRespostaController';
@@ -108,6 +109,9 @@ router.patch('/tutorias/:id/reabrir', isAuthenticated, isProfessor, new ReabrirT
 // revoga o tutor da sala (data_revogacao) e finaliza as tutorias ativas dele numa transação;
 // só o professor dono da sala, só vínculo não revogado e sem contestação de nota pendente (RN15)
 router.patch('/tutores-sala/:id/revogar', isAuthenticated, isProfessor, new RevogarTutorSalaController().handle);
+// avalia o tutor da sala (nota 0 a 10 + comentário); só o professor dono da sala.
+// o mesmo tutor pode ter várias avaliações, e tutor revogado também pode ser avaliado
+router.post('/tutores-sala/:id/avaliacoes', isAuthenticated, isProfessor, new CreateAvaliacaoTutorController().handle);
 
 // -- ROTAS ATIVIDADE (somente aluno autenticado que seja tutor da tutoria) --
 // o tutor cria uma atividade para o aluno que ele tutora (destinatário pela tutoria)
