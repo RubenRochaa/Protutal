@@ -43,6 +43,7 @@ import { CreateContestacaoNotaController } from './controllers/aluno/CreateConte
 import { ListTutoriasTutorController } from './controllers/aluno/ListTutoriasTutorController';
 import { ListTutoriasAlunoController } from './controllers/aluno/ListTutoriasAlunoController';
 import { ListContestacoesAlunoController } from './controllers/aluno/ListContestacoesAlunoController';
+import { ListContestacoesController } from './controllers/professor/ListContestacoesController';
 import { CreateMaterialController } from './controllers/aluno/CreateMaterialController';
 import { ListMateriaisSalaController } from './controllers/professor/ListMateriaisSalaController';
 import { ListTiposAtividadeController } from './controllers/professor/ListTiposAtividadeController';
@@ -158,11 +159,15 @@ router.get('/atividades/:id/respostas', isAuthenticated, isTutorCriadorOuProfess
 // das validações: corpo inválido (400) -> atividade inexistente (404) -> sem permissão (403)
 router.post('/atividades/:id/notas', isAuthenticated, new CreateNotaController().handle);
 
-// -- ROTAS CONTESTAÇÃO DE NOTA (somente o aluno dono da nota) --
+// -- ROTAS CONTESTAÇÃO DE NOTA --
 // o aluno contesta a nota recebida, só enquanto a tutoria estiver ativa (RN14), e uma única vez por nota.
 // a permissão é conferida no service, na ordem: id/corpo inválido (400) -> nota inexistente (404)
 // -> não é dono ou tutoria finalizada (403) -> nota já contestada (409)
 router.post('/notas/:id/contestacoes', isAuthenticated, isAluno, new CreateContestacaoNotaController().handle);
+// listar (professor e tutor): o professor vê as das salas em que é dono; o tutor vê as das atividades
+// que ele criou, só nos vínculos ativos; qualquer outro usuário recebe 403. A permissão é conferida no service.
+// filtros opcionais ?status=pendente|aceita|recusada e ?id_sala=; mais recentes primeiro
+router.get('/contestacoes', isAuthenticated, new ListContestacoesController().handle);
 
 // -- ROTAS DO ALUNO LOGADO (somente aluno autenticado) --
 // atenção: se um dia existir uma rota /alunos/:id, ela deve ficar DEPOIS das rotas /alunos/me/...,
