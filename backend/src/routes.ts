@@ -16,6 +16,7 @@ import { ListTutoresSalaController } from './controllers/professor/ListTutoresSa
 import { ListTutoriasSalaController } from './controllers/professor/ListTutoriasSalaController';
 import { ListAtividadesSalaController } from './controllers/professor/ListAtividadesSalaController';
 import { ListNotasSalaController } from './controllers/professor/ListNotasSalaController';
+import { ExportNotasSalaController } from './controllers/professor/ExportNotasSalaController';
 import { CreateConteudoController } from './controllers/professor/CreateConteudoController';
 import { ListConteudosSalaController } from './controllers/professor/ListConteudosSalaController';
 
@@ -91,6 +92,9 @@ router.get('/salas/:id/atividades', isAuthenticated, isProfessor, new ListAtivid
 // conteúdo, tutor e contestacao_pendente; só o professor dono. ordem: aluno -> etapa -> data de entrega.
 // filtros opcionais ?etapa=1|2|3, ?id_conteudo=, ?id_aluno= e ?id_tutor_sala=; a P15 (Excel) reaproveita o service
 router.get('/salas/:id/notas', isAuthenticated, isProfessor, new ListNotasSalaController().handle);
+// exporta as mesmas notas da rota acima para Excel (RF14 / RNF10): .xlsx com a aba "Notas", uma linha por nota.
+// mesmos filtros, validações e ordem de erros (400 -> 404 -> 403); sem notas, devolve só o cabeçalho (200)
+router.get('/salas/:id/notas/exportar', isAuthenticated, isProfessor, new ExportNotasSalaController().handle);
 
 // -- ROTAS CONTEÚDO --
 // cadastrar: somente professor autenticado

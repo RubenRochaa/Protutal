@@ -26,6 +26,7 @@
     "bcryptjs": "^3.0.3",
     "cloudinary": "^2.11.0",
     "cors": "^2.8.6",
+    "exceljs": "4.4.0",
     "express": "^4.21.1",
     "express-async-errors": "^3.1.1",
     "express-fileupload": "^1.5.2",
