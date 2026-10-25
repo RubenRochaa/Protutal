@@ -1,5 +1,6 @@
 import prismaClient from "../../prisma";
 import { AppError } from "../../errors/AppError";
+import { parseIdOpcional } from "../../helpers/parseIdOpcional";
 
 interface ListAtividadesSalaRequest {
     id_sala: number;
@@ -7,21 +8,6 @@ interface ListAtividadesSalaRequest {
     etapa?: string;
     id_conteudo?: string;
     id_tutor_sala?: string;
-}
-
-// converte um id opcional da query string; se vier, precisa ser um inteiro positivo
-function parseIdOpcional(valor: string | undefined, mensagem: string) {
-    if (valor === undefined) {
-        return undefined;
-    }
-
-    const id = Number(valor);
-
-    if (!Number.isInteger(id) || id <= 0) {
-        throw new AppError(mensagem, 400);
-    }
-
-    return id;
 }
 
 class ListAtividadesSalaService {
