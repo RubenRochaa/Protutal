@@ -15,6 +15,7 @@ import { ListAlunosSalaController } from './controllers/professor/ListAlunosSala
 import { ListTutoresSalaController } from './controllers/professor/ListTutoresSalaController';
 import { ListTutoriasSalaController } from './controllers/professor/ListTutoriasSalaController';
 import { ListAtividadesSalaController } from './controllers/professor/ListAtividadesSalaController';
+import { ListNotasSalaController } from './controllers/professor/ListNotasSalaController';
 import { CreateConteudoController } from './controllers/professor/CreateConteudoController';
 import { ListConteudosSalaController } from './controllers/professor/ListConteudosSalaController';
 
@@ -86,6 +87,10 @@ router.get('/salas/:id/tutorias', isAuthenticated, isProfessor, new ListTutorias
 // atividades lançadas pelos tutores na sala, com conteúdo, tutor e contagens de entrega; só o professor dono.
 // filtros opcionais ?etapa=1|2|3, ?id_conteudo= e ?id_tutor_sala=; o detalhe por aluno fica em /atividades/:id/respostas
 router.get('/salas/:id/atividades', isAuthenticated, isProfessor, new ListAtividadesSalaController().handle);
+// notas lançadas nas atividades da sala (só consulta, RF15), uma linha por nota, com aluno, atividade,
+// conteúdo, tutor e contestacao_pendente; só o professor dono. ordem: aluno -> etapa -> data de entrega.
+// filtros opcionais ?etapa=1|2|3, ?id_conteudo=, ?id_aluno= e ?id_tutor_sala=; a P15 (Excel) reaproveita o service
+router.get('/salas/:id/notas', isAuthenticated, isProfessor, new ListNotasSalaController().handle);
 
 // -- ROTAS CONTEÚDO --
 // cadastrar: somente professor autenticado
