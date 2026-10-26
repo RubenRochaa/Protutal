@@ -20,6 +20,7 @@ import { ExportNotasSalaController } from './controllers/professor/ExportNotasSa
 import { CreateConteudoController } from './controllers/professor/CreateConteudoController';
 import { ListConteudosSalaController } from './controllers/professor/ListConteudosSalaController';
 import { CreateAvisoController } from './controllers/professor/CreateAvisoController';
+import { ListAvisosSalaController } from './controllers/professor/ListAvisosSalaController';
 
 import { CreatePedidoTutoriaController } from './controllers/aluno/CreatePedidoTutoriaController';
 import { ListPedidosTutoriaController } from './controllers/professor/ListPedidosTutoriaController';
@@ -99,6 +100,10 @@ router.get('/salas/:id/notas/exportar', isAuthenticated, isProfessor, new Export
 // publica aviso na sala (titulo até 150 + conteudo), visível a todos os alunos da turma (RN10);
 // só o professor dono e só com tutoria ativa na sala (RN14). ordem: 400 -> 404 -> 403 -> 400 (corpo) -> 409
 router.post('/salas/:id/avisos', isAuthenticated, isProfessor, new CreateAvisoController().handle);
+// lista os avisos da sala (mais recente primeiro): aluno matriculado (inclui o tutor) ou professor dono.
+// sem filtro de tutoria ativa nem de ano letivo (histórico, RN14). A permissão é conferida no service,
+// na ordem: id inválido (400) -> não encontrada (404) -> sem permissão (403)
+router.get('/salas/:id/avisos', isAuthenticated, new ListAvisosSalaController().handle);
 
 // -- ROTAS CONTEÚDO --
 // cadastrar: somente professor autenticado
