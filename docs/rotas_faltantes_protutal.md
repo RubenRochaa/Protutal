@@ -39,44 +39,44 @@
 * Definir meta de aprendizagem da tutoria: `PATCH /tutorias/:id/meta` (RF16) - (P5) - feito
 * Finalizar tutoria: `PATCH /tutorias/:id/finalizar` (RF3; bloqueada se houver contestação pendente, RN15) - (P6) - feito
 * Reabrir tutoria: `PATCH /tutorias/:id/reabrir` (somente no mesmo ano letivo) - (P7) - feito
-* Revogar tutor da sala: `PATCH /tutores-sala/:id/revogar` (RF18; preenche `data_revogacao`) - (P8)
-* Avaliar tutor: `POST /tutores-sala/:id/avaliacoes` (RF19; com nota e comentário) - (P9)
-* Listar avaliações do tutor: `GET /tutores-sala/:id/avaliacoes` - (P10)
-* Listar atividades da sala: `GET /salas/:id/atividades` (RF11 reescrito; ver ponto de atenção 3) - (P11)
-* Ver respostas, notas e comentários de uma atividade: `GET /atividades/:id/respostas` (RF12; também usada pelo tutor) - (P12)
+* Revogar tutor da sala: `PATCH /tutores-sala/:id/revogar` (RF18; preenche `data_revogacao`) - (P8) - feito
+* Avaliar tutor: `POST /tutores-sala/:id/avaliacoes` (RF19; com nota e comentário) - (P9) - feito
+* Listar avaliações do tutor: `GET /tutores-sala/:id/avaliacoes` - (P10) - feito
+* Listar atividades da sala: `GET /salas/:id/atividades` (RF11 reescrito; ver ponto de atenção 3) - (P11) - feito
+* Ver respostas, notas e comentários de uma atividade: `GET /atividades/:id/respostas` (RF12; também usada pelo tutor) - (P12) - feito
 * Dashboard de desempenho dos tutores: `GET /salas/:id/desempenho-tutores` (RF13) - (P13)
-* Consultar notas lançadas na sala: `GET /salas/:id/notas` (RF15, agora apenas consulta) - (P14)
-* Exportar notas para Excel: `GET /salas/:id/notas/exportar` (RF14) - (P15)
-* Listar contestações de nota: `GET /contestacoes` (também usada pelo tutor) - (P16)
+* Consultar notas lançadas na sala: `GET /salas/:id/notas` (RF15, agora apenas consulta) - (P14) - feito
+* Exportar notas para Excel: `GET /salas/:id/notas/exportar` (RF14) - (P15) - feito
+* Listar contestações de nota: `GET /contestacoes` (também usada pelo tutor) - (P16) - feito
 
 ### Tutor (8)
 
 * Listar seus tutorados: `GET /tutores/me/tutorias` - (T1) - feito
-* Listar atividades que criou: `GET /tutores/me/atividades` - (T2) - feito
+* Listar atividades que criou: `GET /tutores/me/atividades` - (T2)
 * Lançar nota e comentário na resposta do aluno: `POST /atividades/:id/notas` (RF21; `id_aluno` no corpo) - (T3) - feito
 * Resolver contestação de nota: `PATCH /contestacoes/:id/resolver` (RF29/UC06; mantém ou ajusta a nota) - (T4)
 * Anexar material de apoio: `POST /salas/:id/materiais` (RF25; upload no Cloudinary) - (T5) - feito
 * Ver o próprio desempenho: `GET /tutores/me/desempenho` (RF23) - (T6)
 * Ver feedbacks recebidos dos alunos: `GET /tutores/me/feedbacks` (RF22 invertido) - (T7)
-* Listar tipos de atividade: `GET /tipos-atividade` (opcional: o enum é fixo, mas o front-end precisa da lista para o campo de seleção) - (T8)
+* Listar tipos de atividade: `GET /tipos-atividade` (opcional: o enum é fixo, mas o front-end precisa da lista para o campo de seleção) - (T8) - feito
 
 ### Aluno (10)
 
 * Listar atividades destinadas a ele: `GET /alunos/me/atividades` (RF30) - (A1) - feito
-* Detalhar atividade: `GET /atividades/:id` - (A2)
+* Detalhar atividade: `GET /atividades/:id` - (A2) - feito
 * Ver a própria tutoria (tutor e meta): `GET /alunos/me/tutorias` - (A3) - feito
 * Listar avisos da sala: `GET /salas/:id/avisos` - (A4)
-* Listar materiais de apoio: `GET /salas/:id/materiais` (RF28) - (A5)
+* Listar materiais de apoio: `GET /salas/:id/materiais` (RF28) - (A5) - feito
 * Ver dashboard de notas: `GET /alunos/me/desempenho` (RF26) - (A6)
 * Ver conteúdos dominados: `GET /alunos/me/conteudos-dominados` (RF27; usa `Faixa_desempenho`) - (A7)
-* Contestar nota: `POST /notas/:id/contestacoes` (RF29) - (A8)
-* Ver histórico de contestações: `GET /alunos/me/contestacoes` (UC06, passo 4) - (A9)
+* Contestar nota: `POST /notas/:id/contestacoes` (RF29) - (A8) - feito
+* Ver histórico de contestações: `GET /alunos/me/contestacoes` (UC06, passo 4) - (A9) - feito
 * Enviar feedback ao tutor via rubrica: `POST /tutorias/:id/feedbacks` (RF22; por etapa, de 1 a 3) - (A10)
 
 ### Tutor e aluno (2)
 
 * Enviar mensagem ou comunicado: `POST /tutorias/:id/mensagens` (RF2 e RF24; o comunicado é a mensagem com `assunto` preenchido) - (O1) - feito
-* Listar mensagens da tutoria: `GET /tutorias/:id/mensagens` - (O2)
+* Listar mensagens da tutoria: `GET /tutorias/:id/mensagens` - (O2) - feito
 
 ### Comum (1)
 
