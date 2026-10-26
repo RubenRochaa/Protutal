@@ -19,6 +19,7 @@ import { ListNotasSalaController } from './controllers/professor/ListNotasSalaCo
 import { ExportNotasSalaController } from './controllers/professor/ExportNotasSalaController';
 import { CreateConteudoController } from './controllers/professor/CreateConteudoController';
 import { ListConteudosSalaController } from './controllers/professor/ListConteudosSalaController';
+import { CreateAvisoController } from './controllers/professor/CreateAvisoController';
 
 import { CreatePedidoTutoriaController } from './controllers/aluno/CreatePedidoTutoriaController';
 import { ListPedidosTutoriaController } from './controllers/professor/ListPedidosTutoriaController';
@@ -95,6 +96,9 @@ router.get('/salas/:id/notas', isAuthenticated, isProfessor, new ListNotasSalaCo
 // exporta as mesmas notas da rota acima para Excel (RF14 / RNF10): .xlsx com a aba "Notas", uma linha por nota.
 // mesmos filtros, validações e ordem de erros (400 -> 404 -> 403); sem notas, devolve só o cabeçalho (200)
 router.get('/salas/:id/notas/exportar', isAuthenticated, isProfessor, new ExportNotasSalaController().handle);
+// publica aviso na sala (titulo até 150 + conteudo), visível a todos os alunos da turma (RN10);
+// só o professor dono e só com tutoria ativa na sala (RN14). ordem: 400 -> 404 -> 403 -> 400 (corpo) -> 409
+router.post('/salas/:id/avisos', isAuthenticated, isProfessor, new CreateAvisoController().handle);
 
 // -- ROTAS CONTEÚDO --
 // cadastrar: somente professor autenticado
