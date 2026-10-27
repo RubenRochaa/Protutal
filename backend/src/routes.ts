@@ -46,6 +46,7 @@ import { ListAtividadesAlunoController } from './controllers/aluno/ListAtividade
 import { CreateNotaController } from './controllers/aluno/CreateNotaController';
 import { CreateContestacaoNotaController } from './controllers/aluno/CreateContestacaoNotaController';
 import { ListTutoriasTutorController } from './controllers/aluno/ListTutoriasTutorController';
+import { DesempenhoTutorController } from './controllers/aluno/DesempenhoTutorController';
 import { ListTutoriasAlunoController } from './controllers/aluno/ListTutoriasAlunoController';
 import { ListContestacoesAlunoController } from './controllers/aluno/ListContestacoesAlunoController';
 import { DesempenhoAlunoController } from './controllers/aluno/DesempenhoAlunoController';
@@ -239,6 +240,9 @@ router.get('/alunos/me/conteudos-dominados', isAuthenticated, isAluno, new Conte
 // senão o Express trata "me" como :id
 // lista os tutorados do tutor logado (aluno, status, meta e sala); filtro opcional ?status=ativa|finalizada
 router.get('/tutores/me/tutorias', isAuthenticated, isTutor, new ListTutoriasTutorController().handle);
+// desempenho do tutor logado (RF23 / UC20): mesmos indicadores da P13 (feedback geral e por etapa; avaliações do professor só geral),
+// um item por vínculo (inclusive revogados), com as listas; ativos primeiro e depois ano letivo mais recente; filtro opcional ?id_sala=
+router.get('/tutores/me/desempenho', isAuthenticated, isTutor, new DesempenhoTutorController().handle);
 
 // -- ROTAS MATERIAL DE APOIO --
 // anexar: tutor ativo da sala com pelo menos uma tutoria ativa nela (RN14), via multipart/form-data
