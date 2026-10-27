@@ -48,6 +48,7 @@ import { ListTutoriasTutorController } from './controllers/aluno/ListTutoriasTut
 import { ListTutoriasAlunoController } from './controllers/aluno/ListTutoriasAlunoController';
 import { ListContestacoesAlunoController } from './controllers/aluno/ListContestacoesAlunoController';
 import { ListContestacoesController } from './controllers/professor/ListContestacoesController';
+import { ResolverContestacaoController } from './controllers/professor/ResolverContestacaoController';
 import { CreateMaterialController } from './controllers/aluno/CreateMaterialController';
 import { ListMateriaisSalaController } from './controllers/professor/ListMateriaisSalaController';
 import { ListTiposAtividadeController } from './controllers/professor/ListTiposAtividadeController';
@@ -186,6 +187,11 @@ router.post('/notas/:id/contestacoes', isAuthenticated, isAluno, new CreateConte
 // que ele criou, só nos vínculos ativos; qualquer outro usuário recebe 403. A permissão é conferida no service.
 // filtros opcionais ?status=pendente|aceita|recusada e ?id_sala=; mais recentes primeiro
 router.get('/contestacoes', isAuthenticated, new ListContestacoesController().handle);
+// resolver (professor dono da sala ou tutor criador da atividade com vínculo ativo; os mesmos que listam acima):
+// status aceita (com valor 0 a 10, que sobrescreve a nota) ou recusada (sem valor) + decisao obrigatória.
+// contestação e nota numa transação; a permissão é conferida no service, na ordem:
+// id/corpo inválido (400) -> não encontrada (404) -> sem permissão (403) -> já resolvida (409)
+router.patch('/contestacoes/:id/resolver', isAuthenticated, new ResolverContestacaoController().handle);
 
 // -- ROTAS DO ALUNO LOGADO (somente aluno autenticado) --
 // atenção: se um dia existir uma rota /alunos/:id, ela deve ficar DEPOIS das rotas /alunos/me/...,
