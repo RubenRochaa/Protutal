@@ -13,6 +13,7 @@ import { ListAlunoController } from './controllers/professor/ListAlunoController
 import { CreateMatriculaController } from './controllers/professor/CreateMatriculaController';
 import { ListAlunosSalaController } from './controllers/professor/ListAlunosSalaController';
 import { ListTutoresSalaController } from './controllers/professor/ListTutoresSalaController';
+import { DesempenhoTutoresSalaController } from './controllers/professor/DesempenhoTutoresSalaController';
 import { ListTutoriasSalaController } from './controllers/professor/ListTutoriasSalaController';
 import { ListAtividadesSalaController } from './controllers/professor/ListAtividadesSalaController';
 import { ListNotasSalaController } from './controllers/professor/ListNotasSalaController';
@@ -90,6 +91,9 @@ router.get('/alunos', isAuthenticated, isProfessor, new ListAlunoController().ha
 router.post('/salas/:id/matriculas', isAuthenticated, isProfessor, new CreateMatriculaController().handle);
 router.get('/salas/:id/alunos', isAuthenticated, isProfessor, new ListAlunosSalaController().handle);
 router.get('/salas/:id/tutores', isAuthenticated, isProfessor, new ListTutoresSalaController().handle);
+// dashboard de desempenho dos tutores da sala (RF13): feedback dos alunos (geral e por etapa) e avaliações do professor,
+// um item por vínculo (inclusive revogados), ativos primeiro e depois por nome; só o professor dono
+router.get('/salas/:id/desempenho-tutores', isAuthenticated, isProfessor, new DesempenhoTutoresSalaController().handle);
 // tutorias da sala (tutor, aluno tutorado, status e meta); filtro opcional ?status=ativa|finalizada
 router.get('/salas/:id/tutorias', isAuthenticated, isProfessor, new ListTutoriasSalaController().handle);
 // atividades lançadas pelos tutores na sala, com conteúdo, tutor e contagens de entrega; só o professor dono.
