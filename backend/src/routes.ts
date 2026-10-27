@@ -54,6 +54,7 @@ import { ListMateriaisSalaController } from './controllers/professor/ListMateria
 import { ListTiposAtividadeController } from './controllers/professor/ListTiposAtividadeController';
 import { CreateMensagemController } from './controllers/aluno/CreateMensagemController';
 import { ListMensagensTutoriaController } from './controllers/aluno/ListMensagensTutoriaController';
+import { CreateFeedbackController } from './controllers/aluno/CreateFeedbackController';
 
 import { isAuthenticated } from './middlewares/isAuthenticated';
 import { isProfessor } from './middlewares/isProfessor';
@@ -145,6 +146,12 @@ router.post('/tutorias/:id/mensagens', isAuthenticated, isAluno, new CreateMensa
 // filtro opcional ?tipo=comunicado (só mensagens com assunto). a participação é conferida no service, na ordem:
 // id inválido (400) -> não encontrada (404) -> não participa (403) -> tutor revogado (403) -> ?tipo inválido (400)
 router.get('/tutorias/:id/mensagens', isAuthenticated, isAluno, new ListMensagensTutoriaController().handle);
+
+// -- ROTAS FEEDBACK (somente aluno autenticado que seja o tutorado da tutoria) --
+// o aluno tutorado avalia o tutor (nota 0 a 10, comentario opcional e rubrica obrigatória) via multipart/form-data
+// (file: .pdf .doc .docx .xls .xlsx .csv, até 10 MB); um feedback por etapa. a permissão é conferida no service, na ordem:
+// id inválido (400) -> não encontrada (404) -> não é o tutorado (403) -> finalizada (409) -> corpo inválido (400) -> etapa repetida (409)
+router.post('/tutorias/:id/feedbacks', isAuthenticated, isAluno, new CreateFeedbackController().handle);
 
 // -- ROTAS TUTOR DA SALA (somente professor autenticado) --
 // revoga o tutor da sala (data_revogacao) e finaliza as tutorias ativas dele numa transação;
