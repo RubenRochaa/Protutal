@@ -48,6 +48,7 @@ import { ListTutoriasTutorController } from './controllers/aluno/ListTutoriasTut
 import { ListTutoriasAlunoController } from './controllers/aluno/ListTutoriasAlunoController';
 import { ListContestacoesAlunoController } from './controllers/aluno/ListContestacoesAlunoController';
 import { DesempenhoAlunoController } from './controllers/aluno/DesempenhoAlunoController';
+import { ConteudosDominadosController } from './controllers/aluno/ConteudosDominadosController';
 import { ListContestacoesController } from './controllers/professor/ListContestacoesController';
 import { ResolverContestacaoController } from './controllers/professor/ResolverContestacaoController';
 import { CreateMaterialController } from './controllers/aluno/CreateMaterialController';
@@ -224,6 +225,10 @@ router.get('/alunos/me/contestacoes', isAuthenticated, isAluno, new ListContesta
 // média geral, por etapa e por conteúdo (só onde há nota; sem nota a média é null, nunca 0)
 // e a lista das notas com o status da contestação; filtros opcionais ?id_sala= e ?etapa=1|2|3
 router.get('/alunos/me/desempenho', isAuthenticated, isAluno, new DesempenhoAlunoController().handle);
+// conteúdos dominados e com dificuldade do aluno logado (RF27), de tutorias ativas e finalizadas (RN14):
+// média por conteúdo (só onde há nota) classificada pela tabela faixa_desempenho,
+// uma lista por nome de faixa, em ordem alfabética; filtro opcional ?id_sala=
+router.get('/alunos/me/conteudos-dominados', isAuthenticated, isAluno, new ConteudosDominadosController().handle);
 
 // -- ROTAS TUTOR (somente aluno autenticado com vínculo de tutor ativo) --
 // atenção: se um dia existir uma rota /tutores/:id, ela deve ficar DEPOIS das rotas /tutores/me/...,
