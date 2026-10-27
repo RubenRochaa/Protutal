@@ -1,6 +1,7 @@
 import prismaClient from "../../prisma";
 import { AppError } from "../../errors/AppError";
 import { parseIdOpcional } from "../../helpers/parseIdOpcional";
+import { selectAtividadeResumo, camposAtividadeResumo, contagensAtividade } from "../../helpers/atividadeResumo";
 
 interface ListAtividadesSalaRequest {
     id_sala: number;
@@ -54,8 +55,7 @@ class ListAtividadesSalaService {
 
         // atividades cujo vínculo Tutor_sala é desta sala (Atividade -> Tutor_sala -> Sala);
         // filtros ausentes ficam undefined e o Prisma ignora o campo.
-        // as contagens vêm do _count na mesma consulta (subconsultas COUNT no SQL),
-        // então o número de queries não cresce com a quantidade de atividades (sem N+1);
+        // os campos comuns e as contagens (_count, sem N+1) vêm do helper atividadeResumo;
         // se não houver atividades (ou o filtro não achar nada), volta lista vazia e isso não é erro
         const atividades = await prismaClient.atividade.findMany({
             where: {
@@ -70,17 +70,7 @@ class ListAtividadesSalaService {
                 data_entrega: "desc"
             },
             select: {
-                id_atividade: true,
-                titulo: true,
-                tipo: true,
-                etapa: true,
-                data_entrega: true,
-                conteudo: {
-                    select: {
-                        id_conteudo: true,
-                        nome: true
-                    }
-                },
+                ...selectAtividadeResumo,
                 tutor_sala: {
                     select: {
                         id_tutor_sala: true,
@@ -94,32 +84,18 @@ class ListAtividadesSalaService {
                             }
                         }
                     }
-                },
-                _count: {
-                    select: {
-                        destinatarios: true,
-                        respostas: true,
-                        notas: true
-                    }
                 }
             }
         });
 
         // achata tutor_sala.tutor.aluno e _count, deixando a resposta mais simples para o front
         return atividades.map((atividade) => ({
-            id_atividade: atividade.id_atividade,
-            titulo: atividade.titulo,
-            tipo: atividade.tipo,
-            etapa: atividade.etapa,
-            data_entrega: atividade.data_entrega,
-            conteudo: atividade.conteudo,
+            ...camposAtividadeResumo(atividade),
             tutor: {
                 id_tutor_sala: atividade.tutor_sala.id_tutor_sala,
                 nome: atividade.tutor_sala.tutor.aluno.nome
             },
-            total_destinatarios: atividade._count.destinatarios,
-            total_entregues: atividade._count.respostas,
-            total_com_nota: atividade._count.notas
+            ...contagensAtividade(atividade)
         }));
     }
 }
