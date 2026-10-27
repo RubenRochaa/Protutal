@@ -1,6 +1,6 @@
 import prismaClient from "../../prisma";
 import { AppError } from "../../errors/AppError";
-import { calcularMedia } from "../../helpers/calcularMedia";
+import { calcularDesempenhoTutor } from "../../helpers/calcularDesempenhoTutor";
 
 interface DesempenhoTutoresSalaRequest {
     id_sala: number;
@@ -118,39 +118,17 @@ class DesempenhoTutoresSalaService {
             avaliacoesPorTutor.set(avaliacao.id_tutor_sala, grupo);
         }
 
-        // média só existe onde há nota: sem feedback/avaliação, media null e quantidade 0 (nunca média 0)
+        // o cálculo dos dois indicadores fica no helper, compartilhado com o desempenho do próprio tutor (T6)
         const desempenho = tutores.map((tutorSala) => {
             const feedbacksTutor = feedbacksPorTutor.get(tutorSala.id_tutor_sala) ?? [];
             const notasAvaliacoes = avaliacoesPorTutor.get(tutorSala.id_tutor_sala) ?? [];
-            const notasFeedback = feedbacksTutor.map((feedback) => feedback.nota);
-
-            // sempre as 3 etapas; Avaliacao_tutor não tem etapa, então só o feedback tem por_etapa
-            const por_etapa = [1, 2, 3].map((numeroEtapa) => {
-                const notasEtapa = feedbacksTutor
-                    .filter((feedback) => feedback.etapa === numeroEtapa)
-                    .map((feedback) => feedback.nota);
-
-                return {
-                    etapa: numeroEtapa,
-                    media: calcularMedia(notasEtapa),
-                    quantidade: notasEtapa.length
-                };
-            });
 
             return {
                 id_tutor_sala: tutorSala.id_tutor_sala,
                 nome: tutorSala.tutor.aluno.nome,
                 revogado: tutorSala.data_revogacao !== null,
                 data_revogacao: tutorSala.data_revogacao,
-                feedback: {
-                    media_geral: calcularMedia(notasFeedback),
-                    quantidade: notasFeedback.length,
-                    por_etapa
-                },
-                avaliacoes_professor: {
-                    media_geral: calcularMedia(notasAvaliacoes),
-                    quantidade: notasAvaliacoes.length
-                }
+                ...calcularDesempenhoTutor(feedbacksTutor, notasAvaliacoes)
             };
         });
 
