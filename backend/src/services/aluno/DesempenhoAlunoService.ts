@@ -1,24 +1,12 @@
 import prismaClient from "../../prisma";
 import { AppError } from "../../errors/AppError";
 import { parseIdOpcional } from "../../helpers/parseIdOpcional";
+import { calcularMedia } from "../../helpers/calcularMedia";
 
 interface DesempenhoAlunoRequest {
     id_aluno: number;
     id_sala?: string;
     etapa?: string;
-}
-
-// média simples de uma lista de valores, arredondada para 2 casas.
-// sem valores a média é null (nunca 0): média só existe onde há nota lançada.
-// a soma é feita em centésimos inteiros para não acumular erro de ponto flutuante
-function calcularMedia(valores: number[]) {
-    if (valores.length === 0) {
-        return null;
-    }
-
-    const somaCentesimos = valores.reduce((soma, valor) => soma + Math.round(valor * 100), 0);
-
-    return Math.round(somaCentesimos / valores.length) / 100;
 }
 
 // dashboard de notas do aluno logado (RF26): média geral, por etapa, por conteúdo e a lista das notas
