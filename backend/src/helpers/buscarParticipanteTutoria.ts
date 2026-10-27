@@ -4,7 +4,7 @@ import { AppError } from "../errors/AppError";
 // papel do aluno logado dentro da tutoria
 type PapelTutoria = "tutor" | "tutorado";
 
-// usada pelas rotas de mensagem (enviar e listar): confere, nesta ordem,
+// usada pelas rotas de mensagem (enviar e listar) e de feedback: confere, nesta ordem,
 // id inválido (400) -> tutoria não encontrada (404) -> aluno não participa (403)
 // e devolve a tutoria junto com o papel do aluno nela
 async function buscarParticipanteTutoria(id_tutoria: number, id_aluno: number) {
