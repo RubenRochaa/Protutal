@@ -77,6 +77,8 @@
 
 * Enviar mensagem ou comunicado: `POST /tutorias/:id/mensagens` (RF2 e RF24; o comunicado é a mensagem com `assunto` preenchido) - (O1) - feito
 * Listar mensagens da tutoria: `GET /tutorias/:id/mensagens` - (O2) - feito
+* Confirmar e-mail: `GET /confirmacao-email/:token` (RN20; vale para professor e aluno) - (O3) - feito
+* Reenviar link de confirmação de e-mail: `POST /confirmacao-email/reenviar` (RN20; gera token novo de 1 hora; intervalo mínimo de 2 minutos para o mesmo e-mail; resposta sempre genérica, sem revelar se o e-mail está cadastrado) - (O4)
 
 ### Comum (1)
 

@@ -6,6 +6,9 @@ import { CreateAlunoController } from './controllers/aluno/CreateAlunoController
 import { AuthProfessorController } from './controllers/professor/AuthProfessorController';
 import { AuthAlunoController } from './controllers/aluno/AuthAlunoController';
 
+import { ConfirmarEmailController } from './controllers/ConfirmarEmailController';
+import { ReenviarConfirmacaoEmailController } from './controllers/ReenviarConfirmacaoEmailController';
+
 import { CreateSalaController } from './controllers/professor/CreateSalaController';
 import { ListSalaController } from './controllers/professor/ListSalaController';
 import { DetailSalaController } from './controllers/professor/DetailSalaController';
@@ -78,6 +81,14 @@ router.post('/sessao/professores', new AuthProfessorController().handle);
 // -- ROTAS ALUNO --
 router.post('/alunos', new CreateAlunoController().handle);
 router.post('/sessao/alunos', new AuthAlunoController().handle);
+
+// -- ROTAS CONFIRMAÇÃO DE E-MAIL (pública) --
+// reenvia o link (token novo de 1 hora), com intervalo mínimo de 2 minutos por e-mail;
+// e-mail ausente ou vazio (400); nos demais casos, sempre a mesma mensagem (200), para não revelar cadastros
+router.post('/confirmacao-email/reenviar', new ReenviarConfirmacaoEmailController().handle);
+// link enviado no cadastro de professor e aluno (RN20); responde página HTML, não JSON.
+// token inexistente ou já usado (400) -> expirado (410) -> confirma e limpa o token (200)
+router.get('/confirmacao-email/:token', new ConfirmarEmailController().handle);
 
 // -- ROTAS SALA (somente professor autenticado) --
 router.post('/salas', isAuthenticated, isProfessor, new CreateSalaController().handle);
