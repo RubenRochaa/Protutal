@@ -1,0 +1,113 @@
+.container{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+// Filtros à esquerda e o botão "Nova sala" à direita, alinhados pela base
+.topo{
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.filtros{
+    flex: 1;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 12px;
+    max-width: 720px;
+}
+
+// Mesmo visual do Button (que é só de envio de formulário)
+.botao{
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 44px;
+    margin-left: auto;
+    padding: 0 20px;
+    border: 0;
+    border-radius: var(--radius-input);
+    background-color: var(--red-700);
+    color: var(--white);
+    font-weight: 500;
+    transition: background-color 0.2s;
+
+    &:hover{
+        background-color: var(--red-900);
+    }
+}
+
+.botaoSecundario{
+    align-self: center;
+    height: 40px;
+    padding: 0 20px;
+    border: 1px solid var(--red-700);
+    border-radius: var(--radius-input);
+    background-color: var(--white);
+    color: var(--red-700);
+    font-weight: 500;
+
+    &:hover{
+        background-color: var(--gray-100);
+    }
+}
+
+.semResultado{
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.lista{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    list-style: none;
+}
+
+.nome{
+    display: block;
+    font-weight: 600;
+}
+
+.detalhe{
+    display: block;
+    color: var(--gray-700);
+    font-size: 0.9rem;
+}
+
+@media (max-width: 768px){
+    .topo{
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .filtros{
+        max-width: none;
+        grid-template-columns: 1fr 1fr;
+    }
+
+    // A busca ocupa a linha inteira; série e ano ficam lado a lado
+    .filtros > :first-child{
+        grid-column: 1 / -1;
+    }
+
+    .botao{
+        margin-left: 0;
+    }
+
+    .lista{
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 375px){
+    .filtros{
+        grid-template-columns: 1fr;
+    }
+}
