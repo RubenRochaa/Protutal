@@ -1,0 +1,58 @@
+.modal{
+    margin: auto;
+    width: min(720px, 100% - 32px);
+    max-width: none;
+    max-height: 85vh;
+    padding: 24px 28px 28px;
+    border: 0;
+    border-radius: var(--radius-card);
+    background-color: var(--white);
+    color: var(--black);
+    box-shadow: var(--shadow-card);
+
+    // Fundo escurecido atrás da janela.
+    // Valor fixo: em alguns navegadores o ::backdrop não enxerga as variáveis do :root
+    &::backdrop{
+        background-color: rgba(0, 0, 0, 0.45);
+    }
+}
+
+.topo{
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.titulo{
+    color: var(--red-700);
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.fechar{
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    border: 0;
+    border-radius: var(--radius-pill);
+    background: transparent;
+    color: var(--gray-700);
+
+    &:hover{
+        color: var(--red-700);
+    }
+}
+
+@media (max-width: 375px){
+    .modal{
+        padding: 20px 16px 24px;
+    }
+
+    .titulo{
+        font-size: 1.05rem;
+    }
+}

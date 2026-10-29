@@ -1,0 +1,51 @@
+// Mesmas medidas do conteúdo da tela "Minhas salas" (professor/page.module.scss)
+.conteudo{
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px 72px 48px;
+}
+
+// Voltar à esquerda, série e ano ao lado e, à direita, o espaço das ações da sala
+.barra{
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px 24px;
+}
+
+.voltar{
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--red-700);
+    font-weight: 600;
+
+    &:hover{
+        text-decoration: underline;
+        text-underline-offset: 3px;
+    }
+}
+
+.info{
+    color: var(--gray-700);
+}
+
+.acoes{
+    margin-left: auto;
+}
+
+@media (max-width: 768px){
+    .conteudo{
+        gap: 20px;
+        padding: 20px 24px 40px;
+    }
+}
+
+@media (max-width: 375px){
+    .conteudo{
+        padding: 16px 16px 32px;
+    }
+}

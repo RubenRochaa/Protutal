@@ -1,0 +1,42 @@
+// Desktop: 4 cards lado a lado. Tablet: 2 por linha. Celular: 1 por linha.
+.grade{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+}
+
+.card{
+    min-height: 160px;
+}
+
+.corpo{
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.emBreve{
+    padding: 2px 10px;
+    border-radius: var(--radius-pill);
+    background-color: var(--white);
+    color: var(--gray-700);
+    font-size: 0.8rem;
+}
+
+@media (max-width: 1024px){
+    .grade{
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+    }
+}
+
+@media (max-width: 480px){
+    .grade{
+        grid-template-columns: 1fr;
+    }
+
+    .card{
+        min-height: 110px;
+    }
+}

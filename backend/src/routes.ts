@@ -6,6 +6,9 @@ import { CreateAlunoController } from './controllers/aluno/CreateAlunoController
 import { AuthProfessorController } from './controllers/professor/AuthProfessorController';
 import { AuthAlunoController } from './controllers/aluno/AuthAlunoController';
 
+import { ConfirmarEmailController } from './controllers/ConfirmarEmailController';
+import { ReenviarConfirmacaoEmailController } from './controllers/ReenviarConfirmacaoEmailController';
+
 import { CreateSalaController } from './controllers/professor/CreateSalaController';
 import { ListSalaController } from './controllers/professor/ListSalaController';
 import { DetailSalaController } from './controllers/professor/DetailSalaController';
@@ -13,9 +16,15 @@ import { ListAlunoController } from './controllers/professor/ListAlunoController
 import { CreateMatriculaController } from './controllers/professor/CreateMatriculaController';
 import { ListAlunosSalaController } from './controllers/professor/ListAlunosSalaController';
 import { ListTutoresSalaController } from './controllers/professor/ListTutoresSalaController';
+import { DesempenhoTutoresSalaController } from './controllers/professor/DesempenhoTutoresSalaController';
 import { ListTutoriasSalaController } from './controllers/professor/ListTutoriasSalaController';
+import { ListAtividadesSalaController } from './controllers/professor/ListAtividadesSalaController';
+import { ListNotasSalaController } from './controllers/professor/ListNotasSalaController';
+import { ExportNotasSalaController } from './controllers/professor/ExportNotasSalaController';
 import { CreateConteudoController } from './controllers/professor/CreateConteudoController';
 import { ListConteudosSalaController } from './controllers/professor/ListConteudosSalaController';
+import { CreateAvisoController } from './controllers/professor/CreateAvisoController';
+import { ListAvisosSalaController } from './controllers/professor/ListAvisosSalaController';
 
 import { CreatePedidoTutoriaController } from './controllers/aluno/CreatePedidoTutoriaController';
 import { ListPedidosTutoriaController } from './controllers/professor/ListPedidosTutoriaController';
@@ -38,11 +47,24 @@ import { CreateRespostaController } from './controllers/aluno/CreateRespostaCont
 import { ListRespostasAtividadeController } from './controllers/professor/ListRespostasAtividadeController';
 import { ListAtividadesAlunoController } from './controllers/aluno/ListAtividadesAlunoController';
 import { CreateNotaController } from './controllers/aluno/CreateNotaController';
+import { CreateContestacaoNotaController } from './controllers/aluno/CreateContestacaoNotaController';
 import { ListTutoriasTutorController } from './controllers/aluno/ListTutoriasTutorController';
+import { DesempenhoTutorController } from './controllers/aluno/DesempenhoTutorController';
+import { ListAtividadesTutorController } from './controllers/aluno/ListAtividadesTutorController';
 import { ListTutoriasAlunoController } from './controllers/aluno/ListTutoriasAlunoController';
+import { ListContestacoesAlunoController } from './controllers/aluno/ListContestacoesAlunoController';
+import { DesempenhoAlunoController } from './controllers/aluno/DesempenhoAlunoController';
+import { ConteudosDominadosController } from './controllers/aluno/ConteudosDominadosController';
+import { ListSalasAlunoController } from './controllers/aluno/ListSalasAlunoController';
+import { ListContestacoesController } from './controllers/professor/ListContestacoesController';
+import { ResolverContestacaoController } from './controllers/professor/ResolverContestacaoController';
 import { CreateMaterialController } from './controllers/aluno/CreateMaterialController';
 import { ListMateriaisSalaController } from './controllers/professor/ListMateriaisSalaController';
 import { ListTiposAtividadeController } from './controllers/professor/ListTiposAtividadeController';
+import { CreateMensagemController } from './controllers/aluno/CreateMensagemController';
+import { ListMensagensTutoriaController } from './controllers/aluno/ListMensagensTutoriaController';
+import { CreateFeedbackController } from './controllers/aluno/CreateFeedbackController';
+import { ListFeedbacksController } from './controllers/professor/ListFeedbacksController';
 
 import { isAuthenticated } from './middlewares/isAuthenticated';
 import { isProfessor } from './middlewares/isProfessor';
@@ -62,6 +84,14 @@ router.post('/sessao/professores', new AuthProfessorController().handle);
 router.post('/alunos', new CreateAlunoController().handle);
 router.post('/sessao/alunos', new AuthAlunoController().handle);
 
+// -- ROTAS CONFIRMAÇÃO DE E-MAIL (pública) --
+// reenvia o link (token novo de 1 hora), com intervalo mínimo de 2 minutos por e-mail;
+// e-mail ausente ou vazio (400); nos demais casos, sempre a mesma mensagem (200), para não revelar cadastros
+router.post('/confirmacao-email/reenviar', new ReenviarConfirmacaoEmailController().handle);
+// link enviado no cadastro de professor e aluno (RN20); responde página HTML, não JSON.
+// token inexistente ou já usado (400) -> expirado (410) -> confirma e limpa o token (200)
+router.get('/confirmacao-email/:token', new ConfirmarEmailController().handle);
+
 // -- ROTAS SALA (somente professor autenticado) --
 router.post('/salas', isAuthenticated, isProfessor, new CreateSalaController().handle);
 router.get('/salas', isAuthenticated, isProfessor, new ListSalaController().handle);
@@ -75,8 +105,28 @@ router.get('/alunos', isAuthenticated, isProfessor, new ListAlunoController().ha
 router.post('/salas/:id/matriculas', isAuthenticated, isProfessor, new CreateMatriculaController().handle);
 router.get('/salas/:id/alunos', isAuthenticated, isProfessor, new ListAlunosSalaController().handle);
 router.get('/salas/:id/tutores', isAuthenticated, isProfessor, new ListTutoresSalaController().handle);
+// dashboard de desempenho dos tutores da sala (RF13): feedback dos alunos (geral e por etapa) e avaliações do professor,
+// um item por vínculo (inclusive revogados), ativos primeiro e depois por nome; só o professor dono
+router.get('/salas/:id/desempenho-tutores', isAuthenticated, isProfessor, new DesempenhoTutoresSalaController().handle);
 // tutorias da sala (tutor, aluno tutorado, status e meta); filtro opcional ?status=ativa|finalizada
 router.get('/salas/:id/tutorias', isAuthenticated, isProfessor, new ListTutoriasSalaController().handle);
+// atividades lançadas pelos tutores na sala, com conteúdo, tutor e contagens de entrega; só o professor dono.
+// filtros opcionais ?etapa=1|2|3, ?id_conteudo= e ?id_tutor_sala=; o detalhe por aluno fica em /atividades/:id/respostas
+router.get('/salas/:id/atividades', isAuthenticated, isProfessor, new ListAtividadesSalaController().handle);
+// notas lançadas nas atividades da sala (só consulta, RF15), uma linha por nota, com aluno, atividade,
+// conteúdo, tutor e contestacao_pendente; só o professor dono. ordem: aluno -> etapa -> data de entrega.
+// filtros opcionais ?etapa=1|2|3, ?id_conteudo=, ?id_aluno= e ?id_tutor_sala=; a P15 (Excel) reaproveita o service
+router.get('/salas/:id/notas', isAuthenticated, isProfessor, new ListNotasSalaController().handle);
+// exporta as mesmas notas da rota acima para Excel (RF14 / RNF10): .xlsx com a aba "Notas", uma linha por nota.
+// mesmos filtros, validações e ordem de erros (400 -> 404 -> 403); sem notas, devolve só o cabeçalho (200)
+router.get('/salas/:id/notas/exportar', isAuthenticated, isProfessor, new ExportNotasSalaController().handle);
+// publica aviso na sala (titulo até 150 + conteudo), visível a todos os alunos da turma (RN10);
+// só o professor dono e só com tutoria ativa na sala (RN14). ordem: 400 -> 404 -> 403 -> 400 (corpo) -> 409
+router.post('/salas/:id/avisos', isAuthenticated, isProfessor, new CreateAvisoController().handle);
+// lista os avisos da sala (mais recente primeiro): aluno matriculado (inclui o tutor) ou professor dono.
+// sem filtro de tutoria ativa nem de ano letivo (histórico, RN14). A permissão é conferida no service,
+// na ordem: id inválido (400) -> não encontrada (404) -> sem permissão (403)
+router.get('/salas/:id/avisos', isAuthenticated, new ListAvisosSalaController().handle);
 
 // -- ROTAS CONTEÚDO --
 // cadastrar: somente professor autenticado
@@ -107,6 +157,27 @@ router.patch('/tutorias/:id/finalizar', isAuthenticated, isProfessor, new Finali
 // reabre a tutoria (status ativa + data_fim null); só o professor dono da sala, só tutoria finalizada,
 // do ano letivo atual, com tutor não revogado e sem outra tutoria ativa do aluno na sala
 router.patch('/tutorias/:id/reabrir', isAuthenticated, isProfessor, new ReabrirTutoriaController().handle);
+
+// -- ROTAS MENSAGEM (somente aluno autenticado que participe da tutoria) --
+// o tutor ou o aluno tutorado envia mensagem; com assunto preenchido vira comunicado (só o tutor).
+// a participação é conferida no service, na ordem: id inválido (400) -> não encontrada (404)
+// -> não participa (403) -> tutoria finalizada (409) -> corpo inválido (400) -> tutorado com assunto (403)
+router.post('/tutorias/:id/mensagens', isAuthenticated, isAluno, new CreateMensagemController().handle);
+// lista as mensagens da tutoria (mais antiga primeiro); tutoria finalizada também lista (histórico).
+// filtro opcional ?tipo=comunicado (só mensagens com assunto). a participação é conferida no service, na ordem:
+// id inválido (400) -> não encontrada (404) -> não participa (403) -> tutor revogado (403) -> ?tipo inválido (400)
+router.get('/tutorias/:id/mensagens', isAuthenticated, isAluno, new ListMensagensTutoriaController().handle);
+
+// -- ROTAS FEEDBACK (somente aluno autenticado que seja o tutorado da tutoria) --
+// o aluno tutorado avalia o tutor (nota 0 a 10, comentario opcional e rubrica obrigatória) via multipart/form-data
+// (file: .pdf .doc .docx .xls .xlsx .csv, até 10 MB); um feedback por etapa. a permissão é conferida no service, na ordem:
+// id inválido (400) -> não encontrada (404) -> não é o tutorado (403) -> finalizada (409) -> corpo inválido (400) -> etapa repetida (409)
+router.post('/tutorias/:id/feedbacks', isAuthenticated, isAluno, new CreateFeedbackController().handle);
+// listar (tutor e professor): o tutor (com vínculo ativo) vê os feedbacks de todos os seus vínculos, inclusive revogados
+// e de anos anteriores; o professor vê os das salas em que é dono; qualquer outro usuário recebe 403. A permissão é conferida no service.
+// filtros opcionais ?etapa=1|2|3, ?ano=, ?id_aluno= e, só para o professor, ?id_sala= e ?id_tutor_sala=;
+// mais recentes primeiro, com total e média das notas
+router.get('/feedbacks', isAuthenticated, new ListFeedbacksController().handle);
 
 // -- ROTAS TUTOR DA SALA (somente professor autenticado) --
 // revoga o tutor da sala (data_revogacao) e finaliza as tutorias ativas dele numa transação;
@@ -140,6 +211,21 @@ router.get('/atividades/:id/respostas', isAuthenticated, isTutorCriadorOuProfess
 // das validações: corpo inválido (400) -> atividade inexistente (404) -> sem permissão (403)
 router.post('/atividades/:id/notas', isAuthenticated, new CreateNotaController().handle);
 
+// -- ROTAS CONTESTAÇÃO DE NOTA --
+// o aluno contesta a nota recebida, só enquanto a tutoria estiver ativa (RN14), e uma única vez por nota.
+// a permissão é conferida no service, na ordem: id/corpo inválido (400) -> nota inexistente (404)
+// -> não é dono ou tutoria finalizada (403) -> nota já contestada (409)
+router.post('/notas/:id/contestacoes', isAuthenticated, isAluno, new CreateContestacaoNotaController().handle);
+// listar (professor e tutor): o professor vê as das salas em que é dono; o tutor vê as das atividades
+// que ele criou, só nos vínculos ativos; qualquer outro usuário recebe 403. A permissão é conferida no service.
+// filtros opcionais ?status=pendente|aceita|recusada e ?id_sala=; mais recentes primeiro
+router.get('/contestacoes', isAuthenticated, new ListContestacoesController().handle);
+// resolver (professor dono da sala ou tutor criador da atividade com vínculo ativo; os mesmos que listam acima):
+// status aceita (com valor 0 a 10, que sobrescreve a nota) ou recusada (sem valor) + decisao obrigatória.
+// contestação e nota numa transação; a permissão é conferida no service, na ordem:
+// id/corpo inválido (400) -> não encontrada (404) -> sem permissão (403) -> já resolvida (409)
+router.patch('/contestacoes/:id/resolver', isAuthenticated, new ResolverContestacaoController().handle);
+
 // -- ROTAS DO ALUNO LOGADO (somente aluno autenticado) --
 // atenção: se um dia existir uma rota /alunos/:id, ela deve ficar DEPOIS das rotas /alunos/me/...,
 // senão o Express trata "me" como :id
@@ -149,12 +235,34 @@ router.get('/alunos/me/atividades', isAuthenticated, isAluno, new ListAtividades
 // lista as tutorias em que o aluno logado é o tutorado (nunca as que ele conduz como tutor),
 // com tutor (só o nome), sala, status e meta; ativas primeiro; filtro opcional ?status=ativa|finalizada
 router.get('/alunos/me/tutorias', isAuthenticated, isAluno, new ListTutoriasAlunoController().handle);
+// histórico das contestações das notas do aluno logado, de tutorias ativas e finalizadas (UC06, passo 4; RN14),
+// com nota, atividade (etapa e conteúdo) e tutor (só o nome); mais recentes primeiro;
+// filtro opcional ?status=pendente|aceita|recusada
+router.get('/alunos/me/contestacoes', isAuthenticated, isAluno, new ListContestacoesAlunoController().handle);
+// dashboard de notas do aluno logado (RF26), de tutorias ativas e finalizadas (RN14):
+// média geral, por etapa e por conteúdo (só onde há nota; sem nota a média é null, nunca 0)
+// e a lista das notas com o status da contestação; filtros opcionais ?id_sala= e ?etapa=1|2|3
+router.get('/alunos/me/desempenho', isAuthenticated, isAluno, new DesempenhoAlunoController().handle);
+// conteúdos dominados e com dificuldade do aluno logado (RF27), de tutorias ativas e finalizadas (RN14):
+// média por conteúdo (só onde há nota) classificada pela tabela faixa_desempenho,
+// uma lista por nome de faixa, em ordem alfabética; filtro opcional ?id_sala=
+router.get('/alunos/me/conteudos-dominados', isAuthenticated, isAluno, new ConteudosDominadosController().handle);
+// salas em que o aluno logado está matriculado, com professor (só o nome), para escolher onde pedir tutoria;
+// cada sala diz se o aluno pode pedir (pode_pedir_tutoria + motivo), com as mesmas regras do POST /pedidos-tutoria;
+// ano letivo mais recente primeiro e depois nome da sala; filtro opcional ?ano_letivo=
+router.get('/alunos/me/salas', isAuthenticated, isAluno, new ListSalasAlunoController().handle);
 
 // -- ROTAS TUTOR (somente aluno autenticado com vínculo de tutor ativo) --
 // atenção: se um dia existir uma rota /tutores/:id, ela deve ficar DEPOIS das rotas /tutores/me/...,
 // senão o Express trata "me" como :id
 // lista os tutorados do tutor logado (aluno, status, meta e sala); filtro opcional ?status=ativa|finalizada
 router.get('/tutores/me/tutorias', isAuthenticated, isTutor, new ListTutoriasTutorController().handle);
+// desempenho do tutor logado (RF23 / UC20): mesmos indicadores da P13 (feedback geral e por etapa; avaliações do professor só geral),
+// um item por vínculo (inclusive revogados), com as listas; ativos primeiro e depois ano letivo mais recente; filtro opcional ?id_sala=
+router.get('/tutores/me/desempenho', isAuthenticated, isTutor, new DesempenhoTutorController().handle);
+// atividades criadas pelo tutor logado, só dos vínculos ativos (revogado não entra), no formato da P11
+// com sala no lugar do tutor; prazo mais recente primeiro; filtros opcionais ?id_sala=, ?id_conteudo= e ?etapa=1|2|3
+router.get('/tutores/me/atividades', isAuthenticated, isTutor, new ListAtividadesTutorController().handle);
 
 // -- ROTAS MATERIAL DE APOIO --
 // anexar: tutor ativo da sala com pelo menos uma tutoria ativa nela (RN14), via multipart/form-data
