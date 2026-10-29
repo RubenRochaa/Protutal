@@ -1,4 +1,5 @@
 import styles from './styles.module.scss'
+import Link from 'next/link'
 import { SalaDetalhe } from '@/lib/types'
 import { Card } from '@/components/card'
 import { EmptyState } from '@/components/emptyState'
@@ -7,13 +8,13 @@ interface Props {
     sala: SalaDetalhe;
 }
 
-// Botões do Figma que dependem de telas dos próximos lotes:
-// "Ver atividades" (P11, lote A5) e "Adicionar alunos" (P21 e P22, próxima tela)
-const BOTOES_EM_BREVE = ["Ver atividades", "Adicionar alunos"]
-
 // Aba "Resumo": dados da P1 e, no layout do Figma, os espaços de alunos e tutores.
-// As listas têm rotas próprias (P23 e P24) e entram nos próximos lotes: por enquanto, "Em breve".
+// As listas ficam nas próprias abas (P23 em "Alunos"; P24 em "Tutores").
+// Aqui só há links, para não repetir as chamadas à API.
 export function ResumoSala({ sala }: Props){
+    const base = `/professor/salas/${sala.id_sala}`
+    const abaAlunos = `${base}/alunos`
+
     return (
         <div className={styles.resumo}>
             <Card titulo="Dados da sala">
@@ -39,21 +40,28 @@ export function ResumoSala({ sala }: Props){
 
             <div className={styles.grade}>
                 <Card titulo="Alunos" sublinhado>
-                    <EmptyState mensagem="Em breve: a lista de alunos matriculados aparecerá aqui." />
+                    <EmptyState
+                    mensagem="Veja os alunos matriculados e matricule novos alunos na aba Alunos."
+                    acao={<Link href={abaAlunos} className={styles.link}>Ir para Alunos</Link>}
+                    />
                 </Card>
 
                 <Card titulo="Tutores" sublinhado>
-                    <EmptyState mensagem="Em breve: a lista de tutores da sala aparecerá aqui." />
+                    <EmptyState
+                    mensagem="Veja os tutores, avalie ou remova na aba Tutores."
+                    acao={<Link href={`${base}/tutores`} className={styles.link}>Ir para Tutores</Link>}
+                    />
                 </Card>
             </div>
 
             <div className={styles.botoes}>
-                {BOTOES_EM_BREVE.map((rotulo) => (
-                    <button key={rotulo} type="button" className={styles.botao} disabled>
-                        {rotulo}
-                        <span className={styles.emBreve}>Em breve</span>
-                    </button>
-                ))}
+                <Link href={`${base}/atividades`} className={styles.botaoAtivo}>
+                    Ver atividades
+                </Link>
+
+                <Link href={abaAlunos} className={styles.botaoAtivo}>
+                    Adicionar alunos
+                </Link>
             </div>
         </div>
     )

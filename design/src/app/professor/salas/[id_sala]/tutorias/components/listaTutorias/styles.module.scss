@@ -1,0 +1,18 @@
+// Dados da tutoria à esquerda e botões à direita; no celular os botões descem
+.linha{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.dados{
+    min-width: 0;
+}
+
+@media (max-width: 600px){
+    .linha{
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}

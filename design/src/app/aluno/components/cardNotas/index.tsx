@@ -4,7 +4,7 @@ import { getAutenticado } from '@/lib/apiServer'
 import { getErrorMessage } from '@/lib/getErrorMessage'
 import { sessaoExpiradaNaPagina } from '@/lib/sessaoExpirada'
 import { DesempenhoAluno } from '@/lib/types'
-import { GraficoEtapas } from '../graficoEtapas'
+import { GraficoEtapas } from '@/components/graficoEtapas'
 import { ToastErro } from '../toastErro'
 
 const TITULO = "Minhas notas e evolução"

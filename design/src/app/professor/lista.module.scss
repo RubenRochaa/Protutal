@@ -1,0 +1,161 @@
+// Estilos comuns às telas de lista do professor (abas da sala, Notificações, Tutoria...).
+// Cada componente importa daqui o que é igual em todas as listas e guarda no próprio
+// styles.module.scss só o que é dele.
+
+// Coluna da tela: blocos empilhados
+.tela{
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+// Filtros à esquerda e o botão principal à direita, alinhados pela base
+.topo{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.filtros{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 12px;
+}
+
+// Select de filtro com largura fixa (não estica até o fim da linha)
+.filtroSelect{
+    width: 240px;
+}
+
+// Texto curto de ajuda abaixo do título
+.ajuda{
+    color: var(--gray-700);
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.lista{
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    list-style: none;
+}
+
+// Duas colunas no desktop (ex.: Tutorados e Tutores); uma no tablet e no celular
+.duasColunas{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    align-items: start;
+}
+
+.nome{
+    display: block;
+    font-weight: 600;
+}
+
+.detalhe{
+    display: block;
+    color: var(--gray-700);
+    font-size: 0.85rem;
+    overflow-wrap: anywhere;
+}
+
+// Texto longo (meta, recado, justificativa) com as quebras de linha do usuário
+.texto{
+    display: block;
+    margin-top: 4px;
+    white-space: pre-line;
+    overflow-wrap: anywhere;
+}
+
+.etiquetas{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 6px;
+}
+
+// Botões de ação do item, à direita
+.acoes{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+// Valor em destaque à direita do item (ex.: nota)
+.valor{
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+// Item inteiro clicável (link)
+.link{
+    display: block;
+    border-radius: var(--radius-card);
+    transition: transform 0.2s;
+
+    &:hover{
+        transform: translateY(-2px);
+    }
+
+    &:hover .nome{
+        color: var(--red-700);
+    }
+}
+
+// Link "Voltar" com a seta, no topo de uma tela de detalhe
+.voltar{
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    align-self: flex-start;
+    color: var(--red-700);
+    font-weight: 600;
+
+    &:hover{
+        text-decoration: underline;
+        text-underline-offset: 3px;
+    }
+}
+
+// Formulário dentro de modal
+.form{
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.formAcoes{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+@media (max-width: 768px){
+    .duasColunas{
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .topo{
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .filtroSelect{
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px){
+    // No celular os botões do item descem para baixo do texto
+    .acoes{
+        justify-content: flex-start;
+    }
+}

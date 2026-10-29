@@ -8,6 +8,9 @@ import { ErroCarregamento } from '../../components/erroCarregamento'
 import { buscarSala } from './buscarSala'
 import { AbasSala } from './components/abasSala'
 import { SalaIndisponivel } from './components/salaIndisponivel'
+import { PermissaoAtividades } from './components/permissaoAtividades'
+import { getAutenticado } from '@/lib/apiServer'
+import { TutorSala } from '@/lib/types'
 
 interface Props {
     children: React.ReactNode;
@@ -22,7 +25,11 @@ const SALA_INDISPONIVEL = [400, 403, 404]
 // a barra com o botão de voltar e as abas. Cada aba (page.tsx) aparece em "children".
 export default async function SalaLayout({ children, params }: Props){
     const { id_sala } = await params
-    const resultado = await buscarSala(id_sala)
+    // A P24 (tutores ativos) dá o estado do interruptor de permissão (P29) no topo da sala
+    const [resultado, tutores] = await Promise.all([
+        buscarSala(id_sala),
+        getAutenticado<TutorSala[]>(`/salas/${encodeURIComponent(id_sala)}/tutores`)
+    ])
 
     // Fora do try/catch: o redirect do Next funciona lançando um erro
     if("erro" in resultado) sessaoExpiradaNaPagina(resultado.erro)
@@ -62,8 +69,11 @@ export default async function SalaLayout({ children, params }: Props){
                         {sala.serie}ª série · {sala.ano_letivo}
                     </span>
 
-                    {/* Espaço reservado: permissão de criar atividades (P29), lote A3 */}
-                    <div className={styles.acoes} />
+                    {/* Permissão de criar atividades (P29). Se a P24 falhar, o interruptor
+                        não aparece: a aba aberta já mostra o erro de carregamento */}
+                    <div className={styles.acoes}>
+                        {"dados" in tutores && <PermissaoAtividades idSala={sala.id_sala} tutores={tutores.dados} />}
+                    </div>
                 </div>
 
                 <AbasSala idSala={sala.id_sala} />
