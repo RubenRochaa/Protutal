@@ -1,0 +1,41 @@
+// Quadro branco arredondado; a rolagem lateral fica só aqui dentro
+.quadro{
+    overflow-x: auto;
+    border-radius: var(--radius-card);
+    background-color: var(--white);
+    box-shadow: var(--shadow-card);
+}
+
+.tabela{
+    width: 100%;
+    min-width: 720px;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+
+    th, td{
+        padding: 12px 14px;
+        text-align: left;
+        vertical-align: top;
+        border-bottom: 1px solid var(--gray-300);
+    }
+
+    th{
+        color: var(--red-700);
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    tbody tr:last-child td{
+        border-bottom: 0;
+    }
+}
+
+.numero{
+    text-align: right !important;
+    white-space: nowrap;
+}
+
+.contestada{
+    display: block;
+    margin-top: 4px;
+}

@@ -7,6 +7,8 @@ import { useState } from 'react'
 import { usePathname } from 'next/navigation'
 import { useFormStatus } from 'react-dom'
 import { CircleUserRound, Menu, X } from 'lucide-react'
+import { iniciais } from '@/lib/formatacao'
+import { Avatar } from '../avatar'
 import { handleLogout } from './actions'
 
 interface LinkMenu {
@@ -31,17 +33,6 @@ function hrefAtivo(links: LinkMenu[], pathname: string){
         .sort((a, b) => b.href.length - a.href.length)
 
     return candidatos[0]?.href
-}
-
-// Primeira letra do primeiro e do último nome (ex.: "Ruben Rocha" -> "RR")
-function iniciais(nome: string){
-    const partes = nome.trim().split(/\s+/).filter(Boolean)
-    if(partes.length === 0) return ""
-
-    const primeira = partes[0][0]
-    const ultima = partes.length > 1 ? partes[partes.length - 1][0] : ""
-
-    return (primeira + ultima).toUpperCase()
 }
 
 // Botão "Sair": fica desabilitado enquanto o logout roda no servidor
@@ -101,8 +92,8 @@ export function Header({ links, nome }: Props){
                 <div className={styles.acoes}>
                     {/* A API não tem foto de usuário: avatar com as iniciais do nome (ou o ícone, sem nome) */}
                     {nome && iniciais(nome) ? (
-                        <span className={styles.avatar} title={nome} aria-label={nome} role="img">
-                            {iniciais(nome)}
+                        <span role="img" aria-label={nome}>
+                            <Avatar nome={nome} tamanho="grande" />
                         </span>
                     ) : (
                         <CircleUserRound className={styles.usuario} aria-hidden="true" />

@@ -1,0 +1,49 @@
+.corpo{
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.mensagem{
+    line-height: 1.5;
+}
+
+// Mesmo visual do Button (que é só de envio de formulário)
+.confirmar, .cancelar{
+    height: 44px;
+    padding: 0 20px;
+    border-radius: var(--radius-input);
+    font-weight: 500;
+    transition: background-color 0.2s;
+
+    &:disabled{
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+}
+
+.confirmar{
+    border: 0;
+    background-color: var(--red-700);
+    color: var(--white);
+
+    &:hover:not(:disabled){
+        background-color: var(--red-900);
+    }
+}
+
+.cancelar{
+    border: 1px solid var(--red-700);
+    background-color: var(--white);
+    color: var(--red-700);
+
+    &:hover:not(:disabled){
+        background-color: var(--gray-100);
+    }
+}
+
+@media (max-width: 375px){
+    .confirmar, .cancelar{
+        flex: 1;
+    }
+}

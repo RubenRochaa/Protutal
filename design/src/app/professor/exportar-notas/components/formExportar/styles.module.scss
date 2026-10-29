@@ -1,0 +1,23 @@
+.cartao{
+    gap: 20px;
+    max-width: 720px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.campos{
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 16px;
+}
+
+.acao{
+    display: flex;
+    justify-content: center;
+}
+
+@media (max-width: 600px){
+    .campos{
+        grid-template-columns: 1fr;
+    }
+}

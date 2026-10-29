@@ -1,0 +1,73 @@
+.container{
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+// Desktop: 2 colunas de alunos; tablet e celular: 1
+.lista{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    list-style: none;
+}
+
+.nome{
+    display: block;
+    font-weight: 600;
+}
+
+.email{
+    display: block;
+    color: var(--gray-700);
+    font-size: 0.85rem;
+    overflow-wrap: anywhere;
+}
+
+.etiqueta{
+    display: inline-block;
+    margin-top: 4px;
+    padding: 2px 8px;
+    border-radius: var(--radius-pill);
+    background-color: var(--gray-300);
+    color: var(--gray-700);
+    font-size: 0.7rem;
+}
+
+.botoes{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+// Mesmo visual do botão "Nova sala"
+.botao{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 44px;
+    padding: 0 20px;
+    border: 0;
+    border-radius: var(--radius-input);
+    background-color: var(--red-700);
+    color: var(--white);
+    font-weight: 500;
+    transition: background-color 0.2s;
+
+    &:hover{
+        background-color: var(--red-900);
+    }
+}
+
+@media (max-width: 768px){
+    .lista{
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px){
+    .botoes{
+        flex-direction: column;
+    }
+}

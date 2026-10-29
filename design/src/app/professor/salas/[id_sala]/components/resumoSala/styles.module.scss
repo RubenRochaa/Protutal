@@ -40,27 +40,29 @@
     gap: 16px;
 }
 
-// Botão desabilitado: o recurso fica para um próximo lote
-.botao{
+// Atalho para uma aba pronta: mesmo visual do botão "Nova sala"
+.botaoAtivo{
     display: flex;
     align-items: center;
-    gap: 8px;
+    justify-content: center;
     height: 44px;
     padding: 0 20px;
-    border: 1px solid var(--gray-500);
     border-radius: var(--radius-input);
-    background-color: var(--white);
-    color: var(--gray-500);
+    background-color: var(--red-700);
+    color: var(--white);
     font-weight: 600;
+    transition: background-color 0.2s;
+
+    &:hover{
+        background-color: var(--red-900);
+    }
 }
 
-.emBreve{
-    padding: 2px 8px;
-    border-radius: var(--radius-pill);
-    background-color: var(--gray-300);
-    color: var(--gray-700);
-    font-size: 0.7rem;
-    font-weight: 500;
+.link{
+    color: var(--red-700);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
 }
 
 @media (max-width: 1024px){
@@ -85,7 +87,7 @@
         flex-direction: column;
     }
 
-    .botao{
+    .botaoAtivo{
         justify-content: center;
     }
 }
