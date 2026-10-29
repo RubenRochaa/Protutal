@@ -2,6 +2,7 @@
 
 import styles from './styles.module.scss'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useState } from 'react'
 import { usePathname } from 'next/navigation'
 import { useFormStatus } from 'react-dom'
@@ -11,20 +12,36 @@ import { handleLogout } from './actions'
 interface LinkMenu {
     label: string;
     href: string;
+    // Tela ainda não feita: o item aparece desabilitado, com o selo "Em breve"
+    emBreve?: boolean;
 }
 
 interface Props {
     links: LinkMenu[];
+    // Nome do usuário logado, para o avatar com as iniciais. Sem nome, fica o ícone
+    nome?: string | null;
 }
 
 // O link ativo é o de href mais longo que combina com a URL.
 // Assim "Início" (/aluno) não fica vermelho junto com "Minhas atividades" (/aluno/atividades)
 function hrefAtivo(links: LinkMenu[], pathname: string){
     const candidatos = links
+        .filter((link) => !link.emBreve)
         .filter((link) => pathname === link.href || pathname.startsWith(link.href + "/"))
         .sort((a, b) => b.href.length - a.href.length)
 
     return candidatos[0]?.href
+}
+
+// Primeira letra do primeiro e do último nome (ex.: "Ruben Rocha" -> "RR")
+function iniciais(nome: string){
+    const partes = nome.trim().split(/\s+/).filter(Boolean)
+    if(partes.length === 0) return ""
+
+    const primeira = partes[0][0]
+    const ultima = partes.length > 1 ? partes[partes.length - 1][0] : ""
+
+    return (primeira + ultima).toUpperCase()
 }
 
 // Botão "Sair": fica desabilitado enquanto o logout roda no servidor
@@ -40,7 +57,7 @@ function BotaoSair(){
 
 // Cabeçalho das áreas logadas: logo, menu (recebido por props), ícone do usuário e "Sair".
 // No celular e tablet os links ficam escondidos atrás do botão de menu.
-export function Header({ links }: Props){
+export function Header({ links, nome }: Props){
     const pathname = usePathname();
     const [menuAberto, setMenuAberto] = useState(false);
     const ativo = hrefAtivo(links, pathname);
@@ -49,14 +66,26 @@ export function Header({ links }: Props){
         <header className={styles.header}>
             <div className={styles.conteudo}>
                 <Link href={links[0]?.href ?? "/"} className={styles.logo} aria-label="Protutal - página inicial">
-                    <span className={styles.logoPr}>PR</span>OTUTAL
+                    <Image
+                    src="/img/logo.png"
+                    alt="Protutal"
+                    width={890}
+                    height={280}
+                    priority
+                    className={styles.logoImagem}
+                    />
                 </Link>
 
                 <nav
                 id="menu-principal"
                 className={menuAberto ? `${styles.nav} ${styles.navAberto}` : styles.nav}
                 >
-                    {links.map((link) => (
+                    {links.map((link) => link.emBreve ? (
+                        <span key={link.href} className={styles.linkEmBreve} aria-disabled="true">
+                            {link.label}
+                            <span className={styles.seloEmBreve}>Em breve</span>
+                        </span>
+                    ) : (
                         <Link
                         key={link.href}
                         href={link.href}
@@ -70,8 +99,14 @@ export function Header({ links }: Props){
                 </nav>
 
                 <div className={styles.acoes}>
-                    {/* A API não tem foto de usuário: fica o ícone no lugar */}
-                    <CircleUserRound className={styles.usuario} aria-hidden="true" />
+                    {/* A API não tem foto de usuário: avatar com as iniciais do nome (ou o ícone, sem nome) */}
+                    {nome && iniciais(nome) ? (
+                        <span className={styles.avatar} title={nome} aria-label={nome} role="img">
+                            {iniciais(nome)}
+                        </span>
+                    ) : (
+                        <CircleUserRound className={styles.usuario} aria-hidden="true" />
+                    )}
 
                     <form action={handleLogout}>
                         <BotaoSair />

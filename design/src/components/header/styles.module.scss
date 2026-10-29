@@ -20,14 +20,13 @@
 
 .logo{
     flex-shrink: 0;
-    color: var(--red-700);
-    font-size: 2rem;
-    font-weight: 700;
-    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
 }
 
-.logoPr{
-    color: var(--gray-700);
+.logoImagem{
+    width: auto;
+    height: 44px;
 }
 
 .nav{
@@ -55,6 +54,27 @@
     color: var(--red-700);
 }
 
+// Item de tela que ainda não existe: visível, mas sem clique
+.linkEmBreve{
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--gray-500);
+    font-weight: 600;
+    font-size: 1.05rem;
+    white-space: nowrap;
+    cursor: not-allowed;
+}
+
+.seloEmBreve{
+    padding: 2px 8px;
+    border-radius: var(--radius-pill);
+    background-color: var(--gray-300);
+    color: var(--gray-700);
+    font-size: 0.7rem;
+    font-weight: 500;
+}
+
 .acoes{
     display: flex;
     align-items: center;
@@ -67,6 +87,20 @@
     height: 48px;
     color: var(--gray-700);
     stroke-width: 1.5;
+}
+
+.avatar{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: var(--red-700);
+    color: var(--white);
+    font-weight: 600;
+    font-size: 1.1rem;
 }
 
 .sair{
@@ -104,13 +138,17 @@
         padding: 0 16px;
     }
 
-    .logo{
-        font-size: 1.5rem;
+    .logoImagem{
+        height: 34px;
     }
 
-    .usuario{
+    .usuario, .avatar{
         width: 36px;
         height: 36px;
+    }
+
+    .avatar{
+        font-size: 0.9rem;
     }
 
     .acoes{
@@ -139,15 +177,15 @@
         display: flex;
     }
 
-    .link, .linkAtivo{
+    .link, .linkAtivo, .linkEmBreve{
         padding: 14px 16px;
         border-top: 1px solid var(--gray-300);
     }
 }
 
 @media (max-width: 375px){
-    .logo{
-        font-size: 1.3rem;
+    .logoImagem{
+        height: 28px;
     }
 
     .sair{
