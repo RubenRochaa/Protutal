@@ -21,6 +21,37 @@ export interface SalaDetalhe {
         id_professor: number;
         nome: string;
     };
+// Tutoria em que o aluno logado é o tutorado (rota A3 - GET /alunos/me/tutorias).
+// Só os campos usados nas telas
+export interface TutoriaAluno {
+    id_tutoria: number;
+    status: "ativa" | "finalizada";
+    tutor: { nome: string };
+    sala: { id_sala: number; nome: string };
+}
+
+// Status de entrega calculado pela A1: pendente = sem resposta;
+// entregue = respondeu até o prazo; entregue_com_atraso = respondeu depois do prazo
+export type StatusAtividadeAluno = "pendente" | "entregue" | "entregue_com_atraso"
+
+// Atividade destinada ao aluno logado (rota A1 - GET /alunos/me/atividades).
+// Só os campos usados nas telas
+export interface AtividadeAluno {
+    id_atividade: number;
+    titulo: string;
+    etapa: number;
+    // Data e hora em ISO (UTC). Mostrar no fuso America/Sao_Paulo
+    data_entrega: string;
+    conteudo: { nome: string } | null;
+    status: StatusAtividadeAluno;
+    // false quando a tutoria foi finalizada ou o aluno já respondeu
+    pode_responder: boolean;
+}
+
+// Dashboard de notas do aluno logado (rota A6 - GET /alunos/me/desempenho).
+// Etapa sem nota vem com media: null
+export interface DesempenhoAluno {
+    por_etapa: { etapa: number; media: number | null }[];
 }
 
 // Retorno das Server Actions de formulário: ou uma mensagem de erro, ou de sucesso.
