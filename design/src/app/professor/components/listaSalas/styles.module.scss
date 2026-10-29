@@ -70,6 +70,21 @@
     list-style: none;
 }
 
+// A pílula inteira é clicável e leva para o detalhe da sala
+.link{
+    display: block;
+    border-radius: var(--radius-card);
+    transition: transform 0.2s;
+
+    &:hover{
+        transform: translateY(-2px);
+    }
+
+    &:hover .nome{
+        color: var(--red-700);
+    }
+}
+
 .nome{
     display: block;
     font-weight: 600;

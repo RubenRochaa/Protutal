@@ -10,6 +10,19 @@ export interface Sala {
     id_professor: number;
 }
 
+// Detalhe da sala, como a rota P1 (GET /salas/:id) devolve.
+// Alunos, tutores e conteúdos não vêm aqui: cada um tem a sua rota (P23, P24 e P2)
+export interface SalaDetalhe {
+    id_sala: number;
+    nome: string;
+    serie: number;
+    ano_letivo: number;
+    professor: {
+        id_professor: number;
+        nome: string;
+    };
+}
+
 // Retorno das Server Actions de formulário: ou uma mensagem de erro, ou de sucesso.
 // O componente de formulário (no navegador) lê este objeto, mostra o toast
 // e, se houver "redirecionar", leva o usuário para essa página.
