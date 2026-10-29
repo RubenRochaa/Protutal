@@ -21,6 +21,8 @@ export interface SalaDetalhe {
         id_professor: number;
         nome: string;
     };
+}
+
 // Tutoria em que o aluno logado é o tutorado (rota A3 - GET /alunos/me/tutorias).
 // Só os campos usados nas telas
 export interface TutoriaAluno {
