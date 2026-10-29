@@ -50,6 +50,49 @@ export interface AtividadeAluno {
     pode_responder: boolean;
 }
 
+// Detalhe da atividade na visão do aluno destinatário (rota A2 - GET /atividades/:id, perfil "aluno").
+// Sem resposta, "resposta" vem null; sem nota, "nota" vem null
+export interface AtividadeDetalheAluno {
+    perfil: "aluno";
+    id_atividade: number;
+    titulo: string;
+    descricao: string;
+    // Valor técnico (ex.: interpretacao_mapas). O rótulo vem da T8 (GET /tipos-atividade)
+    tipo: string;
+    etapa: number;
+    // Data e hora em ISO (UTC). Mostrar no fuso America/Sao_Paulo
+    data_entrega: string;
+    conteudo: { id_conteudo: number; nome: string } | null;
+    sala: { id_sala: number; nome: string };
+    tutor: { nome: string };
+    status: StatusAtividadeAluno;
+    // false quando a tutoria foi finalizada ou o aluno já respondeu
+    pode_responder: boolean;
+    resposta: {
+        id_resposta: number;
+        texto: string | null;
+        // URL do arquivo enviado (Cloudinary)
+        conteudo_file: string;
+        data_envio: string;
+    } | null;
+    nota: {
+        id_nota: number;
+        valor: number;
+        comentario: string | null;
+        data_lancamento: string;
+    } | null;
+}
+
+// A A2 também responde ao tutor que criou a atividade, em outro formato.
+// A visão do tutor ainda não tem tela (lote B3): por enquanto só o "perfil" importa
+export type AtividadeDetalhe = AtividadeDetalheAluno | { perfil: "tutor" }
+
+// Tipo de atividade com o rótulo em português (rota T8 - GET /tipos-atividade)
+export interface TipoAtividadeOpcao {
+    valor: string;
+    rotulo: string;
+}
+
 // Dashboard de notas do aluno logado (rota A6 - GET /alunos/me/desempenho).
 // Etapa sem nota vem com media: null
 export interface DesempenhoAluno {
