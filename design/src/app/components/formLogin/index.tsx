@@ -8,17 +8,28 @@ import { toast } from 'sonner'
 import { Input } from '@/components/input'
 import { Button } from '@/components/button'
 import { validarLogin } from '@/lib/validacao'
+import { MSG_SESSAO_EXPIRADA } from '@/lib/getErrorMessage'
 import { handleLogin } from '../../actions'
 import { AvisoConfirmacao } from '../avisoConfirmacao'
 
 interface Props {
     // true quando o usuário acabou de se cadastrar (veio de /?cadastro=ok)
     cadastroConcluido?: boolean;
+    // true quando a API respondeu 401 em outra tela (veio de /?sessao=expirada)
+    sessaoExpirada?: boolean;
 }
 
-export function FormLogin({ cadastroConcluido = false }: Props){
+export function FormLogin({ cadastroConcluido = false, sessaoExpirada = false }: Props){
     const router = useRouter();
     const [estado, formAction] = useActionState(handleLogin, {});
+
+    // Avisa uma vez e tira o "?sessao=expirada" da URL (para não repetir ao recarregar)
+    useEffect(() => {
+        if(!sessaoExpirada) return;
+
+        toast.error(MSG_SESSAO_EXPIRADA, { id: "sessao-expirada" });
+        router.replace("/");
+    }, [sessaoExpirada, router]);
 
     // Cada resposta da Server Action vira um toast
     useEffect(() => {
