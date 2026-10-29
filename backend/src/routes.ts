@@ -55,6 +55,7 @@ import { ListTutoriasAlunoController } from './controllers/aluno/ListTutoriasAlu
 import { ListContestacoesAlunoController } from './controllers/aluno/ListContestacoesAlunoController';
 import { DesempenhoAlunoController } from './controllers/aluno/DesempenhoAlunoController';
 import { ConteudosDominadosController } from './controllers/aluno/ConteudosDominadosController';
+import { ListSalasAlunoController } from './controllers/aluno/ListSalasAlunoController';
 import { ListContestacoesController } from './controllers/professor/ListContestacoesController';
 import { ResolverContestacaoController } from './controllers/professor/ResolverContestacaoController';
 import { CreateMaterialController } from './controllers/aluno/CreateMaterialController';
@@ -246,6 +247,10 @@ router.get('/alunos/me/desempenho', isAuthenticated, isAluno, new DesempenhoAlun
 // média por conteúdo (só onde há nota) classificada pela tabela faixa_desempenho,
 // uma lista por nome de faixa, em ordem alfabética; filtro opcional ?id_sala=
 router.get('/alunos/me/conteudos-dominados', isAuthenticated, isAluno, new ConteudosDominadosController().handle);
+// salas em que o aluno logado está matriculado, com professor (só o nome), para escolher onde pedir tutoria;
+// cada sala diz se o aluno pode pedir (pode_pedir_tutoria + motivo), com as mesmas regras do POST /pedidos-tutoria;
+// ano letivo mais recente primeiro e depois nome da sala; filtro opcional ?ano_letivo=
+router.get('/alunos/me/salas', isAuthenticated, isAluno, new ListSalasAlunoController().handle);
 
 // -- ROTAS TUTOR (somente aluno autenticado com vínculo de tutor ativo) --
 // atenção: se um dia existir uma rota /tutores/:id, ela deve ficar DEPOIS das rotas /tutores/me/...,
