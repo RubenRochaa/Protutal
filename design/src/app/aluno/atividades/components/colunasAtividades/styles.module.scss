@@ -1,0 +1,41 @@
+.grade{
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 40px 64px;
+    align-items: start;
+}
+
+// Desktop: "Realizadas" à esquerda, como no Figma
+.realizadas{
+    order: 1;
+}
+
+.naoEntregues{
+    order: 2;
+}
+
+.lista{
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    list-style: none;
+}
+
+// Celular e tablet: uma coluna, na ordem do HTML ("Não entregues" primeiro)
+@media (max-width: 768px){
+    .grade{
+        grid-template-columns: minmax(0, 1fr);
+        gap: 32px;
+    }
+
+    .realizadas,
+    .naoEntregues{
+        order: 0;
+    }
+}
+
+@media (max-width: 375px){
+    .grade{
+        gap: 24px;
+    }
+}

@@ -1,0 +1,47 @@
+.titulo{
+    font-weight: 500;
+}
+
+.detalhe{
+    color: var(--gray-700);
+    font-size: 0.85rem;
+}
+
+.prazoVencido{
+    color: var(--red-700);
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.selo{
+    display: inline-block;
+    margin: 6px 6px 0 0;
+    padding: 2px 10px;
+    border-radius: var(--radius-pill);
+    background-color: var(--gray-300);
+    color: var(--gray-700);
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.iconeEntregue,
+.iconeAtrasada{
+    width: 32px;
+    height: 32px;
+}
+
+.iconeEntregue{
+    color: var(--green-500);
+}
+
+.iconeAtrasada{
+    color: var(--red-700);
+}
+
+@media (max-width: 375px){
+    .iconeEntregue,
+    .iconeAtrasada{
+        width: 26px;
+        height: 26px;
+    }
+}
