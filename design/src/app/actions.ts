@@ -35,7 +35,7 @@ export async function handleLogin(_estado: LoginState, formData: FormData): Prom
     try {
         const response = await api.post(ROTA_SESSAO[perfil], { email, senha })
 
-        await setSessaoServer(response.data.token, perfil)
+        await setSessaoServer(response.data.token, perfil, response.data.nome)
 
         return {
             sucesso: `Bem-vindo(a), ${response.data.nome}!`,
