@@ -1,0 +1,16 @@
+.dados{
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 16px;
+
+    dt{
+        color: var(--gray-700);
+        font-size: 0.85rem;
+    }
+
+    dd{
+        font-weight: 600;
+        overflow-wrap: anywhere;
+    }
+}

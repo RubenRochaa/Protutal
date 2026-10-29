@@ -1,0 +1,14 @@
+// Um cartão por ano; duas colunas no desktop, uma no tablet e no celular
+.grade{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    align-items: start;
+}
+
+@media (max-width: 768px){
+    .grade{
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+}

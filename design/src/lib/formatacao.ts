@@ -26,3 +26,36 @@ export function formatarDataHora(iso: string): string {
 export function formatarNota(valor: number): string {
     return formatoNota.format(valor)
 }
+
+// Primeira letra do primeiro e do último nome (ex.: "Ruben Rocha" -> "RR")
+export function iniciais(nome: string): string {
+    const partes = nome.trim().split(/\s+/).filter(Boolean)
+    if(partes.length === 0) return ""
+
+    const primeira = partes[0][0]
+    const ultima = partes.length > 1 ? partes[partes.length - 1][0] : ""
+
+    return (primeira + ultima).toUpperCase()
+}
+
+// Média que pode não existir (null = sem nota). Nunca mostra 0 no lugar de "sem nota"
+export function formatarMedia(valor: number | null, semValor = "Sem nota"): string {
+    return valor === null ? semValor : formatarNota(valor)
+}
+
+// Rótulo legível do tipo de atividade. Os rótulos vêm da T8 (GET /tipos-atividade);
+// se a T8 falhar, troca "_" por espaço (ex.: interpretacao_mapas -> "Interpretacao mapas")
+export function rotuloTipo(tipo: string, tipos: { valor: string; rotulo: string }[]): string {
+    const encontrado = tipos.find((t) => t.valor === tipo)
+    if(encontrado) return encontrado.rotulo
+
+    const texto = tipo.replaceAll("_", " ")
+
+    return texto.charAt(0).toUpperCase() + texto.slice(1)
+}
+
+// Ano usado para separar salas atuais e anteriores. Mesma regra da P7 (reabrir tutoria),
+// que compara o ano_letivo da sala com o ano do relógio do servidor
+export function anoAtual(): number {
+    return new Date().getFullYear()
+}

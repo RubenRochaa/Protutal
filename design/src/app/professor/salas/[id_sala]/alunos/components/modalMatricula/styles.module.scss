@@ -1,0 +1,61 @@
+.conteudo{
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.aviso{
+    color: var(--gray-700);
+    font-size: 0.9rem;
+}
+
+.lista{
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    list-style: none;
+}
+
+.nome{
+    display: block;
+    font-weight: 600;
+}
+
+.email{
+    display: block;
+    color: var(--gray-700);
+    font-size: 0.85rem;
+    overflow-wrap: anywhere;
+}
+
+.botao, .botaoMatriculado{
+    height: 36px;
+    padding: 0 14px;
+    border-radius: var(--radius-input);
+    font-weight: 500;
+    font-size: 0.9rem;
+    white-space: nowrap;
+}
+
+.botao{
+    border: 0;
+    background-color: var(--red-700);
+    color: var(--white);
+    transition: background-color 0.2s;
+
+    &:hover:not(:disabled){
+        background-color: var(--red-900);
+    }
+
+    &:disabled{
+        opacity: 0.6;
+        cursor: wait;
+    }
+}
+
+.botaoMatriculado{
+    border: 1px solid var(--gray-500);
+    background-color: var(--white);
+    color: var(--gray-500);
+    cursor: not-allowed;
+}
