@@ -35,6 +35,80 @@ export interface TutoriaAluno {
     tutor: { nome: string };
     sala: { id_sala: number; nome: string; serie: number };
 }
+
+// Sala em que o aluno logado está matriculado (GET /alunos/me/salas).
+// "motivo" explica por que o aluno não pode pedir tutoria (null quando pode)
+export interface SalaAluno {
+    id_sala: number;
+    nome: string;
+    serie: number;
+    ano_letivo: number;
+    professor: { nome: string };
+    pode_pedir_tutoria: boolean;
+    motivo: { codigo: string; mensagem: string } | null;
+}
+
+// Material de apoio da sala (rota A5 - GET /salas/:id/materiais)
+export interface MaterialSala {
+    id_material: number;
+    titulo: string;
+    descricao: string | null;
+    // URL do arquivo (Cloudinary)
+    arquivo: string;
+    data_envio: string;
+    tutor: { nome: string };
+}
+
+// Aviso do professor para a sala (rota A4 - GET /salas/:id/avisos)
+export interface AvisoSala {
+    id_aviso: number;
+    titulo: string;
+    conteudo: string;
+    data_publicacao: string;
+    professor: { nome: string };
+}
+
+// Mensagem do chat da tutoria (rota O2 - GET /tutorias/:id/mensagens).
+// Com "assunto" preenchido, é um comunicado (só o tutor envia)
+export interface MensagemTutoria {
+    id_mensagem: number;
+    texto: string;
+    assunto: string | null;
+    data_envio: string;
+    remetente: { tipo: "tutor" | "tutorado"; nome: string };
+}
+
+// Conteúdo com média, como as rotas A6 (por_conteudo) e A7 devolvem
+export interface MediaConteudo {
+    id_conteudo: number;
+    nome: string;
+    media: number;
+    quantidade: number;
+}
+
+// Conteúdos classificados por faixa (rota A7 - GET /alunos/me/conteudos-dominados).
+// A chave é o nome da faixa cadastrada no banco; usamos as duas do seed
+export interface ConteudosDominados {
+    dominado?: MediaConteudo[];
+    com_dificuldade?: MediaConteudo[];
+}
+
+export type StatusContestacao = "pendente" | "aceita" | "recusada"
+
+// Contestação de nota do aluno logado (rota A9 - GET /alunos/me/contestacoes)
+export interface ContestacaoAluno {
+    id_contestacao: number;
+    comentario: string;
+    status: StatusContestacao;
+    data_envio: string;
+    decisao: string | null;
+    data_resolucao: string | null;
+    nota: { id_nota: number; valor: number };
+    atividade: { titulo: string; etapa: number; conteudo: { nome: string } };
+    tutor: { nome: string };
+    tutor: { nome: string };
+    sala: { id_sala: number; nome: string; serie: number };
+}
  
 // Sala em que o aluno logado está matriculado (GET /alunos/me/salas).
 // "motivo" explica por que o aluno não pode pedir tutoria (null quando pode)
@@ -197,6 +271,7 @@ export interface ActionState {
     // (nunca devolva a senha aqui)
     valores?: Record<string, string>;
 }
+
  
 // Aluno como as rotas P21 (GET /alunos) e P23 (GET /salas/:id/alunos) devolvem.
 // A API não devolve foto: a tela usa o avatar com as iniciais
@@ -207,6 +282,9 @@ export interface AlunoSala {
     // false = o aluno ainda não clicou no link de confirmação do e-mail
     email_confirmado: boolean;
 }
+
+// ---------- Área do professor (lotes A2 a A6). Só os campos usados nas telas ----------
+
  
 // ---------- Área do professor (lotes A2 a A6). Só os campos usados nas telas ----------
  
@@ -215,6 +293,7 @@ export interface ConteudoSala {
     id_conteudo: number;
     nome: string;
 }
+
  
 // Aviso publicado na sala (rotas P3 e A4 - /salas/:id/avisos)
 export interface Aviso {
@@ -224,6 +303,7 @@ export interface Aviso {
     data_publicacao: string;
     professor: { id_professor: number; nome: string };
 }
+
  
 // Pedido pendente para ser tutor (rota P26 - GET /pedidos-tutoria), de todas as salas do professor
 export interface PedidoTutoria {
@@ -233,6 +313,7 @@ export interface PedidoTutoria {
     aluno: { id_aluno: number; nome: string };
     salas_matriculado: { id_sala: number; nome: string }[];
 }
+
  
 // Tutor ativo da sala (rota P24 - GET /salas/:id/tutores)
 export interface TutorSala {
@@ -242,6 +323,7 @@ export interface TutorSala {
     data_definicao: string;
     aluno: { id_aluno: number; nome: string; email: string };
 }
+
  
 // Avaliações do professor sobre um tutor (rota P10 - GET /tutores-sala/:id/avaliacoes).
 // Sem avaliações: media_notas null e lista vazia
@@ -256,6 +338,9 @@ export interface AvaliacoesTutor {
         professor: { nome: string };
     }[];
 }
+
+export type StatusTutoria = "ativa" | "finalizada"
+
  
 export type StatusTutoria = "ativa" | "finalizada"
  
@@ -269,6 +354,7 @@ export interface TutoriaSala {
     tutor: { nome: string };
     aluno: { nome: string };
 }
+
  
 // Atividade lançada pelos tutores na sala (rota P11 - GET /salas/:id/atividades)
 export interface AtividadeSala {
@@ -283,6 +369,7 @@ export interface AtividadeSala {
     total_entregues: number;
     total_com_nota: number;
 }
+
  
 // Destinatários da atividade com resposta e nota (rota P12 - GET /atividades/:id/respostas)
 export interface RespostasAtividade {
@@ -303,6 +390,7 @@ export interface RespostasAtividade {
         status: StatusAtividadeAluno;
     }[];
 }
+
  
 // Uma linha por nota lançada na sala (rota P14 - GET /salas/:id/notas)
 export interface NotaSala {
@@ -316,6 +404,9 @@ export interface NotaSala {
     tutor: { id_tutor_sala: number; nome: string };
     contestacao_pendente: boolean;
 }
+
+// StatusContestacao: declarado mais acima (usado também pelas telas do aluno)
+
  
 // StatusContestacao: declarado mais acima (usado também pelas telas do aluno)
  
@@ -333,6 +424,7 @@ export interface Contestacao {
     sala: { id_sala: number; nome: string };
     tutor: { id_tutor_sala: number; nome: string };
 }
+
  
 // Feedbacks dos alunos aos tutores (rota T7 - GET /feedbacks)
 export interface FeedbacksResposta {
@@ -351,6 +443,7 @@ export interface FeedbacksResposta {
         sala: { id_sala: number; nome: string; serie: number; ano_letivo: number };
     }[];
 }
+
  
 // Indicadores de cada tutor da sala (rota P13 - GET /salas/:id/desempenho-tutores).
 // Média null = sem nota (nunca 0)

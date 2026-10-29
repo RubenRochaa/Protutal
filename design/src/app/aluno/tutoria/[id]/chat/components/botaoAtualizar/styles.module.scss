@@ -1,0 +1,31 @@
+// Botão secundário: contorno vermelho, para não competir com o "Enviar"
+.botao{
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    height: 40px;
+    padding: 0 16px;
+    border: 1px solid var(--red-700);
+    border-radius: var(--radius-input);
+    background-color: var(--white);
+    color: var(--red-700);
+    font-weight: 500;
+
+    &:hover:not(:disabled){
+        background-color: var(--gray-100);
+    }
+
+    &:disabled{
+        opacity: 0.6;
+    }
+}
+
+.girando{
+    animation: girar 1s linear infinite;
+}
+
+@keyframes girar{
+    to{
+        transform: rotate(360deg);
+    }
+}
