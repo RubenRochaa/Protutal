@@ -10,7 +10,6 @@ export interface Sala {
     id_professor: number;
 }
 
-<<<<<<< HEAD
 // Detalhe da sala, como a rota P1 (GET /salas/:id) devolve.
 // Alunos, tutores e conteúdos não vêm aqui: cada um tem a sua rota (P23, P24 e P2)
 export interface SalaDetalhe {
@@ -22,7 +21,8 @@ export interface SalaDetalhe {
         id_professor: number;
         nome: string;
     };
-=======
+}
+
 // Tutoria em que o aluno logado é o tutorado (rota A3 - GET /alunos/me/tutorias).
 // Só os campos usados nas telas
 export interface TutoriaAluno {
@@ -54,7 +54,6 @@ export interface AtividadeAluno {
 // Etapa sem nota vem com media: null
 export interface DesempenhoAluno {
     por_etapa: { etapa: number; media: number | null }[];
->>>>>>> d70f99dd1a8e87bad3768afacbc61e6f62fdf0fb
 }
 
 // Retorno das Server Actions de formulário: ou uma mensagem de erro, ou de sucesso.
