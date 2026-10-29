@@ -2,7 +2,7 @@ import { Card } from '@/components/card'
 import { getErrorMessage } from '@/lib/getErrorMessage'
 import { sessaoExpiradaNaPagina } from '@/lib/sessaoExpirada'
 import { buscarDesempenho } from '../../../buscas'
-import { GraficoEtapas } from '../../../components/graficoEtapas'
+import { GraficoEtapas } from '@/components/graficoEtapas'
 import { ToastErro } from '../../../components/toastErro'
 
 export const TITULO_ETAPAS = "Média por etapa"
