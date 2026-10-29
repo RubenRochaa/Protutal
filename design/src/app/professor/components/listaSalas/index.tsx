@@ -1,8 +1,9 @@
 "use client"
 
 import styles from './styles.module.scss'
+import Link from 'next/link'
 import { useState } from 'react'
-import { Plus } from 'lucide-react'
+import { ChevronRight, Plus } from 'lucide-react'
 import { Sala } from '@/lib/types'
 import { Input } from '@/components/input'
 import { Select } from '@/components/select'
@@ -104,12 +105,15 @@ export function ListaSalas({ salas }: Props){
                 <ul className={styles.lista}>
                     {salasFiltradas.map((sala) => (
                         <li key={sala.id_sala}>
-                            <ListItem>
-                                <span className={styles.nome}>{sala.nome}</span>
-                                <span className={styles.detalhe}>
-                                    {sala.serie}ª série · {sala.ano_letivo}
-                                </span>
-                            </ListItem>
+                            {/* Cada sala leva para a tela de detalhe (rota P1) */}
+                            <Link href={`/professor/salas/${sala.id_sala}`} className={styles.link}>
+                                <ListItem direita={<ChevronRight size={20} aria-hidden="true" />}>
+                                    <span className={styles.nome}>{sala.nome}</span>
+                                    <span className={styles.detalhe}>
+                                        {sala.serie}ª série · {sala.ano_letivo}
+                                    </span>
+                                </ListItem>
+                            </Link>
                         </li>
                     ))}
                 </ul>
