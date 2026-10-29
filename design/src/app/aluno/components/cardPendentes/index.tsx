@@ -1,4 +1,5 @@
 import styles from './styles.module.scss'
+import Link from 'next/link'
 import { Card } from '@/components/card'
 import { EmptyState } from '@/components/emptyState'
 import { ListItem } from '@/components/listItem'
@@ -13,6 +14,11 @@ const TITULO = "Atividades pendentes"
 // A API já ordena pelo prazo mais próximo; o card mostra só as primeiras
 const LIMITE = 5
 
+// Leva para a tela "Minhas atividades", com a lista completa
+function VerTodas(){
+    return <Link href="/aluno/atividades" className={styles.verTodas}>Ver todas</Link>
+}
+
 // Card "Atividades pendentes": atividades sem resposta do aluno (rota A1)
 export async function CardPendentes(){
     const resultado = await getAutenticado<AtividadeAluno[]>("/alunos/me/atividades", { status: "pendente" })
@@ -24,19 +30,29 @@ export async function CardPendentes(){
         return <Card titulo={TITULO}><ToastErro mensagem={getErrorMessage(resultado.erro)} /></Card>
     }
 
-    if(resultado.dados.length === 0){
-        return <Card titulo={TITULO}><EmptyState mensagem="Nenhuma atividade pendente." /></Card>
+    // A A1 também traz as pendentes de tutorias finalizadas, que não dá mais para responder
+    const pendentes = resultado.dados.filter((atividade) => atividade.pode_responder)
+
+    if(pendentes.length === 0){
+        return (
+            <Card titulo={TITULO}>
+                <EmptyState mensagem="Nenhuma atividade pendente." />
+                <VerTodas />
+            </Card>
+        )
     }
 
     return (
         <Card titulo={TITULO}>
             <ul className={styles.lista}>
-                {resultado.dados.slice(0, LIMITE).map((atividade) => (
+                {pendentes.slice(0, LIMITE).map((atividade) => (
                     <li key={atividade.id_atividade}>
                         <ListItem>{atividade.titulo}</ListItem>
                     </li>
                 ))}
             </ul>
+
+            <VerTodas />
         </Card>
     )
 }

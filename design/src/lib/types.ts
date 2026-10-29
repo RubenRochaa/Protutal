@@ -19,10 +19,22 @@ export interface TutoriaAluno {
     sala: { id_sala: number; nome: string };
 }
 
-// Atividade destinada ao aluno logado (rota A1 - GET /alunos/me/atividades)
+// Status de entrega calculado pela A1: pendente = sem resposta;
+// entregue = respondeu até o prazo; entregue_com_atraso = respondeu depois do prazo
+export type StatusAtividadeAluno = "pendente" | "entregue" | "entregue_com_atraso"
+
+// Atividade destinada ao aluno logado (rota A1 - GET /alunos/me/atividades).
+// Só os campos usados nas telas
 export interface AtividadeAluno {
     id_atividade: number;
     titulo: string;
+    etapa: number;
+    // Data e hora em ISO (UTC). Mostrar no fuso America/Sao_Paulo
+    data_entrega: string;
+    conteudo: { nome: string } | null;
+    status: StatusAtividadeAluno;
+    // false quando a tutoria foi finalizada ou o aluno já respondeu
+    pode_responder: boolean;
 }
 
 // Dashboard de notas do aluno logado (rota A6 - GET /alunos/me/desempenho).

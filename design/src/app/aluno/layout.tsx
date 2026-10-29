@@ -4,10 +4,10 @@ import { getNomeServer, getPerfilServer } from '@/lib/cookieServer'
 import { getAutenticado } from '@/lib/apiServer'
 import { sessaoExpiradaNaPagina } from '@/lib/sessaoExpirada'
 
-// Menu do aluno, na ordem do Figma. Só "Início" já tem tela
+// Menu do aluno, na ordem do Figma. Os itens com "emBreve" ainda não têm tela
 const LINKS = [
     { label: "Início", href: "/aluno" },
-    { label: "Minhas atividades", href: "/aluno/atividades", emBreve: true },
+    { label: "Minhas atividades", href: "/aluno/atividades" },
     { label: "Meu desempenho", href: "/aluno/desempenho", emBreve: true },
     { label: "Tutoria", href: "/aluno/tutoria", emBreve: true },
 ]

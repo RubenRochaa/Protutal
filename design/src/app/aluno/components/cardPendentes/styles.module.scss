@@ -4,3 +4,15 @@
     gap: 12px;
     list-style: none;
 }
+
+.verTodas{
+    align-self: flex-end;
+    color: var(--red-700);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+
+    &:hover{
+        color: var(--red-900);
+    }
+}
