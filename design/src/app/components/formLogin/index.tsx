@@ -9,8 +9,14 @@ import { Input } from '@/components/input'
 import { Button } from '@/components/button'
 import { validarLogin } from '@/lib/validacao'
 import { handleLogin } from '../../actions'
+import { AvisoConfirmacao } from '../avisoConfirmacao'
 
-export function FormLogin(){
+interface Props {
+    // true quando o usuário acabou de se cadastrar (veio de /?cadastro=ok)
+    cadastroConcluido?: boolean;
+}
+
+export function FormLogin({ cadastroConcluido = false }: Props){
     const router = useRouter();
     const [estado, formAction] = useActionState(handleLogin, {});
 
@@ -60,6 +66,19 @@ export function FormLogin(){
             <button type="button" className={styles.esqueceu} disabled title="Em breve">
                 Esqueceu sua senha? <span className={styles.emBreve}>Em breve</span>
             </button>
+
+            {/* Login recusado (403) por e-mail não confirmado, ou cadastro recém-feito */}
+            {estado.emailNaoConfirmado ? (
+                <AvisoConfirmacao
+                texto="Seu e-mail ainda não foi confirmado."
+                textoBotao="Reenviar e-mail de confirmação"
+                />
+            ) : cadastroConcluido && (
+                <AvisoConfirmacao
+                texto="Enviamos um link de confirmação para o seu e-mail."
+                textoBotao="Não recebeu? Reenviar e-mail"
+                />
+            )}
 
             <Button name="ENTRAR" nameCarregando="Entrando..." />
 
