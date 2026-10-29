@@ -1,0 +1,31 @@
+.nota{
+    text-align: center;
+}
+
+.valor{
+    color: var(--red-700);
+    font-size: 2.5rem;
+    font-weight: 700;
+}
+
+.total{
+    color: var(--gray-700);
+    font-weight: 500;
+}
+
+// Mesmo quadro do comentário no card "Sua resposta"
+.comentario{
+    padding: 12px 16px;
+    border-radius: var(--radius-card);
+    background-color: var(--white);
+    box-shadow: var(--shadow-card);
+    line-height: 1.5;
+    white-space: pre-line;
+    overflow-wrap: anywhere;
+}
+
+.rotulo{
+    color: var(--gray-700);
+    font-size: 0.85rem;
+    font-weight: 600;
+}

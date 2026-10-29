@@ -1,21 +1,19 @@
 import styles from './styles.module.scss'
+import Link from 'next/link'
 import { Check, CircleAlert } from 'lucide-react'
 import { ListItem } from '@/components/listItem'
+import { formatarData } from '@/lib/formatacao'
 import { AtividadeAluno } from '@/lib/types'
-
-// Datas sempre no fuso de São Paulo: a API devolve em UTC
-// (ex.: 2026-11-11T02:59Z = 10/11/2026 às 23h59)
-const formatoData = new Intl.DateTimeFormat("pt-BR", { timeZone: "America/Sao_Paulo" })
 
 interface Props {
     atividade: AtividadeAluno;
 }
 
 // Uma atividade da tela "Minhas atividades": título, conteúdo e etapa, prazo, selos e ícone de status.
-// Ainda não é clicável: na tela de detalhe vira um Link para /aluno/atividades/{id_atividade}
+// O item inteiro é um Link para o detalhe (/aluno/atividades/{id_atividade}), também pelo teclado
 export function ItemAtividade({ atividade }: Props){
     const realizada = atividade.status !== "pendente"
-    const prazo = formatoData.format(new Date(atividade.data_entrega))
+    const prazo = formatarData(atividade.data_entrega)
     // Roda no servidor, a cada busca: compara o prazo com a hora atual
     const vencida = !realizada && new Date(atividade.data_entrega) < new Date()
     const comAtraso = atividade.status === "entregue_com_atraso"
@@ -34,18 +32,20 @@ export function ItemAtividade({ atividade }: Props){
     }
 
     return (
-        <ListItem direita={icone}>
-            <p className={styles.titulo}>{atividade.titulo}</p>
-            <p className={styles.detalhe}>{detalhe}</p>
+        <Link href={`/aluno/atividades/${atividade.id_atividade}`} className={styles.link}>
+            <ListItem direita={icone}>
+                <p className={styles.titulo}>{atividade.titulo}</p>
+                <p className={styles.detalhe}>{detalhe}</p>
 
-            {!realizada && (
-                <p className={vencida ? styles.prazoVencido : styles.detalhe}>
-                    {vencida ? `Prazo encerrado em ${prazo}` : `Entregar até ${prazo}`}
-                </p>
-            )}
+                {!realizada && (
+                    <p className={vencida ? styles.prazoVencido : styles.detalhe}>
+                        {vencida ? `Prazo encerrado em ${prazo}` : `Entregar até ${prazo}`}
+                    </p>
+                )}
 
-            {comAtraso && <span className={styles.selo}>Entregue com atraso</span>}
-            {encerrada && <span className={styles.selo}>Encerrada</span>}
-        </ListItem>
+                {comAtraso && <span className={styles.selo}>Entregue com atraso</span>}
+                {encerrada && <span className={styles.selo}>Encerrada</span>}
+            </ListItem>
+        </Link>
     )
 }

@@ -5,6 +5,18 @@
     list-style: none;
 }
 
+// Mesmo efeito do item da tela "Minhas atividades"; o foco vem do :focus-visible do globals
+.item{
+    display: block;
+    border-radius: var(--radius-card);
+    transition: transform 0.15s;
+
+    &:hover{
+        transform: translateY(-2px);
+        color: var(--red-700);
+    }
+}
+
 .verTodas{
     align-self: flex-end;
     color: var(--red-700);
