@@ -1,0 +1,69 @@
+// Formulário centralizado, sem esticar demais no desktop
+.card{
+    width: 100%;
+    max-width: 760px;
+    align-self: center;
+}
+
+.explicacao{
+    padding: 12px 16px;
+    border-radius: var(--radius-card);
+    background-color: var(--white);
+    line-height: 1.5;
+}
+
+.form{
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+// Etapa e nota lado a lado; no celular, um embaixo do outro
+.linha{
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.campo{
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+// Mesmo rótulo do Input (src/components/input)
+.label{
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+// Mesmo visual do textarea do formResposta
+.textarea{
+    padding: 10px 12px;
+    border: 1px solid var(--border-input);
+    border-radius: var(--radius-input);
+    background-color: var(--white);
+    color: var(--black);
+    line-height: 1.4;
+    resize: vertical;
+
+    &::placeholder{
+        color: var(--gray-500);
+    }
+
+    &:focus{
+        border-color: var(--red-700);
+    }
+}
+
+.erro{
+    color: var(--red-700);
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+@media (max-width: 375px){
+    .linha{
+        grid-template-columns: minmax(0, 1fr);
+    }
+}

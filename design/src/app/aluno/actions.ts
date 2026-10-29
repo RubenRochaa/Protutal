@@ -69,3 +69,51 @@ export async function handleEnviarResposta(_estado: ActionState, formData: FormD
 
     return { sucesso: "Resposta enviada!" }
 }
+
+// Páginas que mostram se a nota foi contestada: o desempenho e o detalhe da atividade
+function atualizarTelasContestacao(idAtividade: number | null){
+    revalidatePath("/aluno/desempenho")
+    if(idAtividade !== null) revalidatePath(`/aluno/atividades/${idAtividade}`)
+}
+
+// Roda no servidor: o aluno contesta uma nota que recebeu (rota A8 - POST /notas/:id/contestacoes).
+// Só com a tutoria ativa (403) e uma vez por nota (409). "id_atividade" só serve para atualizar a tela
+export async function handleContestarNota(_estado: ActionState, formData: FormData): Promise<ActionState> {
+    const idNota = Number(formData.get("id_nota"))
+    const idAtividadeLido = Number(formData.get("id_atividade"))
+    const idAtividade = Number.isInteger(idAtividadeLido) && idAtividadeLido > 0 ? idAtividadeLido : null
+    const comentario = String(formData.get("comentario") ?? "").trim()
+    const valores = { comentario }
+
+    // Valida de novo aqui: o navegador pode ter sido burlado
+    if(!Number.isInteger(idNota) || idNota <= 0){
+        return { error: "O id da nota deve ser um número inteiro", valores }
+    }
+
+    if(comentario === "") return { error: "Escreva a justificativa da contestação.", valores }
+
+    const token = await getCookieServer()
+    let erro: unknown
+
+    try {
+        await api.post(`/notas/${idNota}/contestacoes`, { comentario }, {
+            headers: { Authorization: `Bearer ${token}` }
+        })
+    } catch(err) {
+        erro = err
+    }
+
+    if(erro){
+        // Fora do try/catch: o redirect do Next funciona lançando um erro
+        await sessaoExpiradaNaAction(erro)
+
+        // 409 = a nota já foi contestada (ex.: em outra aba): a tela passa a mostrar o status
+        if(getErrorStatus(erro) === 409) atualizarTelasContestacao(idAtividade)
+
+        return { error: getErrorMessage(erro), valores }
+    }
+
+    atualizarTelasContestacao(idAtividade)
+
+    return { sucesso: "Contestação enviada!" }
+}

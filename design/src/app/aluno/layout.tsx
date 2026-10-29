@@ -8,8 +8,8 @@ import { sessaoExpiradaNaPagina } from '@/lib/sessaoExpirada'
 const LINKS = [
     { label: "Início", href: "/aluno" },
     { label: "Minhas atividades", href: "/aluno/atividades" },
-    { label: "Meu desempenho", href: "/aluno/desempenho", emBreve: true },
-    { label: "Tutoria", href: "/aluno/tutoria", emBreve: true },
+    { label: "Meu desempenho", href: "/aluno/desempenho" },
+    { label: "Tutoria", href: "/aluno/tutoria" },
 ]
 
 // Aparece só para quem é tutor (rota T1 respondeu 200)

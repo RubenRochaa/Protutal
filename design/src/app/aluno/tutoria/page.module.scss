@@ -1,0 +1,23 @@
+// Mesmas medidas da tela "Minhas atividades"
+.conteudo{
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 32px 72px 48px;
+}
+
+@media (max-width: 768px){
+    .conteudo{
+        gap: 32px;
+        padding: 24px 24px 40px;
+    }
+}
+
+@media (max-width: 375px){
+    .conteudo{
+        gap: 24px;
+        padding: 20px 16px 32px;
+    }
+}

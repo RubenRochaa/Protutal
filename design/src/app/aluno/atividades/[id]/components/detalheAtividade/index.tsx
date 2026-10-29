@@ -67,7 +67,9 @@ export async function DetalheAtividade({ id }: Props){
         direita = (
             <>
                 <CardResposta resposta={atividade.resposta} status={atividade.status} />
-                {atividade.nota && <CardCorrecao nota={atividade.nota} />}
+                {atividade.nota && (
+                    <CardCorrecao nota={atividade.nota} idAtividade={atividade.id_atividade} tituloAtividade={atividade.titulo} />
+                )}
             </>
         )
     } else if(atividade.pode_responder){

@@ -1,0 +1,27 @@
+.titulo{
+    font-weight: 500;
+}
+
+.descricao{
+    font-size: 0.9rem;
+}
+
+.info{
+    color: var(--gray-700);
+    font-size: 0.85rem;
+}
+
+// Ícone de download do print, com área de toque de 44 px
+.baixar{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-input);
+    color: var(--black);
+
+    &:hover{
+        color: var(--red-700);
+    }
+}
