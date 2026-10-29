@@ -10,6 +10,27 @@ export interface Sala {
     id_professor: number;
 }
 
+// Tutoria em que o aluno logado é o tutorado (rota A3 - GET /alunos/me/tutorias).
+// Só os campos usados nas telas
+export interface TutoriaAluno {
+    id_tutoria: number;
+    status: "ativa" | "finalizada";
+    tutor: { nome: string };
+    sala: { id_sala: number; nome: string };
+}
+
+// Atividade destinada ao aluno logado (rota A1 - GET /alunos/me/atividades)
+export interface AtividadeAluno {
+    id_atividade: number;
+    titulo: string;
+}
+
+// Dashboard de notas do aluno logado (rota A6 - GET /alunos/me/desempenho).
+// Etapa sem nota vem com media: null
+export interface DesempenhoAluno {
+    por_etapa: { etapa: number; media: number | null }[];
+}
+
 // Retorno das Server Actions de formulário: ou uma mensagem de erro, ou de sucesso.
 // O componente de formulário (no navegador) lê este objeto, mostra o toast
 // e, se houver "redirecionar", leva o usuário para essa página.
