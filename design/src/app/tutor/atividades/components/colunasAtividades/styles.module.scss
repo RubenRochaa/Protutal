@@ -1,7 +1,7 @@
 // Três colunas como no print 4: corrigidas, não corrigidas e o atalho "Nova atividade"
 .grade{
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 200px;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(240px, 280px);
     gap: 32px;
     align-items: start;
 }
@@ -16,11 +16,21 @@
 
 .nova{
     order: 3;
+    align-items: center;
+    justify-content: center;
+    min-height: 160px;
+    min-width: 0;
 }
 
 .botaoNova{
-    min-height: 120px;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 360px;
+    min-height: 88px;
+    padding: 14px 18px;
+    line-height: 1.35;
     text-align: center;
+    white-space: normal;
 }
 
 // Tablet: as duas colunas lado a lado e o atalho em cima
@@ -32,10 +42,11 @@
     .nova{
         order: 0;
         grid-column: 1 / -1;
+        min-height: 0;
     }
 
     .botaoNova{
-        min-height: 0;
+        min-height: 76px;
     }
 }
 
