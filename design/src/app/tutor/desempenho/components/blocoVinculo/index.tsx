@@ -2,12 +2,14 @@ import styles from './styles.module.scss'
 import lista from '@/app/professor/lista.module.scss'
 import { Download } from 'lucide-react'
 import { Card } from '@/components/card'
+import { Mascote } from '@/components/mascote'
 import { ListItem } from '@/components/listItem'
 import { EmptyState } from '@/components/emptyState'
 import { Etiqueta } from '@/components/etiqueta'
 import { GraficoEtapas } from '@/components/graficoEtapas'
 import { formatarData, formatarMedia, formatarNota } from '@/lib/formatacao'
 import { DesempenhoTutorVinculo } from '@/lib/types'
+import { MASCOTES } from '@/lib/mascotes'
 
 interface Props {
     vinculo: DesempenhoTutorVinculo;
@@ -21,6 +23,7 @@ export function BlocoVinculo({ vinculo }: Props){
     return (
         <Card className={styles.bloco}>
             <div className={styles.topo}>
+                <Mascote imagem={MASCOTES.desempenho} className={styles.mascote} />
                 <h2 className={styles.titulo}>Sala {vinculo.sala.nome} · {vinculo.sala.ano_letivo}</h2>
                 {vinculo.revogado && (
                     <Etiqueta>
@@ -57,7 +60,7 @@ export function BlocoVinculo({ vinculo }: Props){
                 <section className={styles.secao}>
                     <h3 className={styles.subtitulo}>Avaliações do professor</h3>
                     {avaliacoes.avaliacoes.length === 0 ? (
-                        <EmptyState mensagem="O professor ainda não avaliou você nesta sala." />
+                        <EmptyState mensagem="O professor ainda não avaliou você nesta sala." imagem={MASCOTES.desempenho} />
                     ) : (
                         <ul className={lista.lista}>
                             {avaliacoes.avaliacoes.map((a) => (
@@ -77,7 +80,7 @@ export function BlocoVinculo({ vinculo }: Props){
             <section className={styles.secao}>
                 <h3 className={styles.subtitulo}>Feedbacks dos alunos</h3>
                 {feedback.feedbacks.length === 0 ? (
-                    <EmptyState mensagem="Nenhum feedback dos alunos nesta sala." />
+                    <EmptyState mensagem="Nenhum feedback dos alunos nesta sala." imagem={MASCOTES.desempenho} />
                 ) : (
                     <ul className={lista.lista}>
                         {feedback.feedbacks.map((f) => (

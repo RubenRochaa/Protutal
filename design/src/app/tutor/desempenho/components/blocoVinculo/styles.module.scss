@@ -9,6 +9,13 @@
     gap: 8px 16px;
 }
 
+// Mascote pequeno ao lado do título do vínculo (painel com dados)
+.mascote{
+    flex-shrink: 0;
+    width: 64px;
+    height: 64px;
+}
+
 .titulo{
     color: var(--red-700);
     font-size: 1.3rem;

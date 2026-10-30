@@ -19,6 +19,7 @@ import { Textarea } from '@/components/textarea'
 import { Botao } from '@/components/botao'
 import { Etiqueta } from '@/components/etiqueta'
 import { handleLancarNota } from '../../../../actions'
+import { MASCOTES } from '@/lib/mascotes'
 
 type Destinatario = RespostasAtividade["alunos"][number]
 
@@ -106,7 +107,7 @@ export function AlunosAtividade({ idAtividade, alunos, prazoVencido, prazo }: Pr
             <div className={styles.bloco}>
                 <h3 className={styles.titulo}>Alunos que enviaram:</h3>
                 {enviaram.length === 0 ? (
-                    <EmptyState mensagem="Nenhum aluno enviou esta atividade ainda." />
+                    <EmptyState mensagem="Nenhum aluno enviou esta atividade ainda." imagem={MASCOTES.atividades} />
                 ) : (
                     <ul className={lista.lista}>{enviaram.map(item)}</ul>
                 )}

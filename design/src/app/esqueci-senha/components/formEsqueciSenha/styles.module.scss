@@ -21,14 +21,23 @@
     color: var(--gray-700);
 }
 
-// mesmo visual do aviso de confirmação do login
+// mesmo visual do aviso de confirmação do login (mascote com o envelope à esquerda)
 .aviso{
+    display: flex;
+    align-items: center;
+    gap: 10px;
     padding: 10px 12px;
     border: 1px solid var(--border-input);
     border-radius: var(--radius-input);
     background-color: var(--gray-100);
     font-size: 0.75rem;
     color: var(--gray-700);
+}
+
+.mascote{
+    flex-shrink: 0;
+    width: 72px;
+    height: 72px;
 }
 
 .rodape{

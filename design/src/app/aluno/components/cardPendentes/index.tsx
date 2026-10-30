@@ -36,7 +36,7 @@ export async function CardPendentes(){
     if(pendentes.length === 0){
         return (
             <Card titulo={TITULO}>
-                <EmptyState mensagem="Nenhuma atividade pendente." />
+                <EmptyState mensagem="Nenhuma atividade pendente." imagem={null} />
                 <VerTodas />
             </Card>
         )

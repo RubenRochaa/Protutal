@@ -10,6 +10,7 @@ import { sessaoExpiradaNaPagina } from '@/lib/sessaoExpirada'
 import { ErroCarregamento } from '@/app/professor/components/erroCarregamento'
 import { buscarDesempenho } from '../buscas'
 import { BlocoVinculo } from './components/blocoVinculo'
+import { MASCOTES } from '@/lib/mascotes'
 
 // Tela "Meu desempenho como tutor" (sem print; segue o painel P13 do professor), rota T6.
 // O desempenho do tutor vem só de dois indicadores: feedback dos alunos e avaliação do professor
@@ -45,7 +46,7 @@ async function BlocoDesempenho(){
     const vazio = resultado.dados.every((v) => v.feedback.quantidade === 0 && v.avaliacoes_professor.quantidade === 0)
 
     if(vazio){
-        return <Card><EmptyState mensagem="Você ainda não tem avaliações nem feedbacks." /></Card>
+        return <Card><EmptyState mensagem="Você ainda não tem avaliações nem feedbacks." imagem={MASCOTES.desempenho} /></Card>
     }
 
     // Um bloco por vínculo (sala), com os ativos primeiro, na ordem da T6

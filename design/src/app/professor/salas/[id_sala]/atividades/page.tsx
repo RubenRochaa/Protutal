@@ -12,6 +12,7 @@ import { EmptyState } from '@/components/emptyState'
 import { Etiqueta } from '@/components/etiqueta'
 import { FiltroAbas } from '@/components/filtroAbas'
 import { ErroCarregamento } from '../../../components/erroCarregamento'
+import { MASCOTES } from '@/lib/mascotes'
 
 interface Props {
     params: Promise<{ id_sala: string }>;
@@ -56,7 +57,7 @@ export default async function AtividadesSalaPage({ params, searchParams }: Props
 
             <Card titulo={`Atividades (${atividades.length})`} sublinhado>
                 {atividades.length === 0 ? (
-                    <EmptyState mensagem={etapa
+                    <EmptyState imagem={MASCOTES.atividades} mensagem={etapa
                         ? "Nenhuma atividade nesta etapa."
                         : "Os tutores ainda não criaram atividades nesta sala."}
                     />

@@ -13,6 +13,7 @@ import { EmptyState } from '@/components/emptyState'
 import { Modal } from '@/components/modal'
 import { Botao } from '@/components/botao'
 import { Etiqueta } from '@/components/etiqueta'
+import { MASCOTES } from '@/lib/mascotes'
 
 type Destinatario = RespostasAtividade["alunos"][number]
 
@@ -42,7 +43,7 @@ export function RespostasAlunos({ alunos }: Props){
         <div className={lista.duasColunas}>
             <Card titulo={`Alunos que enviaram (${enviaram.length})`} sublinhado>
                 {enviaram.length === 0 ? (
-                    <EmptyState mensagem="Nenhum aluno enviou esta atividade ainda." />
+                    <EmptyState mensagem="Nenhum aluno enviou esta atividade ainda." imagem={MASCOTES.atividades} />
                 ) : (
                     <ul className={lista.lista}>
                         {enviaram.map((d) => (
@@ -65,7 +66,7 @@ export function RespostasAlunos({ alunos }: Props){
 
             <Card titulo={`Ainda não enviaram (${naoEnviaram.length})`} sublinhado>
                 {naoEnviaram.length === 0 ? (
-                    <EmptyState mensagem="Todos os alunos enviaram." />
+                    <EmptyState mensagem="Todos os alunos enviaram." imagem={MASCOTES.atividades} />
                 ) : (
                     <ul className={lista.lista}>
                         {naoEnviaram.map((d) => (

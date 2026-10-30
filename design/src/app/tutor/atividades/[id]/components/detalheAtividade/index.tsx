@@ -12,6 +12,7 @@ import { AtividadeDetalhe, RespostasAtividade } from '@/lib/types'
 import { ErroCarregamento } from '@/app/professor/components/erroCarregamento'
 import { buscarTipos } from '../../../../buscas'
 import { AlunosAtividade } from '../alunosAtividade'
+import { MASCOTES } from '@/lib/mascotes'
 
 // Respostas da A2 que significam "esta atividade não pode ser aberta":
 // 400 (id inválido), 403 (não é o tutor criador com vínculo ativo) e 404 (não existe)
@@ -26,6 +27,7 @@ function Indisponivel(){
     return (
         <Card>
             <EmptyState
+            imagem={MASCOTES.badRequest}
             mensagem="Atividade não encontrada ou você não tem acesso a ela."
             acao={<Link href="/tutor/atividades" className={lista.voltar}>Ir para Atividades</Link>}
             />

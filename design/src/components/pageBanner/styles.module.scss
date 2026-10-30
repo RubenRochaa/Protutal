@@ -1,6 +1,8 @@
 .banner{
     display: flex;
     align-items: center;
+    justify-content: space-between;
+    gap: 16px;
     min-height: 96px;
     padding: 16px 72px;
     background: linear-gradient(90deg, var(--red-500) 0%, var(--red-700) 45%, var(--wine-800) 100%);
@@ -12,6 +14,14 @@
     font-weight: 600;
 }
 
+// Mascote do "Bem-vindo": não encolhe o título, só diminui nas telas menores
+.imagem{
+    flex-shrink: 0;
+    width: 112px;
+    height: 112px;
+    margin: -8px 0;
+}
+
 @media (max-width: 768px){
     .banner{
         min-height: 72px;
@@ -21,10 +31,21 @@
     .titulo{
         font-size: 1.6rem;
     }
+
+    .imagem{
+        width: 72px;
+        height: 72px;
+        margin: -4px 0;
+    }
 }
 
 @media (max-width: 375px){
     .banner{
         padding: 12px 16px;
+    }
+
+    .imagem{
+        width: 56px;
+        height: 56px;
     }
 }

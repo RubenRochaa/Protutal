@@ -11,7 +11,7 @@ export default async function Page({ searchParams }: Props) {
   const { cadastro, sessao } = await searchParams
 
   return (
-    <AuthLayout aba="entrar">
+    <AuthLayout aba="entrar" mascotePrioritario>
       <FormLogin cadastroConcluido={cadastro === "ok"} sessaoExpirada={sessao === "expirada"} />
     </AuthLayout>
   )

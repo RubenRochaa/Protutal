@@ -34,6 +34,20 @@
     }
 }
 
+// Logo com o mascote embaixo (computador) ou ao lado (tablet e celular)
+.marca{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+.mascote{
+    width: 200px;
+    height: 200px;
+}
+
 .logo{
     position: relative;
     color: var(--white);
@@ -100,6 +114,17 @@
 
     .logo{
         font-size: 1.75rem;
+    }
+
+    // Na faixa de 160 px o mascote vai para o lado do logo
+    .marca{
+        flex-direction: row-reverse;
+        gap: 12px;
+    }
+
+    .mascote{
+        width: 112px;
+        height: 112px;
     }
 
     .conteudo{

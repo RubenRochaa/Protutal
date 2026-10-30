@@ -6,6 +6,8 @@ import { useActionState, useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { Input } from '@/components/input'
 import { Button } from '@/components/button'
+import { Mascote } from '@/components/mascote'
+import { MASCOTES } from '@/lib/mascotes'
 import { validarEmailRecuperacao } from '@/lib/validacao'
 import { handleSolicitarRedefinicao } from '../../actions'
 
@@ -66,7 +68,10 @@ export function FormEsqueciSenha(){
 
             {/* Mensagem neutra da API: aparece exista o e-mail ou não */}
             {estado.sucesso && (
-                <p className={styles.aviso} role="status">{estado.sucesso}</p>
+                <div className={styles.aviso} role="status">
+                    <Mascote imagem={MASCOTES.email} className={styles.mascote} />
+                    <p>{estado.sucesso}</p>
+                </div>
             )}
 
             <Button

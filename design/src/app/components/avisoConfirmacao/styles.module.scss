@@ -1,14 +1,27 @@
+// Mascote com o envelope à esquerda e o texto com o botão à direita
 .aviso{
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 4px;
+    align-items: center;
+    gap: 10px;
     padding: 10px 12px;
     border: 1px solid var(--border-input);
     border-radius: var(--radius-input);
     background-color: var(--gray-100);
     font-size: 0.75rem;
     color: var(--gray-700);
+}
+
+.mascote{
+    flex-shrink: 0;
+    width: 72px;
+    height: 72px;
+}
+
+.texto{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
 }
 
 // Visual de link, mas é um <button>: é uma ação, não uma navegação

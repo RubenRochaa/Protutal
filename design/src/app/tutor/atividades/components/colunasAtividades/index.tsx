@@ -11,6 +11,7 @@ import { AtividadeTutor } from '@/lib/types'
 import { ErroCarregamento } from '@/app/professor/components/erroCarregamento'
 import { buscarTipos, filtros } from '../../../buscas'
 import { ItemAtividade } from '../itemAtividade'
+import { MASCOTES } from '@/lib/mascotes'
 
 interface Props {
     // "" = sem filtro
@@ -30,7 +31,7 @@ function Coluna({ titulo, atividades, tipos, vazio, className }: ColunaProps){
     return (
         <Card titulo={titulo} className={className}>
             {atividades.length === 0 ? (
-                <EmptyState mensagem={vazio} />
+                <EmptyState mensagem={vazio} imagem={MASCOTES.atividades} />
             ) : (
                 <ul className={lista.lista}>
                     {atividades.map((atividade) => (
@@ -70,6 +71,7 @@ export async function ColunasAtividades({ idSala, etapa }: Props){
         return (
             <Card>
                 <EmptyState
+                imagem={MASCOTES.atividades}
                 mensagem={filtrado ? "Nenhuma atividade com esses filtros." : "Você ainda não criou atividades."}
                 acao={<Botao href="/tutor/atividades/nova"><Plus size={18} aria-hidden="true" /> Nova atividade</Botao>}
                 />
