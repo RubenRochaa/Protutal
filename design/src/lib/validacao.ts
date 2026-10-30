@@ -41,6 +41,27 @@ export function validarCadastro(nome: string, email: string, senha: string): str
     return null
 }
 
+// Pedido de link para redefinir a senha (rota O5): mesmo formato e domínios do cadastro
+export function validarEmailRecuperacao(email: string): string | null {
+    if(email.trim() === "") return "Email é obrigatório";
+
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) return "Email em formato inválido";
+
+    if(!perfilPeloEmail(email)) return MSG_DOMINIO;
+
+    return null
+}
+
+// Nova senha (rota O6): mesma regra do cadastro (só não pode ser vazia).
+// A confirmação é conferida só aqui: a API recebe uma senha só
+export function validarNovaSenha(senha: string, confirmacao: string): string | null {
+    if(senha === "") return "A nova senha é obrigatória";
+
+    if(senha !== confirmacao) return "As senhas não coincidem";
+
+    return null
+}
+
 // Mesmas regras e mensagens do CreateSalaService (rota P19 - POST /salas).
 // Recebe os valores como texto, do jeito que chegam do formulário.
 export function validarSala(nome: string, serie: string, anoLetivo: string): string | null {

@@ -7,19 +7,12 @@
 .esqueceu{
     align-self: flex-end;
     margin-top: -8px;
-    border: 0;
-    background: none;
     font-size: 0.75rem;
-    color: var(--gray-500);
-}
+    color: var(--red-700);
 
-.emBreve{
-    margin-left: 4px;
-    padding: 1px 6px;
-    border-radius: var(--radius-pill);
-    background-color: var(--gray-300);
-    color: var(--gray-700);
-    font-size: 0.65rem;
+    &:hover{
+        text-decoration: underline;
+    }
 }
 
 .rodape{

@@ -15,7 +15,8 @@ export function middleware(req: NextRequest){
 
     const area = Object.keys(AREAS).find((rota) => pathname === rota || pathname.startsWith(rota + "/"))
 
-    // Login, cadastro e arquivos públicos: livres
+    // Login, cadastro, /esqueci-senha, /redefinir-senha e arquivos públicos: livres
+    // (nem entram no matcher abaixo, então abrem com ou sem sessão)
     if(!area) return NextResponse.next();
 
     const token = req.cookies.get("session")?.value

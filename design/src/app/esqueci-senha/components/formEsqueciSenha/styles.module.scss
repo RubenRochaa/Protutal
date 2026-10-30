@@ -1,0 +1,46 @@
+.form{
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.cabecalho{
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.titulo{
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--black);
+}
+
+.texto{
+    font-size: 0.8rem;
+    color: var(--gray-700);
+}
+
+// mesmo visual do aviso de confirmação do login
+.aviso{
+    padding: 10px 12px;
+    border: 1px solid var(--border-input);
+    border-radius: var(--radius-input);
+    background-color: var(--gray-100);
+    font-size: 0.75rem;
+    color: var(--gray-700);
+}
+
+.rodape{
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--gray-700);
+}
+
+.link{
+    color: var(--red-700);
+
+    &:hover{
+        text-decoration: underline;
+    }
+}
