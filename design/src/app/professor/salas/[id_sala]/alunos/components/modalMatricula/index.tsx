@@ -8,6 +8,7 @@ import { Modal } from '@/components/modal'
 import { Input } from '@/components/input'
 import { ListItem } from '@/components/listItem'
 import { Avatar } from '@/components/avatar'
+import { Loader } from '@/components/loader'
 import { buscarAlunos, handleMatricular } from '../../actions'
 
 interface Props {
@@ -140,6 +141,7 @@ export function ModalMatricula({ idSala, aberto, matriculados, onFechar }: Props
                                         disabled={naSala || enviando !== null}
                                         onClick={() => matricular(aluno)}
                                         >
+                                            {carregando && <Loader size="pequeno" variant="branco" decorativo />}
                                             {naSala ? "Já matriculado" : carregando ? "Matriculando..." : "Matricular"}
                                         </button>
                                     }

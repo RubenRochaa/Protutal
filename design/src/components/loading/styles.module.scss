@@ -11,28 +11,8 @@
     box-shadow: var(--shadow-card);
 }
 
-.icone{
-    width: 36px;
-    height: 36px;
-    color: var(--red-700);
-    animation: girar 1s linear infinite;
-}
-
 .mensagem{
     font-weight: 500;
-}
-
-@keyframes girar{
-    to{
-        transform: rotate(360deg);
-    }
-}
-
-// Quem pediu menos movimento no sistema não vê o ícone girando
-@media (prefers-reduced-motion: reduce){
-    .icone{
-        animation: none;
-    }
 }
 
 @media (max-width: 375px){

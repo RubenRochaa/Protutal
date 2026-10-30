@@ -19,13 +19,3 @@
         opacity: 0.6;
     }
 }
-
-.girando{
-    animation: girar 1s linear infinite;
-}
-
-@keyframes girar{
-    to{
-        transform: rotate(360deg);
-    }
-}

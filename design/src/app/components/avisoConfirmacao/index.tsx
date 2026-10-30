@@ -3,6 +3,7 @@
 import styles from './styles.module.scss'
 import { useEffect, useState, useTransition } from 'react'
 import { toast } from 'sonner'
+import { Loader } from '@/components/loader'
 import { handleReenviarConfirmacao } from '../../actions'
 
 // Mesmo intervalo do back-end (ReenviarConfirmacaoEmailService): antes de 2 minutos
@@ -52,6 +53,7 @@ export function AvisoConfirmacao({ texto, textoBotao }: Props){
             <p>{texto}</p>
 
             <button type="button" onClick={handleClick} disabled={bloqueado} className={styles.botao}>
+                {enviando && <Loader size="pequeno" decorativo />}
                 {enviando ? "Enviando..." : restante > 0 ? `Reenviar em ${restante}s` : textoBotao}
             </button>
         </div>

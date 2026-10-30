@@ -62,8 +62,9 @@ export function BotaoExportar({ idSala, filtros = {} }: Props){
     }
 
     return (
-        <Botao onClick={handleExportar} disabled={baixando || !idSala}>
-            <FileSpreadsheet size={18} aria-hidden="true" />
+        <Botao onClick={handleExportar} disabled={!idSala} carregando={baixando}>
+            {/* Enquanto exporta, o Loader toma o lugar do ícone */}
+            {!baixando && <FileSpreadsheet size={18} aria-hidden="true" />}
             {baixando ? "Exportando..." : "Exportar"}
         </Botao>
     )

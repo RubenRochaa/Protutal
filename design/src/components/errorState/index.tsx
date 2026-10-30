@@ -4,6 +4,7 @@ import styles from './styles.module.scss'
 import { useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { MSG_SEM_CONEXAO } from '@/lib/getErrorMessage'
+import { Loader } from '../loader'
 
 interface Props {
     mensagem?: string;
@@ -34,6 +35,7 @@ export function ErrorState({ mensagem = MSG_SEM_CONEXAO, retry }: Props){
             disabled={carregando}
             className={styles.botao}
             >
+                {carregando && <Loader size="pequeno" variant="branco" decorativo />}
                 {carregando ? "Carregando..." : "Tentar novamente"}
             </button>
         </div>

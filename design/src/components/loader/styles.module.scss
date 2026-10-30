@@ -1,0 +1,77 @@
+// Anel: a trilha é a própria cor bem clara e o arco de cima é a cor cheia girando.
+// A cor vem da variante (currentColor), então não há valor fixo aqui.
+.loader{
+    position: relative;
+    display: inline-block;
+    flex-shrink: 0;
+    width: var(--loader-tamanho);
+    height: var(--loader-tamanho);
+
+    &::before, &::after{
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        border: var(--loader-borda) solid currentColor;
+    }
+
+    // Trilha
+    &::before{
+        opacity: 0.25;
+    }
+
+    // Arco
+    &::after{
+        border-color: currentColor transparent transparent transparent;
+        animation: girar 0.8s linear infinite;
+    }
+}
+
+.pequeno{
+    --loader-tamanho: 16px;
+    --loader-borda: 2px;
+}
+
+.medio{
+    --loader-tamanho: 32px;
+    --loader-borda: 3px;
+}
+
+.grande{
+    --loader-tamanho: 48px;
+    --loader-borda: 4px;
+}
+
+.vermelho{
+    color: var(--red-700);
+}
+
+.branco{
+    color: var(--white);
+}
+
+// Texto só para leitor de tela
+.textoOculto{
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+@keyframes girar{
+    to{
+        transform: rotate(360deg);
+    }
+}
+
+// Quem pediu menos movimento no sistema vê o anel girando bem devagar
+@media (prefers-reduced-motion: reduce){
+    .loader::after{
+        animation-duration: 3s;
+    }
+}
