@@ -1,0 +1,19 @@
+.sala{
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.nomeSala{
+    color: var(--red-700);
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+// Botões embaixo do texto do tutorado (no celular não cabem à direita)
+.acoes{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+}

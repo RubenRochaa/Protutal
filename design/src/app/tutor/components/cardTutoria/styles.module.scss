@@ -1,0 +1,25 @@
+// Quadro branco clicável, como no print
+.atalho{
+    display: flex;
+    align-items: center;
+    min-height: 160px;
+    padding: 24px;
+    border-radius: var(--radius-card);
+    background-color: var(--white);
+    box-shadow: var(--shadow-card);
+    font-size: 1.3rem;
+    line-height: 1.4;
+    transition: transform 0.15s;
+
+    &:hover{
+        transform: translateY(-2px);
+        color: var(--red-700);
+    }
+}
+
+@media (max-width: 768px){
+    .atalho{
+        min-height: 96px;
+        font-size: 1.15rem;
+    }
+}
