@@ -18,6 +18,7 @@ export const ABAS_SALA: AbaSala[] = [
     { rotulo: "Tutores", caminho: "tutores", disponivel: true, lote: "A3" },
     { rotulo: "Tutorias", caminho: "tutorias", disponivel: true, lote: "A4" },
     { rotulo: "Atividades", caminho: "atividades", disponivel: true, lote: "A5" },
+    { rotulo: "Materiais", caminho: "materiais", disponivel: true, lote: "A5" },
     { rotulo: "Notas", caminho: "notas", disponivel: true, lote: "A5" },
     { rotulo: "Contestações", caminho: "contestacoes", disponivel: true, lote: "A5" },
     { rotulo: "Feedbacks", caminho: "feedbacks", disponivel: true, lote: "A5" },
