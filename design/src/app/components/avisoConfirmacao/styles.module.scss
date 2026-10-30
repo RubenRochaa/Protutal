@@ -13,6 +13,9 @@
 
 // Visual de link, mas é um <button>: é uma ação, não uma navegação
 .botao{
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
     border: 0;
     background: none;
     font-size: 0.75rem;

@@ -6,6 +6,7 @@ import Image from 'next/image'
 import { useState } from 'react'
 import { usePathname } from 'next/navigation'
 import { useFormStatus } from 'react-dom'
+import { Loader } from '../loader'
 import { CircleUserRound, Menu, X } from 'lucide-react'
 import { iniciais } from '@/lib/formatacao'
 import { Avatar } from '../avatar'
@@ -41,6 +42,7 @@ function BotaoSair(){
 
     return (
         <button type="submit" disabled={pending} className={styles.sair}>
+            {pending && <Loader size="pequeno" variant="branco" decorativo />}
             {pending ? "Saindo..." : "Sair"}
         </button>
     )

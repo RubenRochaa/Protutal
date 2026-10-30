@@ -5,7 +5,7 @@ import { Loading } from '@/components/loading'
 export default function LoadingTutor(){
     return (
         <main className={styles.conteudo}>
-            <Loading />
+            <Loading size="grande" />
         </main>
     )
 }

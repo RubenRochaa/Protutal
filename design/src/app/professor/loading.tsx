@@ -5,7 +5,7 @@ import { Loading } from '@/components/loading'
 export default function LoadingProfessor(){
     return (
         <main className={styles.conteudo}>
-            <Loading mensagem="Carregando suas salas..." />
+            <Loading mensagem="Carregando suas salas..." size="grande" />
         </main>
     )
 }

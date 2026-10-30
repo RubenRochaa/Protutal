@@ -2,6 +2,7 @@
 
 import styles from './styles.module.scss'
 import { useFormStatus } from 'react-dom'
+import { Loader } from '../loader'
 
 interface Props {
     name: string;
@@ -16,6 +17,7 @@ export function Button({ name, nameCarregando = "Carregando...", disabled = fals
 
     return (
         <button type='submit' disabled={pending || disabled} className={styles.button}>
+            {pending && <Loader size="pequeno" variant="branco" decorativo />}
             {pending ? nameCarregando : name}
         </button>
     )

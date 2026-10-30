@@ -91,7 +91,7 @@ export function ModalNovaTutoria({ aberto, onFechar, tutores, alunos }: Props){
 
                     <div className={lista.formAcoes}>
                         <Botao variante="secundario" onClick={fechar} disabled={pendente}>Cancelar</Botao>
-                        <Botao type="submit" disabled={pendente}>{pendente ? "Criando..." : "Criar tutoria"}</Botao>
+                        <Botao type="submit" carregando={pendente}>{pendente ? "Criando..." : "Criar tutoria"}</Botao>
                     </div>
                 </form>
             )}

@@ -159,7 +159,7 @@ export function ListaTutorias({ tutorias, tutores, alunos, filtro, anoAtualDaSal
                     />
                     <div className={lista.formAcoes}>
                         <Botao variante="secundario" onClick={() => setEditarMeta(null)} disabled={pendente}>Cancelar</Botao>
-                        <Botao type="submit" disabled={pendente}>{pendente ? "Salvando..." : "Salvar meta"}</Botao>
+                        <Botao type="submit" carregando={pendente}>{pendente ? "Salvando..." : "Salvar meta"}</Botao>
                     </div>
                 </form>
             </Modal>

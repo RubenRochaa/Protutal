@@ -108,7 +108,7 @@ export function ListaConteudos({ idSala, conteudos }: Props){
 
                     <div className={lista.formAcoes}>
                         <Botao variante="secundario" onClick={fecharModal} disabled={pendente}>Cancelar</Botao>
-                        <Botao type="submit" disabled={pendente}>{pendente ? "Cadastrando..." : "Cadastrar"}</Botao>
+                        <Botao type="submit" carregando={pendente}>{pendente ? "Cadastrando..." : "Cadastrar"}</Botao>
                     </div>
                 </form>
             </Modal>
