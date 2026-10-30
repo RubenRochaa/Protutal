@@ -56,7 +56,8 @@ export interface MaterialSala {
     // URL do arquivo (Cloudinary)
     arquivo: string;
     data_envio: string;
-    tutor: { nome: string };
+    // id_tutor_sala: usado pelo professor para filtrar os materiais por tutor
+    tutor: { id_tutor_sala: number; nome: string };
 }
 
 // Aviso do professor para a sala (rota A4 - GET /salas/:id/avisos)
