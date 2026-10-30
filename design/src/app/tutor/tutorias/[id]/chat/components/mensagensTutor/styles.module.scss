@@ -1,0 +1,13 @@
+// Mesmo quadro branco da lista de mensagens, com o texto no meio
+.vazio{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+    padding: 24px;
+    border-radius: var(--radius-card);
+    background-color: var(--white);
+    box-shadow: var(--shadow-card);
+    color: var(--gray-700);
+    text-align: center;
+}

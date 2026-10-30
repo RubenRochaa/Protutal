@@ -13,7 +13,7 @@ const LINKS = [
 ]
 
 // Aparece só para quem é tutor (rota T1 respondeu 200)
-const LINK_TUTOR = { label: "Área do tutor", href: "/tutor", emBreve: true }
+const LINK_TUTOR = { label: "Área do tutor", href: "/tutor" }
 
 // Moldura de todas as telas do aluno: Header em cima e a página embaixo.
 // O middleware já barra quem não é aluno; conferimos de novo aqui por segurança.
