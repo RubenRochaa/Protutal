@@ -1,8 +1,10 @@
 import styles from './styles.module.scss'
 import pagina from '../../../pagina.module.scss'
 import lista from '@/app/professor/lista.module.scss'
+import { Suspense } from 'react'
 import { Download } from 'lucide-react'
 import { Card } from '@/components/card'
+import { Loading } from '@/components/loading'
 import { ListItem } from '@/components/listItem'
 import { EmptyState } from '@/components/emptyState'
 import { getAutenticado } from '@/lib/apiServer'
@@ -13,6 +15,7 @@ import { MaterialSala } from '@/lib/types'
 import { ErroCarregamento } from '@/app/professor/components/erroCarregamento'
 import { buscarTutorias, salasDasTutorias } from '../../../buscas'
 import { FormMaterial } from '../formMaterial'
+import { AvisosSala, TituloAvisosSala } from '../avisosSala'
 
 const TITULO = "Anexar materiais"
 
@@ -67,7 +70,7 @@ export async function MateriaisSala(){
                 const resultado = materiais[i]
 
                 return (
-                    <section key={sala.id_sala} className={styles.sala} aria-label={`Materiais da sala ${sala.nome}`}>
+                    <section key={sala.id_sala} className={styles.sala} aria-label={`Materiais e avisos da sala ${sala.nome}`}>
                         <h3 className={styles.nomeSala}>Materiais · Sala {sala.nome}</h3>
 
                         {"erro" in resultado ? (
@@ -102,6 +105,11 @@ export async function MateriaisSala(){
                                 ))}
                             </ul>
                         )}
+
+                        {/* Avisos do professor (A4): Suspense próprio, se falhar os materiais continuam */}
+                        <Suspense fallback={<><TituloAvisosSala nomeSala={sala.nome} /><Loading /></>}>
+                            <AvisosSala idSala={sala.id_sala} nomeSala={sala.nome} />
+                        </Suspense>
                     </section>
                 )
             })}
