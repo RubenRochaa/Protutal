@@ -29,7 +29,7 @@ export async function CardPendentes(){
     return (
         <Card titulo={TITULO}>
             {paraCorrigir.length === 0 ? (
-                <EmptyState mensagem="Nenhuma entrega esperando correção." />
+                <EmptyState mensagem="Nenhuma entrega esperando correção." imagem={null} />
             ) : (
                 <ul className={lista.lista}>
                     {paraCorrigir.slice(0, LIMITE).map((atividade) => (

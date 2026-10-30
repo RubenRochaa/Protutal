@@ -22,7 +22,7 @@ export async function CardTutoria(){
     }
 
     if(resultado.dados.length === 0){
-        return <Card titulo={TITULO}><EmptyState mensagem="Você ainda não tem tutoria ativa." /></Card>
+        return <Card titulo={TITULO}><EmptyState mensagem="Você ainda não tem tutoria ativa." imagem={null} /></Card>
     }
 
     return (

@@ -11,6 +11,13 @@
     box-shadow: var(--shadow-card);
 }
 
+// Mascote: 160 px de altura no computador e 120 px no celular
+.imagem{
+    width: auto;
+    height: 160px;
+    max-width: 100%;
+}
+
 .mensagem{
     max-width: 280px;
     font-weight: 500;
@@ -26,5 +33,9 @@
     .quadro{
         min-height: 130px;
         padding: 20px 16px;
+    }
+
+    .imagem{
+        height: 120px;
     }
 }

@@ -28,7 +28,7 @@ export async function CardContestacoes(){
     return (
         <Card titulo={TITULO}>
             {resultado.dados.length === 0 ? (
-                <EmptyState mensagem="Nenhuma contestação pendente." />
+                <EmptyState mensagem="Nenhuma contestação pendente." imagem={null} />
             ) : (
                 <ul className={lista.lista}>
                     {resultado.dados.slice(0, LIMITE).map((c) => (

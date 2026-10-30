@@ -7,13 +7,14 @@ import { CardTutoria } from './components/cardTutoria'
 import { CardPendentes } from './components/cardPendentes'
 import { CardEvolucao } from './components/cardEvolucao'
 import { CardContestacoes } from './components/cardContestacoes'
+import { MASCOTES } from '@/lib/mascotes'
 
 // Início do tutor (print 1): banner e os 4 cards.
 // Cada card busca a própria rota; o Suspense deixa um carregar sem esperar os outros
 export default function TutorPage(){
     return (
         <main>
-            <PageBanner titulo="Bem-vindo ao Protutal!" />
+            <PageBanner titulo="Bem-vindo ao Protutal!" imagem={MASCOTES.telaInicial} />
 
             <div className={styles.grade}>
                 <CardTutoria />

@@ -15,6 +15,7 @@ import { BotaoAtualizar } from '@/app/aluno/tutoria/[id]/chat/components/botaoAt
 import { buscarTutorias } from '../../../../../buscas'
 import { MensagensTutor } from '../mensagensTutor'
 import { FormMensagemTutor } from '../formMensagemTutor'
+import { MASCOTES } from '@/lib/mascotes'
 
 interface Props {
     // Vem da URL sem tratar
@@ -58,7 +59,7 @@ export async function ChatTutor({ id, tipo }: Props){
             }
         }
 
-        return <Card><EmptyState mensagem="Tutoria não encontrada." /></Card>
+        return <Card><EmptyState mensagem="Tutoria não encontrada." imagem={MASCOTES.badRequest} /></Card>
     }
 
     const ativa = tutoria.status === "ativa"

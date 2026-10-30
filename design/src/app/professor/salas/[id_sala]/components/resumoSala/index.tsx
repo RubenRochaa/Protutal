@@ -41,6 +41,7 @@ export function ResumoSala({ sala }: Props){
             <div className={styles.grade}>
                 <Card titulo="Alunos" sublinhado>
                     <EmptyState
+                    imagem={null}
                     mensagem="Veja os alunos matriculados e matricule novos alunos na aba Alunos."
                     acao={<Link href={abaAlunos} className={styles.link}>Ir para Alunos</Link>}
                     />
@@ -48,6 +49,7 @@ export function ResumoSala({ sala }: Props){
 
                 <Card titulo="Tutores" sublinhado>
                     <EmptyState
+                    imagem={null}
                     mensagem="Veja os tutores, avalie ou remova na aba Tutores."
                     acao={<Link href={`${base}/tutores`} className={styles.link}>Ir para Tutores</Link>}
                     />

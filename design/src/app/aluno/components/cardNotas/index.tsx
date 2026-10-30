@@ -23,7 +23,7 @@ export async function CardNotas(){
     const etapas = resultado.dados.por_etapa
 
     if(etapas.every((item) => item.media === null)){
-        return <Card titulo={TITULO}><EmptyState mensagem="Você ainda não tem notas lançadas." /></Card>
+        return <Card titulo={TITULO}><EmptyState mensagem="Você ainda não tem notas lançadas." imagem={null} /></Card>
     }
 
     return (

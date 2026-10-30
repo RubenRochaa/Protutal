@@ -8,6 +8,7 @@ import { PageBanner } from '@/components/pageBanner'
 import { CardsResumo } from './components/cardsResumo'
 import { ListaSalas } from './components/listaSalas'
 import { ErroCarregamento } from './components/erroCarregamento'
+import { MASCOTES } from '@/lib/mascotes'
 
 // Busca as salas do professor logado (rota P20 - GET /salas).
 // Roda no servidor: o token está no cookie httpOnly e não pode ir para o navegador.
@@ -34,7 +35,7 @@ export default async function ProfessorPage(){
 
     return (
         <main>
-            <PageBanner titulo="Bem-vindo ao Protutal!" />
+            <PageBanner titulo="Bem-vindo ao Protutal!" imagem={MASCOTES.telaInicial} />
 
             <div className={styles.conteudo}>
                 <CardsResumo />

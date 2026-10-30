@@ -40,11 +40,12 @@ export default async function SalaLayout({ children, params }: Props){
 
         return (
             <main>
-                <PageBanner titulo="Detalhes da sala" />
+                {/* 403 = sala de outro professor: a faixa vira "Acesso negado" */}
+                <PageBanner titulo={status === 403 ? "Acesso negado" : "Detalhes da sala"} />
 
                 <div className={styles.conteudo}>
                     {status !== null && SALA_INDISPONIVEL.includes(status)
-                        ? <SalaIndisponivel mensagem={mensagem} />
+                        ? <SalaIndisponivel mensagem={mensagem} acessoNegado={status === 403} />
                         : <ErroCarregamento mensagem={mensagem} />
                     }
                 </div>

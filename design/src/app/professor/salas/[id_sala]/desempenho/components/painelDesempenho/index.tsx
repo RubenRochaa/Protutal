@@ -9,6 +9,7 @@ import { Card } from '@/components/card'
 import { EmptyState } from '@/components/emptyState'
 import { Etiqueta } from '@/components/etiqueta'
 import { GraficoEtapas } from '@/components/graficoEtapas'
+import { MASCOTES } from '@/lib/mascotes'
 
 // Médias de um aluno, montadas na página a partir da P14
 export interface DesempenhoAlunoSala {
@@ -47,9 +48,9 @@ export function PainelDesempenho({ tutores, alunos }: Props){
             </p>
 
             <div className={lista.duasColunas}>
-                <Card titulo="Tutorados" sublinhado>
+                <Card titulo="Tutorados" sublinhado imagem={alunos.length > 0 ? MASCOTES.desempenho : undefined}>
                     {alunos.length === 0 ? (
-                        <EmptyState mensagem="Ainda não há notas lançadas nesta sala." />
+                        <EmptyState mensagem="Ainda não há notas lançadas nesta sala." imagem={MASCOTES.desempenho} />
                     ) : (
                         <ul className={lista.lista}>
                             {alunos.map((aluno) => (
@@ -72,9 +73,9 @@ export function PainelDesempenho({ tutores, alunos }: Props){
                     )}
                 </Card>
 
-                <Card titulo="Tutores" sublinhado>
+                <Card titulo="Tutores" sublinhado imagem={tutores.length > 0 ? MASCOTES.desempenho : undefined}>
                     {tutores.length === 0 ? (
-                        <EmptyState mensagem="A sala ainda não tem tutores." />
+                        <EmptyState mensagem="A sala ainda não tem tutores." imagem={MASCOTES.desempenho} />
                     ) : (
                         <ul className={lista.lista}>
                             {tutores.map((tutor) => (

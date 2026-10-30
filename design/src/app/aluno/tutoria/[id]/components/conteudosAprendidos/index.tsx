@@ -8,6 +8,7 @@ import { formatarNota } from '@/lib/formatacao'
 import { MediaConteudo } from '@/lib/types'
 import { buscarConteudosDominados } from '../../../../buscas'
 import { ToastErro } from '../../../../components/toastErro'
+import { MASCOTES } from '@/lib/mascotes'
 
 export const TITULO_CONTEUDOS = "Conteúdos aprendidos"
 
@@ -39,7 +40,7 @@ export async function ConteudosAprendidos({ idSala }: Props){
     const comDificuldade = resultado.dados.com_dificuldade ?? []
 
     if(dominados.length === 0 && comDificuldade.length === 0){
-        return <Card titulo={TITULO_CONTEUDOS} sublinhado><EmptyState mensagem="Ainda não há conteúdos com nota nesta sala." /></Card>
+        return <Card titulo={TITULO_CONTEUDOS} sublinhado><EmptyState mensagem="Ainda não há conteúdos com nota nesta sala." imagem={MASCOTES.desempenho} /></Card>
     }
 
     return (

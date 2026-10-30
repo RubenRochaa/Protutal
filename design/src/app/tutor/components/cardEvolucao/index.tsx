@@ -24,7 +24,7 @@ export async function CardEvolucao(){
     const vinculo = resultado.dados.find((v) => !v.revogado)
 
     if(!vinculo || vinculo.feedback.quantidade === 0){
-        return <Card titulo={TITULO}><EmptyState mensagem="Você ainda não recebeu feedbacks dos alunos." /></Card>
+        return <Card titulo={TITULO}><EmptyState mensagem="Você ainda não recebeu feedbacks dos alunos." imagem={null} /></Card>
     }
 
     return (

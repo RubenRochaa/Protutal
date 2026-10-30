@@ -20,6 +20,20 @@
     text-underline-offset: 3px;
 }
 
+// Título com o mascote pequeno ao lado (prop "imagem")
+.cabecalho{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.imagem{
+    flex-shrink: 0;
+    width: 64px;
+    height: 64px;
+}
+
 @media (max-width: 375px){
     .card{
         padding: 14px 12px 20px;
@@ -27,5 +41,10 @@
 
     .titulo{
         font-size: 1.05rem;
+    }
+
+    .imagem{
+        width: 48px;
+        height: 48px;
     }
 }

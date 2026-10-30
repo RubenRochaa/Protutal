@@ -9,6 +9,7 @@ import { sessaoExpiradaNaPagina } from '@/lib/sessaoExpirada'
 import { formatarData } from '@/lib/formatacao'
 import { MaterialSala } from '@/lib/types'
 import { ToastErro } from '../../../../components/toastErro'
+import { MASCOTES } from '@/lib/mascotes'
 
 export const TITULO_MATERIAIS = "Materiais de apoio disponíveis"
 
@@ -27,7 +28,7 @@ export async function Materiais({ idSala }: Props){
 
         // 403: o aluno não tem acesso à sala. É um estado da tela, não falha: sem toast
         if(getErrorStatus(resultado.erro) === 403){
-            return <Card titulo={TITULO_MATERIAIS} sublinhado><EmptyState mensagem="Você não tem acesso aos materiais desta sala." /></Card>
+            return <Card titulo={TITULO_MATERIAIS} sublinhado><EmptyState mensagem="Você não tem acesso aos materiais desta sala." imagem={MASCOTES.badRequest} /></Card>
         }
 
         return <Card titulo={TITULO_MATERIAIS} sublinhado><ToastErro mensagem={getErrorMessage(resultado.erro)} /></Card>

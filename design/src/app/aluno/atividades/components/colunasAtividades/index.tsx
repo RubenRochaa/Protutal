@@ -7,6 +7,7 @@ import { sessaoExpiradaNaPagina } from '@/lib/sessaoExpirada'
 import { AtividadeAluno } from '@/lib/types'
 import { ToastErro } from '../../../components/toastErro'
 import { ItemAtividade } from '../itemAtividade'
+import { MASCOTES } from '@/lib/mascotes'
 
 const MSG_FILTRO_VAZIO = "Nenhuma atividade nesta etapa."
 
@@ -26,7 +27,7 @@ function Coluna({ titulo, atividades, vazio, className }: ColunaProps){
     return (
         <Card titulo={titulo} className={className}>
             {atividades.length === 0 ? (
-                <EmptyState mensagem={vazio} />
+                <EmptyState mensagem={vazio} imagem={MASCOTES.atividades} />
             ) : (
                 <ul className={styles.lista}>
                     {atividades.map((atividade) => (

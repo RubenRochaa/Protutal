@@ -6,6 +6,7 @@ import { sessaoExpiradaNaPagina } from '@/lib/sessaoExpirada'
 import { formatarNota } from '@/lib/formatacao'
 import { buscarConteudosDominados, buscarDesempenho } from '../../../buscas'
 import { ToastErro } from '../../../components/toastErro'
+import { MASCOTES } from '@/lib/mascotes'
 
 interface Props {
     // "" = todas as etapas
@@ -35,7 +36,7 @@ export async function NumerosDesempenho({ etapa }: Props){
 
     const { media, total_notas } = resultado.dados.media_geral
 
-    if(total_notas === 0) return <Card><EmptyState mensagem={mensagemSemNotas(etapa)} /></Card>
+    if(total_notas === 0) return <Card><EmptyState mensagem={mensagemSemNotas(etapa)} imagem={MASCOTES.desempenho} /></Card>
 
     // A A7 não aceita filtro de etapa: as contagens são sempre de todas as etapas
     const conteudos = "dados" in resultadoConteudos ? resultadoConteudos.dados : null

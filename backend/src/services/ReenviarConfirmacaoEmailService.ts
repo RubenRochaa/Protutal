@@ -34,7 +34,7 @@ function dentroDoIntervalo(token_expiracao: Date | null) {
 // (a resposta da rota não muda)
 async function enviarLink(usuario: UsuarioPendente, token: string) {
     try {
-        await enviarEmailConfirmacao({ nome: usuario.nome, email: usuario.email, token });
+        await enviarEmailConfirmacao({ nome: usuario.nome, email: usuario.email, token, reenvio: true });
     } catch (err) {
         console.error("Erro ao reenviar e-mail de confirmação:", err);
     }
