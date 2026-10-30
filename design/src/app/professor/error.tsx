@@ -1,8 +1,9 @@
 "use client"
 
-import { ErrorState } from '@/components/errorState'
+import { ErroInesperado } from '@/components/erroInesperado'
 
-// Erro inesperado ao montar a página (os erros da API já são tratados no page.tsx)
-export default function ErroProfessor({ reset }: { error: Error; reset: () => void }){
-    return <ErrorState mensagem="Algo deu errado ao abrir esta página." retry={reset} />
+// Erro inesperado ao montar a página (os erros da API já são tratados no page.tsx).
+// Fica dentro do layout do professor, então o Header continua aparecendo
+export default function ErroProfessor({ error, reset }: { error: Error & { digest?: string }; reset: () => void }){
+    return <ErroInesperado error={error} reset={reset} inicio="/professor" />
 }

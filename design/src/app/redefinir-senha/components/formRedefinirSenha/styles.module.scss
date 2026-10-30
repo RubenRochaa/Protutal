@@ -4,6 +4,13 @@
     gap: 14px;
 }
 
+// Mascote do link inválido: centralizado acima do título
+.mascote{
+    align-self: center;
+    width: 120px;
+    height: 120px;
+}
+
 .cabecalho{
     display: flex;
     flex-direction: column;

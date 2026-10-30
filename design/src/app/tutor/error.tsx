@@ -1,8 +1,9 @@
 "use client"
 
-import { ErrorState } from '@/components/errorState'
+import { ErroInesperado } from '@/components/erroInesperado'
 
-// Erro inesperado ao montar a página (os erros da API já são tratados nos blocos)
-export default function ErroTutor({ reset }: { error: Error; reset: () => void }){
-    return <ErrorState mensagem="Algo deu errado ao abrir esta página." retry={reset} />
+// Erro inesperado ao montar a página (os erros da API já são tratados nos blocos).
+// Fica dentro do layout do tutor, então o Header continua aparecendo
+export default function ErroTutor({ error, reset }: { error: Error & { digest?: string }; reset: () => void }){
+    return <ErroInesperado error={error} reset={reset} inicio="/tutor" />
 }

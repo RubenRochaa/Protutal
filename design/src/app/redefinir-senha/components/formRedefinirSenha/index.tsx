@@ -7,6 +7,8 @@ import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { Input } from '@/components/input'
 import { Button } from '@/components/button'
+import { Mascote } from '@/components/mascote'
+import { MASCOTES } from '@/lib/mascotes'
 import { validarNovaSenha } from '@/lib/validacao'
 import { handleRedefinirSenha } from '../../actions'
 
@@ -43,11 +45,14 @@ export function FormRedefinirSenha({ token }: Props){
     // Sem token na URL, ou a API recusou o token: não adianta mostrar o formulário
     if(token === "" || estado.tokenInvalido){
         return (
-            <div className={styles.form}>
+            <div className={styles.form} role="alert">
+                <Mascote imagem={MASCOTES.badRequest} className={styles.mascote} />
+
                 <div className={styles.cabecalho}>
-                    <h2 className={styles.titulo}>Link inválido ou expirado</h2>
+                    <h2 className={styles.titulo}>Link inválido</h2>
+                    {/* Mensagem da API quando ela recusou o token; sem token na URL, o texto fixo */}
                     <p className={styles.texto}>
-                        Este link de redefinição não vale mais. Ele dura 30 minutos e só pode ser usado uma vez.
+                        {estado.error ?? "Este link de redefinição não vale mais. Ele dura 30 minutos e só pode ser usado uma vez."}
                     </p>
                 </div>
 
