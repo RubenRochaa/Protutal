@@ -1,4 +1,5 @@
 import mailConfig from "../config/mail";
+import { montarEmail } from "../templates/email/layoutEmail";
 
 interface EmailRedefinicaoRequest {
     nome: string;
@@ -13,25 +14,23 @@ async function enviarEmailRedefinicaoSenha({ nome, email, token }: EmailRedefini
     const frontUrl = (process.env.FRONT_URL || "").replace(/\/+$/, "");
     const link = `${frontUrl}/redefinir-senha?token=${encodeURIComponent(token)}`;
 
-    // o nome vem do cadastro (digitado pelo usuário): escapa os caracteres especiais
-    // para ninguém conseguir injetar HTML no corpo do e-mail
-    const nomeSeguro = nome
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;");
+    // layout do Protutal (o nome é escapado lá dentro). Validade = PRAZO_TOKEN_REDEFINICAO (30m)
+    const { html, text, attachments } = montarEmail({
+        titulo: "Redefina sua senha",
+        nome,
+        texto: "Recebemos um pedido para redefinir a sua senha no Protutal. Para criar uma nova senha, clique no botão abaixo. Enquanto você não fizer isso, a sua senha continua a mesma.",
+        textoBotao: "Criar nova senha",
+        link,
+        validade: "Este link vale por 30 minutos e só pode ser usado uma vez."
+    });
 
     await mailConfig.transporte().sendMail({
         from: `"Protutal" <${process.env.EMAIL_USER}>`,
         to: email,
-        subject: "Redefinição de senha no Protutal",
-        html: `
-            <p>Olá, ${nomeSeguro}!</p>
-            <p>Recebemos um pedido para redefinir a sua senha no Protutal. Para criar uma nova senha, clique no link abaixo:</p>
-            <p><a href="${link}">${link}</a></p>
-            <p>Este link vale por 30 minutos e só pode ser usado uma vez.</p>
-            <p>Se você não pediu a redefinição, ignore este e-mail: a sua senha continua a mesma.</p>
-        `
+        subject: "Redefinição de senha do Protutal",
+        html,
+        text,
+        attachments
     });
 }
 
