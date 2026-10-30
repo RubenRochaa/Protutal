@@ -1,0 +1,93 @@
+.bloco{
+    gap: 20px;
+}
+
+.topo{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 16px;
+}
+
+.titulo{
+    color: var(--red-700);
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+
+// Quatro números em quadros brancos; dois por linha no tablet, um no celular
+.numeros{
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+
+    div{
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        padding: 14px 16px;
+        border-radius: var(--radius-card);
+        background-color: var(--white);
+        box-shadow: var(--shadow-card);
+    }
+
+    dt{
+        color: var(--gray-700);
+        font-size: 0.85rem;
+    }
+
+    dd{
+        font-size: 1.5rem;
+        font-weight: 600;
+    }
+}
+
+.colunas{
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 24px;
+    align-items: start;
+}
+
+.secao{
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.subtitulo{
+    color: var(--red-700);
+    font-size: 1.05rem;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.rubrica{
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--red-700);
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+@media (max-width: 1100px){
+    .numeros{
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 768px){
+    .colunas{
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+@media (max-width: 375px){
+    .numeros{
+        grid-template-columns: minmax(0, 1fr);
+    }
+}

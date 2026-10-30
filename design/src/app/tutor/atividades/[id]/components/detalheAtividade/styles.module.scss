@@ -1,0 +1,60 @@
+// Duas colunas como no print 6; uma no tablet e no celular
+.grade{
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 32px;
+    align-items: start;
+}
+
+.esquerda,
+.direita{
+    gap: 16px;
+}
+
+.titulo{
+    font-size: 1.3rem;
+    font-weight: 400;
+    overflow-wrap: anywhere;
+}
+
+// Rótulos vermelhos e sublinhados, como no print
+.rotulo{
+    color: var(--red-700);
+    font-size: 1.3rem;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.rotuloMenor{
+    color: var(--red-700);
+    font-size: 1.05rem;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+// Pílula branca do print ("Ruben Rocha Barbosa", "Prazo: 20/9/2026")
+.quadro{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px 20px;
+    padding: 16px 20px;
+    border-radius: var(--radius-card);
+    background-color: var(--white);
+    box-shadow: var(--shadow-card);
+    font-size: 1.1rem;
+}
+
+.nomeTutor{
+    font-size: 1.2rem;
+    overflow-wrap: anywhere;
+}
+
+@media (max-width: 768px){
+    .grade{
+        grid-template-columns: minmax(0, 1fr);
+        gap: 24px;
+    }
+}

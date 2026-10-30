@@ -1,0 +1,49 @@
+.topo{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 16px;
+}
+
+// "Chat com o tutor:" vermelho e sublinhado, e o nome em preto, como no print
+.titulo{
+    flex: 1;
+    min-width: 0;
+    font-size: 1.6rem;
+    font-weight: 400;
+    overflow-wrap: anywhere;
+}
+
+.rotulo{
+    color: var(--red-700);
+    font-size: 1.3rem;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.carregando{
+    padding: 24px;
+    border-radius: var(--radius-card);
+    background-color: var(--white);
+}
+
+.finalizada{
+    padding: 12px 16px;
+    border-left: 4px solid var(--red-700);
+    border-radius: var(--radius-input);
+    background-color: var(--white);
+    color: var(--red-700);
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+@media (max-width: 375px){
+    .titulo{
+        font-size: 1.2rem;
+    }
+
+    .rotulo{
+        font-size: 1.05rem;
+    }
+}
