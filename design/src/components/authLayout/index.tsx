@@ -2,7 +2,8 @@ import styles from './styles.module.scss'
 import Link from 'next/link'
 
 interface Props {
-    aba: "entrar" | "cadastrar";
+    // sem aba (ex.: esqueci a senha e redefinir senha): as duas abas aparecem sem destaque
+    aba?: "entrar" | "cadastrar";
     children: React.ReactNode;
 }
 
