@@ -213,6 +213,21 @@ async function main() {
         { id_tutor_sala: 3, id_professor: 2, nota: "7.00", comentario: "Bom domínio do conteúdo, mas demorou a corrigir as atividades.", data: dt("2026-06-30 16:00:00") },
       ],
     });
+
+    // 20. faixa_desempenho (parâmetros da classificação de conteúdos, RF27)
+    // não entra no TRUNCATE: upsert pelo nome para não duplicar se o seed rodar de novo
+    const faixas = [
+      { nome: "com_dificuldade", nota_min: "0.00", nota_max: "6.99" },
+      { nome: "dominado", nota_min: "7.00", nota_max: "10.00" },
+    ];
+
+    for (const faixa of faixas) {
+      await tx.faixa_desempenho.upsert({
+        where: { nome: faixa.nome },
+        update: { nota_min: faixa.nota_min, nota_max: faixa.nota_max },
+        create: faixa,
+      });
+    }
   });
 
   console.log("Seed concluído. Senha de todos os usuários: Protutal@123");

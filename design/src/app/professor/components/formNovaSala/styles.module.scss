@@ -1,0 +1,18 @@
+.form{
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+// Série e ano letivo lado a lado; no celular, um embaixo do outro
+.linha{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+@media (max-width: 375px){
+    .linha{
+        grid-template-columns: 1fr;
+    }
+}

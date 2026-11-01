@@ -1,0 +1,68 @@
+// Três colunas como no print 4: corrigidas, não corrigidas e o atalho "Nova atividade"
+.grade{
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(240px, 280px);
+    gap: 32px;
+    align-items: start;
+}
+
+.corrigidas{
+    order: 1;
+}
+
+.naoCorrigidas{
+    order: 2;
+}
+
+.nova{
+    order: 3;
+    align-items: center;
+    justify-content: center;
+    min-height: 160px;
+    min-width: 0;
+}
+
+.botaoNova{
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 360px;
+    min-height: 88px;
+    padding: 14px 18px;
+    line-height: 1.35;
+    text-align: center;
+    white-space: normal;
+}
+
+// Tablet: as duas colunas lado a lado e o atalho em cima
+@media (max-width: 1100px){
+    .grade{
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .nova{
+        order: 0;
+        grid-column: 1 / -1;
+        min-height: 0;
+    }
+
+    .botaoNova{
+        min-height: 76px;
+    }
+}
+
+// Celular: uma coluna, na ordem do HTML ("Não corrigidas" primeiro)
+@media (max-width: 768px){
+    .grade{
+        grid-template-columns: minmax(0, 1fr);
+        gap: 24px;
+    }
+
+    .corrigidas,
+    .naoCorrigidas{
+        order: 0;
+    }
+
+    .nova{
+        order: -1;
+    }
+}

@@ -1,0 +1,73 @@
+// Medidas comuns às páginas do tutor (as mesmas das telas do aluno e do professor)
+.conteudo{
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 32px 72px 48px;
+}
+
+// Painel inicial: 4 cards lado a lado no desktop, como no print
+.grade{
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 32px;
+    align-items: start;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 32px 48px 48px;
+}
+
+// Texto curto de aviso fixo (ex.: tutoria finalizada, permissão negada)
+.aviso{
+    padding: 12px 16px;
+    border-left: 4px solid var(--red-700);
+    border-radius: var(--radius-input);
+    background-color: var(--white);
+    color: var(--red-700);
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+// "Ver todas" no rodapé dos cards
+.verTodas{
+    align-self: flex-end;
+    color: var(--red-700);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+
+    &:hover{
+        color: var(--red-900);
+    }
+}
+
+@media (max-width: 1100px){
+    .grade{
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 768px){
+    .conteudo{
+        padding: 24px 24px 40px;
+    }
+
+    .grade{
+        grid-template-columns: minmax(0, 1fr);
+        gap: 24px;
+        padding: 24px 24px 40px;
+    }
+}
+
+@media (max-width: 375px){
+    .conteudo{
+        gap: 20px;
+        padding: 20px 16px 32px;
+    }
+
+    .grade{
+        padding: 20px 16px 32px;
+    }
+}

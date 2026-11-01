@@ -1,0 +1,36 @@
+// Abas lado a lado com uma linha embaixo; no celular, rolam na horizontal
+.abas{
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    border-bottom: 2px solid var(--gray-300);
+}
+
+.aba, .abaAtiva{
+    flex-shrink: 0;
+    margin-bottom: -2px;
+    padding: 10px 16px;
+    border-bottom: 3px solid transparent;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.aba{
+    color: var(--gray-700);
+
+    &:hover{
+        color: var(--red-700);
+    }
+}
+
+.abaAtiva{
+    border-bottom-color: var(--red-700);
+    color: var(--red-700);
+}
+
+@media (max-width: 375px){
+    .aba, .abaAtiva{
+        padding: 8px 12px;
+        font-size: 0.95rem;
+    }
+}

@@ -1,0 +1,30 @@
+.lista{
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    list-style: none;
+}
+
+// Mesmo efeito do item da tela "Minhas atividades"; o foco vem do :focus-visible do globals
+.item{
+    display: block;
+    border-radius: var(--radius-card);
+    transition: transform 0.15s;
+
+    &:hover{
+        transform: translateY(-2px);
+        color: var(--red-700);
+    }
+}
+
+.verTodas{
+    align-self: flex-end;
+    color: var(--red-700);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+
+    &:hover{
+        color: var(--red-900);
+    }
+}

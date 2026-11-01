@@ -6,6 +6,7 @@
 //   403 - autenticado, mas sem permissão
 //   404 - recurso não encontrado
 //   409 - conflito com dado existente (ex.: email já cadastrado)
+//   410 - recurso expirado (ex.: link de confirmação de e-mail vencido)
 // Qualquer erro que NÃO seja AppError é tratado como 500 (erro interno).
 class AppError extends Error {
     statusCode: number;

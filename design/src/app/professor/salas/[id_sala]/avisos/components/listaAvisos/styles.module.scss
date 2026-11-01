@@ -1,0 +1,24 @@
+// Como na p03: a lista ocupa a maior parte e o cartão de envio fica à direita
+.grade{
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 24px;
+    align-items: start;
+}
+
+.cartaoEnviar{
+    align-items: center;
+    text-align: center;
+}
+
+// Tablet e celular: o cartão de envio sobe para cima da lista
+@media (max-width: 768px){
+    .grade{
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .cartaoEnviar{
+        order: -1;
+    }
+}

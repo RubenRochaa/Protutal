@@ -1,5 +1,6 @@
 import prismaClient from "../../prisma";
 import { AppError } from "../../errors/AppError";
+import { IMPEDIMENTOS_PEDIDO_TUTORIA, buscarImpedimentoAluno } from "../../helpers/verificarPedidoTutoria";
 
 interface PedidoTutoriaRequest {
     id_aluno: number;
@@ -44,36 +45,15 @@ class CreatePedidoTutoriaService {
         });
 
         if (!matricula) {
-            throw new AppError("Você não está matriculado nesta sala", 400);
+            const { mensagem, status } = IMPEDIMENTOS_PEDIDO_TUTORIA.nao_matriculado;
+            throw new AppError(mensagem, status);
         }
 
-        // Tutor.id_aluno é único: quem já é tutor não pode pedir de novo
-        const tutor = await prismaClient.tutor.findUnique({
-            where: {
-                id_aluno: id_aluno
-            },
-            select: {
-                id_tutor: true
-            }
-        });
+        // já é tutor (409) -> pedido pendente (409): regras compartilhadas com o GET /alunos/me/salas
+        const impedimento = await buscarImpedimentoAluno(id_aluno);
 
-        if (tutor) {
-            throw new AppError("Você já é tutor", 409);
-        }
-
-        // só pode existir um pedido pendente por aluno
-        const pedidoPendente = await prismaClient.pedido_tutoria.findFirst({
-            where: {
-                id_aluno: id_aluno,
-                status: "pendente"
-            },
-            select: {
-                id_pedido: true
-            }
-        });
-
-        if (pedidoPendente) {
-            throw new AppError("Você já tem um pedido de tutoria pendente", 409);
+        if (impedimento) {
+            throw new AppError(impedimento.mensagem, impedimento.status);
         }
 
         const pedido = await prismaClient.pedido_tutoria.create({

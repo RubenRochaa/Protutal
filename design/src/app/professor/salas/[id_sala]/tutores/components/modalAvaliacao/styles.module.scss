@@ -1,0 +1,32 @@
+.conteudo{
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.historico{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.subtitulo{
+    color: var(--red-700);
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.itens{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 220px;
+    overflow-y: auto;
+    list-style: none;
+}
+
+.item{
+    padding: 10px 12px;
+    border-radius: var(--radius-input);
+    background-color: var(--gray-100);
+}

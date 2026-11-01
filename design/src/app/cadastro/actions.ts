@@ -11,7 +11,8 @@ const ROTA_CADASTRO = {
 }
 
 // Roda no servidor: cadastra professor ou aluno conforme o domínio do e-mail.
-// A API não devolve token no cadastro, então o usuário volta para o login.
+// A API não devolve token no cadastro, então o usuário volta para o login
+// (onde precisa confirmar o e-mail antes de entrar).
 export async function handleCadastro(_estado: ActionState, formData: FormData): Promise<ActionState> {
     const nome = String(formData.get("nome") ?? "")
     const email = String(formData.get("email") ?? "").trim()
@@ -26,11 +27,13 @@ export async function handleCadastro(_estado: ActionState, formData: FormData): 
     const perfil = perfilPeloEmail(email)!
 
     try {
-        await api.post(ROTA_CADASTRO[perfil], { nome, email, senha })
+        const response = await api.post(ROTA_CADASTRO[perfil], { nome, email, senha })
 
+        // A mensagem da API diz se o link de confirmação foi enviado ou não.
+        // "?cadastro=ok" faz o login mostrar o aviso com o botão de reenviar
         return {
-            sucesso: "Cadastro realizado! Agora é só entrar.",
-            redirecionar: "/"
+            sucesso: response.data.mensagem,
+            redirecionar: "/?cadastro=ok"
         }
     } catch(err) {
         return { error: getErrorMessage(err), valores }

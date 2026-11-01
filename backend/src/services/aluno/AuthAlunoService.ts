@@ -33,6 +33,12 @@ class AuthAlunoService {
             throw new AppError("Email ou senha incorretos", 401);
         }
 
+        // RN20: só confere a confirmação depois de email e senha corretos,
+        // para a mensagem não revelar se o email está cadastrado
+        if (!aluno.email_confirmado) {
+            throw new AppError("Confirme seu e-mail antes de entrar. Verifique sua caixa de entrada.", 403);
+        }
+
         const token = sign(
             {
                 nome: aluno.nome,

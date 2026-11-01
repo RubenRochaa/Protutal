@@ -1,0 +1,38 @@
+.conteudo{
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 32px 72px 48px;
+}
+
+.secao{
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    scroll-margin-top: 16px;
+}
+
+.titulo{
+    color: var(--red-700);
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+@media (max-width: 768px){
+    .conteudo{
+        gap: 32px;
+        padding: 24px 24px 40px;
+    }
+
+    .titulo{
+        font-size: 1.3rem;
+    }
+}
+
+@media (max-width: 375px){
+    .conteudo{
+        padding: 20px 16px 32px;
+    }
+}

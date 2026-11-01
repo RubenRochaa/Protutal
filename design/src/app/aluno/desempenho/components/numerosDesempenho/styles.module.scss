@@ -1,0 +1,59 @@
+.secao{
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.numeros{
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 20px;
+}
+
+// Pílula branca com o número grande em vermelho
+.numero{
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 16px 12px;
+    border-radius: var(--radius-card);
+    background-color: var(--white);
+    box-shadow: var(--shadow-card);
+    text-align: center;
+}
+
+.valor{
+    color: var(--red-700);
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1.1;
+}
+
+.rotulo{
+    color: var(--gray-700);
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+@media (max-width: 768px){
+    .numeros{
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+    }
+}
+
+@media (max-width: 375px){
+    .numeros{
+        gap: 12px;
+    }
+
+    .valor{
+        font-size: 1.6rem;
+    }
+
+    .rotulo{
+        font-size: 0.8rem;
+    }
+}

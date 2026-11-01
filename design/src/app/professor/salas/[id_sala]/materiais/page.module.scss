@@ -1,0 +1,19 @@
+// Link de download do material (mesmo visual do "Baixar rubrica" da aba Feedbacks)
+.baixar{
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--red-700);
+    font-size: 0.85rem;
+    font-weight: 600;
+    white-space: nowrap;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+// Material sem URL válida (caminho local do seed): não há o que baixar
+.indisponivel{
+    color: var(--gray-700);
+    font-size: 0.85rem;
+    white-space: nowrap;
+}

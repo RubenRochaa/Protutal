@@ -15,14 +15,14 @@ Plataforma web de tutoria entre alunos da rede SESI, com foco na matéria de Geo
 
 - Arquitetura do backend: MVC
 - Pasta do backend: /backend
-- Pasta do frontend: /frontend
+- Pasta do frontend: /design
 - Siga a estrutura de pastas que já existe. Não crie pastas ou camadas novas sem perguntar.
 
 ## Comandos
 
-- Instalar dependências: [DEFINIR]
-- Subir o backend em desenvolvimento: [DEFINIR]
-- Rodar testes: [DEFINIR, ou "ainda não há testes"]
+- Instalar dependências: npm intall
+- Subir o backend em desenvolvimento: npm run dev
+- Rodar testes: (ainda não tem)
 - Gerar o client do Prisma: `npx prisma generate`
 - Criar migration (somente com autorização, ver "Banco de dados"): `npx prisma migrate dev --name <nome>`
 

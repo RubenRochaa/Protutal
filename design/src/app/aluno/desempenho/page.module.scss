@@ -1,0 +1,48 @@
+// Mesmas medidas da tela "Minhas atividades"
+.conteudo{
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 32px 72px 48px;
+}
+
+.filtro{
+    width: 100%;
+    max-width: 260px;
+}
+
+// Gráfico e médias por conteúdo lado a lado, como os dois quadros do print
+.grade{
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 40px;
+    align-items: start;
+}
+
+@media (max-width: 768px){
+    .conteudo{
+        padding: 24px 24px 40px;
+    }
+
+    .filtro{
+        max-width: none;
+    }
+
+    .grade{
+        grid-template-columns: minmax(0, 1fr);
+        gap: 32px;
+    }
+}
+
+@media (max-width: 375px){
+    .conteudo,
+    .grade{
+        gap: 24px;
+    }
+
+    .conteudo{
+        padding: 20px 16px 32px;
+    }
+}

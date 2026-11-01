@@ -1,0 +1,66 @@
+// Mesmo vermelho do Button
+.botao{
+    height: 44px;
+    padding: 0 20px;
+    border: 0;
+    border-radius: var(--radius-input);
+    background-color: var(--red-700);
+    color: var(--white);
+    font-weight: 500;
+    white-space: nowrap;
+    transition: background-color 0.2s;
+
+    &:hover:not(:disabled){
+        background-color: var(--red-900);
+    }
+
+    &:disabled{
+        opacity: 0.6;
+    }
+}
+
+.form{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    line-height: 1.5;
+}
+
+.botoes{
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.cancelar{
+    height: 44px;
+    padding: 0 24px;
+    border: 1px solid var(--gray-500);
+    border-radius: var(--radius-input);
+    background-color: var(--white);
+    color: var(--black);
+    font-weight: 500;
+
+    &:hover{
+        background-color: var(--gray-100);
+    }
+}
+
+.enviar{
+    width: 200px;
+}
+
+@media (max-width: 375px){
+    .botao{
+        width: 100%;
+    }
+
+    .botoes{
+        flex-direction: column-reverse;
+    }
+
+    .cancelar,
+    .enviar{
+        width: 100%;
+    }
+}

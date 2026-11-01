@@ -106,15 +106,18 @@ A validação do cliente só melhora a experiência. Mesmo validado, o erro da A
 
 ## Rotas da API disponíveis
 
-Base: `NEXT_PUBLIC_API_URL`. Todas, exceto cadastro e login, exigem `Authorization: Bearer <token>`.
+Base: `NEXT_PUBLIC_API_URL`. Todas, exceto cadastro, login e confirmação de e-mail, exigem `Authorization: Bearer <token>`.
+A API tem 57 rotas, todas implementadas. A descrição completa de cada uma (respostas e erros) está em `docs/rotas_do_sistema.md`.
 
 ### Públicas
 | Método | Rota | Corpo / parâmetros |
 | --- | --- | --- |
 | POST | `/professores` | `{ nome, email, senha }` |
 | POST | `/alunos` | `{ nome, email, senha }` |
-| POST | `/sessao/professores` | `{ email, senha }` |
-| POST | `/sessao/alunos` | `{ email, senha }` |
+| POST | `/sessao/professores` | `{ email, senha }` (403 se o e-mail ainda não foi confirmado) |
+| POST | `/sessao/alunos` | `{ email, senha }` (403 se o e-mail ainda não foi confirmado) |
+| GET | `/confirmacao-email/:token` | — (aberta pelo link do e-mail; responde uma página HTML, o front não chama) |
+| POST | `/confirmacao-email/reenviar` | `{ email }` |
 
 ### Professor
 | Método | Rota | Corpo / parâmetros |
@@ -137,43 +140,70 @@ Base: `NEXT_PUBLIC_API_URL`. Todas, exceto cadastro e login, exigem `Authorizati
 | PATCH | `/tutorias/:id/meta` | `{ meta_aprendizagem }` |
 | PATCH | `/tutorias/:id/finalizar` | — |
 | PATCH | `/tutorias/:id/reabrir` | — |
+| PATCH | `/tutores-sala/:id/revogar` | — (`:id` = `id_tutor_sala`; finaliza as tutorias ativas do tutor) |
+| POST | `/tutores-sala/:id/avaliacoes` | `{ nota, comentario }` |
+| GET | `/tutores-sala/:id/avaliacoes` | — |
+| GET | `/salas/:id/atividades` | `?etapa=`, `?id_conteudo=`, `?id_tutor_sala=` opcionais |
 | GET | `/atividades/:id/respostas` | — (também para o tutor criador) |
+| GET | `/salas/:id/notas` | `?etapa=`, `?id_conteudo=`, `?id_aluno=`, `?id_tutor_sala=` opcionais |
+| GET | `/salas/:id/notas/exportar` | mesmos filtros de `/salas/:id/notas`; responde um arquivo `.xlsx` |
+| GET | `/salas/:id/desempenho-tutores` | — |
+| POST | `/salas/:id/avisos` | `{ titulo, conteudo }` |
 
 ### Aluno (tutorado)
 | Método | Rota | Corpo / parâmetros |
 | --- | --- | --- |
 | GET | `/alunos/me/atividades` | `?status=pendente\|entregue\|entregue_com_atraso` e `?etapa=1\|2\|3` opcionais |
+| GET | `/atividades/:id` | — (também para o tutor criador) |
 | POST | `/atividades/:id/respostas` | multipart/form-data: `file` (obrigatório), `texto` (opcional) |
 | GET | `/alunos/me/tutorias` | `?status=ativa\|finalizada` opcional |
 | POST | `/pedidos-tutoria` | `{ id_sala }` |
+| POST | `/notas/:id/contestacoes` | `{ comentario }` |
+| GET | `/alunos/me/contestacoes` | `?status=pendente\|aceita\|recusada` opcional |
+| GET | `/alunos/me/desempenho` | `?id_sala=` e `?etapa=1\|2\|3` opcionais |
+| GET | `/alunos/me/conteudos-dominados` | `?id_sala=` opcional |
+| POST | `/tutorias/:id/feedbacks` | multipart/form-data: `file` (obrigatório, rubrica), `comentario` (opcional) |
 
 ### Tutor (login de aluno)
 | Método | Rota | Corpo / parâmetros |
 | --- | --- | --- |
 | GET | `/tutores/me/tutorias` | `?status=ativa\|finalizada` opcional (traz `id_tutoria` e `sala.id_sala`) |
+| GET | `/tutores/me/atividades` | `?id_sala=`, `?id_conteudo=`, `?etapa=` opcionais |
+| GET | `/tutores/me/desempenho` | `?id_sala=` opcional |
 | GET | `/salas/:id/conteudos` | — |
 | POST | `/atividades` | `{ titulo, descricao, prazo, tipo, etapa, id_conteudo, id_tutoria }` |
 | GET | `/atividades/:id/respostas` | — (traz os destinatários com `id_aluno`) |
 | POST | `/atividades/:id/notas` | `{ id_aluno, valor, comentario }` |
 | POST | `/salas/:id/materiais` | multipart/form-data: `titulo` (obrigatório), `descricao` (opcional), `file` (obrigatório) |
 
-Valores aceitos em `tipo` (lista fixa do sistema): `aula_invertida`, `prova_alternativa`, `prova_dissertativa`, `projeto`, `interpretacao_imagens`, `exercicios_livro`, `interpretacao_mapas`, `analise_graficos`, `mapa_mental`, `pesquisa`, `estudo_caso`, `trabalho_campo`, `teatro`, `atividade_extracurricular`, `autoavaliacao`. Mostre ao usuário com rótulo legível (ex.: "Aula invertida") e envie o valor técnico.
+### Mais de um perfil
+| Método | Rota | Perfis | Corpo / parâmetros |
+| --- | --- | --- | --- |
+| GET | `/tipos-atividade` | professor, aluno | — (lista os valores de `tipo` da atividade) |
+| GET | `/contestacoes` | professor, tutor | `?status=pendente\|aceita\|recusada` e `?id_sala=` opcionais |
+| PATCH | `/contestacoes/:id/resolver` | professor (dono), tutor (criador da atividade) | `{ status: "aceita"\|"recusada", decisao, valor }` (`valor` só com `aceita`) |
+| GET | `/salas/:id/materiais` | professor, tutor, aluno | — |
+| GET | `/salas/:id/avisos` | professor (dono), aluno (matriculado) | — |
+| POST | `/tutorias/:id/mensagens` | tutor e aluno da tutoria | `{ texto, assunto }` (`assunto` opcional; com ele, vira comunicado) |
+| GET | `/tutorias/:id/mensagens` | tutor e aluno da tutoria | `?tipo=comunicado` opcional |
+| GET | `/feedbacks` | tutor, professor | `?etapa=`, `?ano=`, `?id_aluno=` opcionais; `?id_sala=` e `?id_tutor_sala=` só para o professor |
 
-A collection do Insomnia em `docs/collections` tem exemplos de cada requisição. Em dúvida sobre um campo da resposta, leia o service correspondente em `backend/src/services` (somente leitura) ou pergunte.
+Valores aceitos em `tipo` (lista fixa do sistema, também devolvida por `GET /tipos-atividade`): `aula_invertida`, `prova_alternativa`, `prova_dissertativa`, `projeto`, `interpretacao_imagens`, `exercicios_livro`, `interpretacao_mapas`, `analise_graficos`, `mapa_mental`, `pesquisa`, `estudo_caso`, `trabalho_campo`, `teatro`, `atividade_extracurricular`, `autoavaliacao`. Mostre ao usuário com rótulo legível (ex.: "Aula invertida") e envie o valor técnico.
+
+A collection do Insomnia em `docs/collections` tem exemplos de cada requisição. Em dúvida sobre um campo da resposta, consulte `docs/rotas_do_sistema.md`, leia o service correspondente em `backend/src/services` (somente leitura) ou pergunte.
 
 ## Tela x API (lacunas)
 
 Ao receber o print de uma tela do Figma, antes de qualquer código, compare a tela com as rotas acima e entregue duas listas:
 
-1. **Elemento da tela sem rota na API** (ex.: chat, avisos, gráfico de desempenho). Não invente dados nem rota. O elemento aparece desabilitado, com o texto "Em breve", e entra no relatório para o grupo do back-end.
+1. **Elemento da tela sem rota na API** (ex.: um dado que nenhuma rota devolve, como a lista de salas do aluno). Não invente dados nem rota. O elemento aparece desabilitado, com o texto "Em breve", e entra no relatório para o grupo do back-end.
 2. **Rota da API sem elemento na tela** (funcionalidade faltando no Figma). Proponha o elemento que falta, seguindo o estilo visual da tela, e crie depois da aprovação.
 
-Lacunas já conhecidas (rotas que ainda não existem):
+Lacuna já conhecida (pendente no back-end):
 
-- Não há rota para o aluno listar as próprias salas. A tela "pedir para ser tutor" precisa do `id_sala`.
-- Não há rota para o tutor listar as atividades que ele criou, nem para o professor listar as atividades de uma sala. Sem o `id` da atividade, as telas de respostas e notas só são abertas logo após criar a atividade.
-- Não há rota para listar materiais de apoio (só para anexar).
-- Ainda não existem rotas de: revogação e avaliação do tutor, mensagens e avisos, feedback do aluno ao tutor, contestação de nota, desempenho e confirmação de e-mail. Estão sendo feitas pelo back-end. Telas desses fluxos ficam fora da Sprint 4 até a rota existir.
+- Não há rota para o aluno listar as próprias salas. A tela "pedir para ser tutor" (B4) precisa do `id_sala`.
+
+As demais lacunas que constavam aqui (atividades do tutor e da sala, listagem de materiais, revogação e avaliação do tutor, mensagens, avisos, feedback, contestação de nota, desempenho e confirmação de e-mail) já foram implementadas. As rotas estão nas tabelas acima.
 
 ## Divisão das telas (dois blocos)
 

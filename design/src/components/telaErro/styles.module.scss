@@ -1,0 +1,65 @@
+.conteudo{
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 32px 24px 48px;
+}
+
+// Mesmo quadro branco do ErrorState, com o mascote maior (página inteira)
+.quadro{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 32px 24px;
+    border-radius: var(--radius-card);
+    background-color: var(--white);
+    box-shadow: var(--shadow-card);
+    text-align: center;
+}
+
+// Mascote: 240 px de altura no computador e 160 px no celular
+.imagem{
+    width: auto;
+    height: 240px;
+    max-width: 100%;
+}
+
+.mensagem{
+    max-width: 420px;
+    font-weight: 500;
+    line-height: 1.5;
+}
+
+.acoes{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+}
+
+@media (max-width: 768px){
+    .conteudo{
+        padding: 24px 16px 40px;
+    }
+
+    .imagem{
+        height: 160px;
+    }
+}
+
+@media (max-width: 375px){
+    .quadro{
+        padding: 20px 16px;
+    }
+
+    // Botões um embaixo do outro, ocupando a largura toda
+    .acoes{
+        flex-direction: column;
+        width: 100%;
+
+        > *{
+            width: 100%;
+        }
+    }
+}

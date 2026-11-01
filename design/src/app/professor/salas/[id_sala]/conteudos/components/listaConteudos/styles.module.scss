@@ -1,0 +1,23 @@
+.busca{
+    width: min(360px, 100%);
+}
+
+// Desktop: 3 colunas; tablet: 2; celular: 1
+.grade{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    list-style: none;
+}
+
+@media (max-width: 1024px){
+    .grade{
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px){
+    .grade{
+        grid-template-columns: 1fr;
+    }
+}

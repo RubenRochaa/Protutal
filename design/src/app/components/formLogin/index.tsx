@@ -8,11 +8,28 @@ import { toast } from 'sonner'
 import { Input } from '@/components/input'
 import { Button } from '@/components/button'
 import { validarLogin } from '@/lib/validacao'
+import { MSG_SESSAO_EXPIRADA } from '@/lib/getErrorMessage'
 import { handleLogin } from '../../actions'
+import { AvisoConfirmacao } from '../avisoConfirmacao'
 
-export function FormLogin(){
+interface Props {
+    // true quando o usuário acabou de se cadastrar (veio de /?cadastro=ok)
+    cadastroConcluido?: boolean;
+    // true quando a API respondeu 401 em outra tela (veio de /?sessao=expirada)
+    sessaoExpirada?: boolean;
+}
+
+export function FormLogin({ cadastroConcluido = false, sessaoExpirada = false }: Props){
     const router = useRouter();
     const [estado, formAction] = useActionState(handleLogin, {});
+
+    // Avisa uma vez e tira o "?sessao=expirada" da URL (para não repetir ao recarregar)
+    useEffect(() => {
+        if(!sessaoExpirada) return;
+
+        toast.error(MSG_SESSAO_EXPIRADA, { id: "sessao-expirada" });
+        router.replace("/");
+    }, [sessaoExpirada, router]);
 
     // Cada resposta da Server Action vira um toast
     useEffect(() => {
@@ -56,10 +73,23 @@ export function FormLogin(){
             required
             />
 
-            {/* Ainda não existe rota de recuperação de senha na API */}
-            <button type="button" className={styles.esqueceu} disabled title="Em breve">
-                Esqueceu sua senha? <span className={styles.emBreve}>Em breve</span>
-            </button>
+            {/* Leva para outra tela (pedido do link de redefinição, rota O5), por isso é Link */}
+            <Link href="/esqueci-senha" className={styles.esqueceu}>
+                Esqueceu sua senha?
+            </Link>
+
+            {/* Login recusado (403) por e-mail não confirmado, ou cadastro recém-feito */}
+            {estado.emailNaoConfirmado ? (
+                <AvisoConfirmacao
+                texto="Seu e-mail ainda não foi confirmado."
+                textoBotao="Reenviar e-mail de confirmação"
+                />
+            ) : cadastroConcluido && (
+                <AvisoConfirmacao
+                texto="Enviamos um link de confirmação para o seu e-mail."
+                textoBotao="Não recebeu? Reenviar e-mail"
+                />
+            )}
 
             <Button name="ENTRAR" nameCarregando="Entrando..." />
 

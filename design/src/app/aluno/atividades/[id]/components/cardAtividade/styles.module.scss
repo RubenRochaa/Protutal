@@ -1,0 +1,45 @@
+.detalhe{
+    color: var(--gray-700);
+    font-size: 0.9rem;
+    text-align: center;
+    overflow-wrap: anywhere;
+}
+
+// Pílula branca, como os itens do Figma
+.descricao{
+    margin-top: 8px;
+    padding: 16px 20px;
+    border-radius: var(--radius-card);
+    background-color: var(--white);
+    box-shadow: var(--shadow-card);
+    line-height: 1.5;
+    // Mantém as quebras de linha que o tutor digitou
+    white-space: pre-line;
+    overflow-wrap: anywhere;
+}
+
+// Rótulo à esquerda e data à direita, no fim do card (como no Figma)
+.prazo{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 4px 16px;
+    margin-top: 8px;
+    font-weight: 500;
+}
+
+.rotuloPrazo{
+    color: var(--red-700);
+    font-weight: 600;
+}
+
+.prazoEncerrado{
+    color: var(--red-700);
+    font-weight: 600;
+}
+
+@media (max-width: 375px){
+    .descricao{
+        padding: 14px 12px;
+    }
+}
