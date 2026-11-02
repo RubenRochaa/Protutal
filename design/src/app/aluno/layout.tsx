@@ -3,17 +3,7 @@ import { Header } from '@/components/header'
 import { getNomeServer, getPerfilServer } from '@/lib/cookieServer'
 import { getAutenticado } from '@/lib/apiServer'
 import { sessaoExpiradaNaPagina } from '@/lib/sessaoExpirada'
-
-// Menu do aluno, na ordem do Figma. Os itens com "emBreve" ainda não têm tela
-const LINKS = [
-    { label: "Início", href: "/aluno" },
-    { label: "Minhas atividades", href: "/aluno/atividades" },
-    { label: "Meu desempenho", href: "/aluno/desempenho" },
-    { label: "Tutoria", href: "/aluno/tutoria" },
-]
-
-// Aparece só para quem é tutor (rota T1 respondeu 200)
-const LINK_TUTOR = { label: "Área do tutor", href: "/tutor" }
+import { LINK_TUTOR, MENU_ALUNO } from '@/lib/menus'
 
 // Moldura de todas as telas do aluno: Header em cima e a página embaixo.
 // O middleware já barra quem não é aluno; conferimos de novo aqui por segurança.
@@ -35,7 +25,7 @@ export default async function AlunoLayout({ children }: { children: React.ReactN
 
     return (
         <>
-            <Header links={ehTutor ? [...LINKS, LINK_TUTOR] : LINKS} nome={nome} />
+            <Header links={ehTutor ? [...MENU_ALUNO, LINK_TUTOR] : MENU_ALUNO} nome={nome} />
             {children}
         </>
     )
