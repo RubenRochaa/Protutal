@@ -7,7 +7,7 @@ import { useState } from 'react'
 import { usePathname } from 'next/navigation'
 import { useFormStatus } from 'react-dom'
 import { Loader } from '../loader'
-import { CircleUserRound, Menu, X } from 'lucide-react'
+import { Bell, CircleUserRound, Menu, X } from 'lucide-react'
 import { iniciais } from '@/lib/formatacao'
 import { Avatar } from '../avatar'
 import { handleLogout } from './actions'
@@ -17,16 +17,25 @@ interface LinkMenu {
     href: string;
     // Tela ainda não feita: o item aparece desabilitado, com o selo "Em breve"
     emBreve?: boolean;
+    // Item mostrado só como ícone, ao lado do avatar (ver ICONES)
+    icone?: "notificacao";
 }
 
 interface Props {
     links: LinkMenu[];
+    // Página inicial do perfil ("/professor", "/aluno", "/tutor"): destino da logo
+    inicio: string;
     // Nome do usuário logado, para o avatar com as iniciais. Sem nome, fica o ícone
     nome?: string | null;
 }
 
+// Ícones dos itens que aparecem sem texto, ao lado do avatar
+const ICONES = {
+    notificacao: Bell,
+}
+
 // O link ativo é o de href mais longo que combina com a URL.
-// Assim "Início" (/aluno) não fica vermelho junto com "Minhas atividades" (/aluno/atividades)
+// Se mais de um item combinar com a URL, só o mais específico fica vermelho
 function hrefAtivo(links: LinkMenu[], pathname: string){
     const candidatos = links
         .filter((link) => !link.emBreve)
@@ -50,20 +59,24 @@ function BotaoSair(){
 
 // Cabeçalho das áreas logadas: logo, menu (recebido por props), ícone do usuário e "Sair".
 // No celular e tablet os links ficam escondidos atrás do botão de menu.
-export function Header({ links, nome }: Props){
+export function Header({ links, inicio, nome }: Props){
     const pathname = usePathname();
     const [menuAberto, setMenuAberto] = useState(false);
     const ativo = hrefAtivo(links, pathname);
 
+    // Itens com ícone (ex.: Notificações) ficam ao lado do avatar, fora do menu de texto
+    const menu = links.filter((link) => !link.icone);
+    const atalhos = links.filter((link) => link.icone);
+
     return (
         <header className={styles.header}>
             <div className={styles.conteudo}>
-                <Link href={links[0]?.href ?? "/"} className={styles.logo} aria-label="Protutal - página inicial">
+                <Link href={inicio} className={styles.logo} aria-label="Protutal - página inicial">
                     <Image
                     src="/img/logo.png"
                     alt="Protutal"
-                    width={890}
-                    height={280}
+                    width={424}
+                    height={62}
                     priority
                     className={styles.logoImagem}
                     />
@@ -73,7 +86,7 @@ export function Header({ links, nome }: Props){
                 id="menu-principal"
                 className={menuAberto ? `${styles.nav} ${styles.navAberto}` : styles.nav}
                 >
-                    {links.map((link) => link.emBreve ? (
+                    {menu.map((link) => link.emBreve ? (
                         <span key={link.href} className={styles.linkEmBreve} aria-disabled="true">
                             {link.label}
                             <span className={styles.seloEmBreve}>Em breve</span>
@@ -92,6 +105,24 @@ export function Header({ links, nome }: Props){
                 </nav>
 
                 <div className={styles.acoes}>
+                    {/* Só o ícone aparece; o label vira o nome lido pelo leitor de tela e a dica do mouse */}
+                    {atalhos.map((link) => {
+                        const Icone = ICONES[link.icone!]
+
+                        return (
+                            <Link
+                            key={link.href}
+                            href={link.href}
+                            className={link.href === ativo ? `${styles.atalho} ${styles.atalhoAtivo}` : styles.atalho}
+                            aria-current={link.href === ativo ? "page" : undefined}
+                            aria-label={link.label}
+                            title={link.label}
+                            >
+                                <Icone aria-hidden="true" />
+                            </Link>
+                        )
+                    })}
+
                     {/* A API não tem foto de usuário: avatar com as iniciais do nome (ou o ícone, sem nome) */}
                     {nome && iniciais(nome) ? (
                         <span role="img" aria-label={nome}>
