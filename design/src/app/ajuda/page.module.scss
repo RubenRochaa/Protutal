@@ -8,6 +8,21 @@
     padding: 32px 72px 48px;
 }
 
+// Só para quem não está logado: volta para a tela de login
+.voltar{
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: -16px;
+    color: var(--red-700);
+    font-weight: 500;
+
+    &:hover{
+        text-decoration: underline;
+    }
+}
+
 .lista{
     display: flex;
     flex-direction: column;

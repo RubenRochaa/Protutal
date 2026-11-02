@@ -15,7 +15,7 @@ interface Props {
 const MARCA_DAGUA = Array.from({ length: 80 });
 
 // Moldura das telas de login e cadastro: painel vermelho com o logo e o mascote à esquerda
-// e, à direita, o cartão com as abas ENTRAR / CADASTRAR e o formulário (children)
+// e, à direita, o cartão com as abas ENTRAR / CADASTRAR o formulário (children) e o link da Ajuda
 export function AuthLayout({ aba, mascotePrioritario = false, children }: Props){
     return (
         <main className={styles.container}>
@@ -49,6 +49,11 @@ export function AuthLayout({ aba, mascotePrioritario = false, children }: Props)
                     </nav>
 
                     {children}
+
+                    {/* Ajuda pública (seção "Geral" do FAQ): para quem não consegue entrar */}
+                    <Link href="/ajuda" className={styles.ajuda}>
+                        Precisa de ajuda?
+                    </Link>
                 </div>
             </section>
         </main>

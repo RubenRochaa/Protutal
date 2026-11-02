@@ -40,12 +40,12 @@ export const SECOES_FAQ: SecaoFaq[] = [
         titulo: "Professor",
         perguntas: [
             {
-                pergunta: "Como coloco alunos na minha turma?",
-                resposta: "Pela tela da turma, o professor associa os alunos à sala. O aluno não escolhe a sala no cadastro.",
+                pergunta: "Como coloco alunos na minha sala?",
+                resposta: "Pela tela da sala, o professor associa os alunos à sala. O aluno não escolhe a sala no cadastro.",
             },
             {
                 pergunta: "Como um aluno se torna tutor?",
-                resposta: "O aluno matriculado na sala envia um pedido de tutoria, e o professor aceita ou recusa na área \"Tutoria\".",
+                resposta: "O aluno matriculado na sala envia um pedido de tutoria. O pedido aparece nas Notificações (ícone do sino) e na aba \"Pedidos\" da sala, onde o professor aceita ou recusa.",
             },
             {
                 pergunta: "Como permito que os tutores criem atividades?",
@@ -97,7 +97,7 @@ export const SECOES_FAQ: SecaoFaq[] = [
             },
             {
                 pergunta: "Onde vejo os feedbacks dos meus tutorados?",
-                resposta: "Na área de desempenho do tutor, com filtros por etapa, ano e tutorado.",
+                resposta: "No item \"Feedbacks\" do menu do tutor. Lá é possível filtrar por etapa (\"Todas as etapas\", \"1ª etapa\", \"2ª etapa\", \"3ª etapa\"), por \"Ano letivo\" e por \"Tutorado\".",
             },
         ],
     },

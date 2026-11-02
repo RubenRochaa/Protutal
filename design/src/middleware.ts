@@ -8,9 +8,6 @@ const AREAS: Record<string, string> = {
     "/tutor": "aluno",
 }
 
-// Rotas privadas abertas para qualquer perfil logado (professor ou aluno)
-const ROTAS_TODOS_PERFIS = ["/ajuda"]
-
 function combina(pathname: string, rota: string){
     return pathname === rota || pathname.startsWith(rota + "/")
 }
@@ -21,11 +18,11 @@ export function middleware(req: NextRequest){
     const { pathname } = req.nextUrl
 
     const area = Object.keys(AREAS).find((rota) => combina(pathname, rota))
-    const todosPerfis = ROTAS_TODOS_PERFIS.some((rota) => combina(pathname, rota))
 
-    // Login, cadastro, /esqueci-senha, /redefinir-senha e arquivos públicos: livres
-    // (nem entram no matcher abaixo, então abrem com ou sem sessão)
-    if(!area && !todosPerfis) return NextResponse.next();
+    // Login, cadastro, /esqueci-senha, /redefinir-senha, /ajuda e arquivos públicos: livres
+    // (nem entram no matcher abaixo, então abrem com ou sem sessão).
+    // /ajuda decide no próprio layout o que mostrar para quem está ou não logado
+    if(!area) return NextResponse.next();
 
     const token = req.cookies.get("session")?.value
     const perfil = req.cookies.get("perfil")?.value
@@ -35,7 +32,7 @@ export function middleware(req: NextRequest){
     }
 
     // Perfil errado para a área (ex.: aluno em /professor): vai para a área do próprio perfil
-    if(area && AREAS[area] !== perfil){
+    if(AREAS[area] !== perfil){
         return NextResponse.redirect(new URL(`/${perfil}`, req.url))
     }
 
@@ -43,5 +40,5 @@ export function middleware(req: NextRequest){
 }
 
 export const config = {
-    matcher: ["/professor/:path*", "/aluno/:path*", "/tutor/:path*", "/ajuda/:path*"],
+    matcher: ["/professor/:path*", "/aluno/:path*", "/tutor/:path*"],
 }

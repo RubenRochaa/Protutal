@@ -1,18 +1,21 @@
-import { redirect } from 'next/navigation'
 import { Header } from '@/components/header'
 import { AreaComRodape } from '@/components/footer/areaComRodape'
-import { getNomeServer, getPerfilServer } from '@/lib/cookieServer'
+import { getCookieServer, getNomeServer, getPerfilServer } from '@/lib/cookieServer'
 import { getAutenticado } from '@/lib/apiServer'
 import { sessaoExpiradaNaPagina } from '@/lib/sessaoExpirada'
 import { LINK_TUTOR, MENU_ALUNO, MENU_PROFESSOR } from '@/lib/menus'
 
 // Moldura da página de Ajuda. Ela fica fora das áreas /professor e /aluno,
 // então o menu do Header é escolhido aqui pelo cookie "perfil".
-// O middleware já barra quem não está logado; conferimos de novo aqui por segurança.
+// A página é pública: logado = cookies "session" e "perfil" (mesma regra do middleware).
+// Quem não está logado vê a moldura pública: sem Header/menu, só o conteúdo e o rodapé
 export default async function AjudaLayout({ children }: { children: React.ReactNode }){
+    const token = await getCookieServer()
     const perfil = await getPerfilServer()
 
-    if(!perfil) redirect("/")
+    if(!token || !perfil){
+        return <AreaComRodape>{children}</AreaComRodape>
+    }
 
     const nome = await getNomeServer()
 

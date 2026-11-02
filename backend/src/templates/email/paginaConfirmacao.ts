@@ -28,6 +28,12 @@ function paginaConfirmacao(mensagem: string, sucesso: boolean) {
         ? `<a href="${escaparHtml(frontUrl)}/" style="display:inline-block; padding:12px 24px; border-radius:6px; background-color:${COR_VERMELHO}; color:#FFFFFF; font-weight:bold; text-decoration:none;">Ir para o login</a>`
         : "";
 
+    // Link discreto para a Ajuda pública do front (seção "Geral" do FAQ). Mesma regra do botão:
+    // sem FRONT_URL não aparece
+    const linkAjuda = frontUrl
+        ? `<p style="margin:16px 0 0; font-size:14px;"><a href="${escaparHtml(frontUrl)}/ajuda" style="color:${COR_TEXTO_SECUNDARIO};">Precisa de ajuda?</a></p>`
+        : "";
+
     // O reenvio (O4) precisa do e-mail digitado: ele fica no login, que mostra
     // o botão "Reenviar e-mail de confirmação" quando o e-mail ainda não foi confirmado
     const dicaReenvio = sucesso
@@ -52,6 +58,7 @@ function paginaConfirmacao(mensagem: string, sucesso: boolean) {
             <p style="margin:0 0 24px; font-size:16px; line-height:1.5;">${escaparHtml(mensagem)}</p>
             ${botaoLogin}
             ${dicaReenvio}
+            ${linkAjuda}
         </div>
     </main>
 </body>
