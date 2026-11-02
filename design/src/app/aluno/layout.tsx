@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation'
 import { Header } from '@/components/header'
+import { AreaComRodape } from '@/components/footer/areaComRodape'
 import { getNomeServer, getPerfilServer } from '@/lib/cookieServer'
 import { getAutenticado } from '@/lib/apiServer'
 import { sessaoExpiradaNaPagina } from '@/lib/sessaoExpirada'
@@ -24,9 +25,9 @@ export default async function AlunoLayout({ children }: { children: React.ReactN
     const nome = await getNomeServer()
 
     return (
-        <>
+        <AreaComRodape>
             <Header links={ehTutor ? [...MENU_ALUNO, LINK_TUTOR] : MENU_ALUNO} nome={nome} />
             {children}
-        </>
+        </AreaComRodape>
     )
 }

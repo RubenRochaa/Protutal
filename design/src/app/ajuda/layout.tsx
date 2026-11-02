@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation'
 import { Header } from '@/components/header'
+import { AreaComRodape } from '@/components/footer/areaComRodape'
 import { getNomeServer, getPerfilServer } from '@/lib/cookieServer'
 import { getAutenticado } from '@/lib/apiServer'
 import { sessaoExpiradaNaPagina } from '@/lib/sessaoExpirada'
@@ -17,10 +18,10 @@ export default async function AjudaLayout({ children }: { children: React.ReactN
 
     if(perfil === "professor"){
         return (
-            <>
+            <AreaComRodape>
                 <Header links={MENU_PROFESSOR} nome={nome} />
                 {children}
-            </>
+            </AreaComRodape>
         )
     }
 
@@ -33,9 +34,9 @@ export default async function AjudaLayout({ children }: { children: React.ReactN
     const ehTutor = "dados" in tutorias
 
     return (
-        <>
+        <AreaComRodape>
             <Header links={ehTutor ? [...MENU_ALUNO, LINK_TUTOR] : MENU_ALUNO} nome={nome} />
             {children}
-        </>
+        </AreaComRodape>
     )
 }

@@ -1,6 +1,7 @@
 import styles from './pagina.module.scss'
 import { redirect } from 'next/navigation'
 import { Header } from '@/components/header'
+import { AreaComRodape } from '@/components/footer/areaComRodape'
 import { getNomeServer, getPerfilServer } from '@/lib/cookieServer'
 import { getErrorMessage, getErrorStatus } from '@/lib/getErrorMessage'
 import { sessaoExpiradaNaPagina } from '@/lib/sessaoExpirada'
@@ -39,7 +40,7 @@ export default async function TutorLayout({ children }: { children: React.ReactN
     const nome = await getNomeServer()
 
     return (
-        <>
+        <AreaComRodape>
             <Header links={LINKS} nome={nome} />
 
             {"erro" in tutorias ? (
@@ -48,6 +49,6 @@ export default async function TutorLayout({ children }: { children: React.ReactN
                     <ErroCarregamento mensagem={getErrorMessage(tutorias.erro)} status={getErrorStatus(tutorias.erro)} />
                 </main>
             ) : children}
-        </>
+        </AreaComRodape>
     )
 }

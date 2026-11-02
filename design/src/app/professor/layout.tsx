@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation'
 import { Header } from '@/components/header'
+import { AreaComRodape } from '@/components/footer/areaComRodape'
 import { getNomeServer, getPerfilServer } from '@/lib/cookieServer'
 import { MENU_PROFESSOR } from '@/lib/menus'
 
@@ -13,9 +14,9 @@ export default async function ProfessorLayout({ children }: { children: React.Re
     const nome = await getNomeServer()
 
     return (
-        <>
+        <AreaComRodape>
             <Header links={MENU_PROFESSOR} nome={nome} />
             {children}
-        </>
+        </AreaComRodape>
     )
 }
