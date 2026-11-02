@@ -2,7 +2,6 @@ import styles from './styles.module.scss'
 import lista from '@/app/professor/lista.module.scss'
 import Link from 'next/link'
 import { Card } from '@/components/card'
-import { Avatar } from '@/components/avatar'
 import { EmptyState } from '@/components/emptyState'
 import { getAutenticado } from '@/lib/apiServer'
 import { getErrorMessage, getErrorStatus } from '@/lib/getErrorMessage'
@@ -36,7 +35,8 @@ function Indisponivel(){
 }
 
 // Busca a atividade (A2), as respostas e notas (P12) e os rótulos dos tipos (T8) ao mesmo tempo.
-// Layout do print 6: atividade e alunos à esquerda; tutor e prazo à direita.
+// Layout do print 6: atividade e alunos à esquerda; prazo à direita.
+// O card "Tutor que enviou" do print não aparece: aqui o tutor só vê as próprias atividades.
 // "Data de criação" e "Anexo" do print não aparecem: a API não tem esses dados
 export async function DetalheAtividade({ id }: Props){
     const idUrl = encodeURIComponent(id)
@@ -96,13 +96,7 @@ export async function DetalheAtividade({ id }: Props){
             </Card>
 
             <Card className={styles.direita}>
-                <h2 className={styles.rotulo}>Tutor que enviou</h2>
-                <div className={styles.quadro}>
-                    <Avatar nome={atividade.tutor.nome} tamanho="grande" />
-                    <span className={styles.nomeTutor}>{atividade.tutor.nome}</span>
-                </div>
-
-                <h3 className={styles.rotuloMenor}>Prazo de entrega</h3>
+                <h2 className={styles.rotulo}>Prazo de entrega</h2>
                 <div className={styles.quadro}>
                     <span>{formatarDataHora(atividade.data_entrega)}</span>
                     {prazoVencido && <span className={lista.detalhe}>Prazo encerrado</span>}

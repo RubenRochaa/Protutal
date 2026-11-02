@@ -10,6 +10,7 @@ import { EmptyState } from '@/components/emptyState'
 import { getAutenticado } from '@/lib/apiServer'
 import { getErrorMessage, getErrorStatus } from '@/lib/getErrorMessage'
 import { sessaoExpiradaNaPagina } from '@/lib/sessaoExpirada'
+import { getNomeServer } from '@/lib/cookieServer'
 import { formatarData } from '@/lib/formatacao'
 import { MaterialSala } from '@/lib/types'
 import { ErroCarregamento } from '@/app/professor/components/erroCarregamento'
@@ -22,8 +23,9 @@ const TITULO = "Anexar materiais"
 // Coluna direita do print 2 (antiga tela "Materiais"): formulário de envio (T5)
 // e a lista dos materiais de cada sala em que o tutor tem tutorias (A5)
 export async function MateriaisSala(){
-    // T1 sem filtro: todas as salas, com ou sem tutoria ativa
-    const tutorias = await buscarTutorias("")
+    // T1 sem filtro: todas as salas, com ou sem tutoria ativa.
+    // O nome do tutor logado (cookie) separa os materiais dele dos de outros tutores
+    const [tutorias, nomeLogado] = await Promise.all([buscarTutorias(""), getNomeServer()])
 
     if("erro" in tutorias){
         // Fora do try/catch: o redirect do Next funciona lançando um erro
@@ -96,9 +98,13 @@ export async function MateriaisSala(){
                                         >
                                             <span className={lista.nome}>{material.titulo}</span>
                                             {material.descricao && <span className={lista.texto}>{material.descricao}</span>}
-                                            {/* A A5 junta os materiais de outros tutores se o aluno também for tutorado na sala */}
+                                            {/* A A5 junta os materiais de outros tutores se o aluno também for tutorado na sala:
+                                                o nome só aparece nesses. A comparação é pelo nome (a API não devolve o id do
+                                                tutor logado), então um homônimo na sala também ficaria sem o nome */}
                                             <span className={lista.detalhe}>
-                                                Anexado por {material.tutor.nome} em {formatarData(material.data_envio)}
+                                                {material.tutor.nome === nomeLogado
+                                                    ? `Anexado em ${formatarData(material.data_envio)}`
+                                                    : `Anexado por ${material.tutor.nome} em ${formatarData(material.data_envio)}`}
                                             </span>
                                         </ListItem>
                                     </li>
