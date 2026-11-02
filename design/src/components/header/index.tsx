@@ -62,8 +62,8 @@ export function Header({ links, nome }: Props){
                     <Image
                     src="/img/logo.png"
                     alt="Protutal"
-                    width={890}
-                    height={280}
+                    width={424}
+                    height={62}
                     priority
                     className={styles.logoImagem}
                     />

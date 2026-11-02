@@ -24,9 +24,10 @@
     align-items: center;
 }
 
+// A imagem é só o texto, sem margem em volta (424 x 62)
 .logoImagem{
     width: auto;
-    height: 44px;
+    height: 22px;
 }
 
 .nav{
@@ -128,7 +129,7 @@
     }
 
     .logoImagem{
-        height: 34px;
+        height: 18px;
     }
 
     .usuario{
@@ -170,7 +171,7 @@
 
 @media (max-width: 375px){
     .logoImagem{
-        height: 28px;
+        height: 15px;
     }
 
     .sair{
