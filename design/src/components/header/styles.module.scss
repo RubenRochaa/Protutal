@@ -108,6 +108,12 @@
     }
 }
 
+// Selo do tipo de conta (componente Etiqueta): não encolhe nem quebra linha
+.selo{
+    display: flex;
+    flex-shrink: 0;
+}
+
 // Página aberta é a do ícone: fica vermelho, como o link ativo do menu
 .atalhoAtivo{
     color: var(--red-700);
@@ -203,5 +209,16 @@
 
     .sair{
         padding: 6px 14px;
+    }
+
+    .acoes{
+        gap: 8px;
+    }
+
+    // Selo menor para não empurrar o "Sair" para fora da tela
+    // (".selo > span" tem prioridade sobre a classe da Etiqueta)
+    .selo > span{
+        padding: 2px 8px;
+        font-size: 0.7rem;
     }
 }

@@ -9,14 +9,13 @@ import { ErroCarregamento } from '../professor/components/erroCarregamento'
 import { buscarTutorias } from './buscas'
 
 // Menu do tutor (estrutura dos prints), sem "Início": a logo leva para lá.
-// "Área do aluno" volta para as telas de tutorado
+// A volta para as telas de tutorado é o ícone de troca ao lado do selo "Tutor"
 const LINKS = [
     { label: "Atividades", href: "/tutor/atividades" },
     { label: "Tutoria", href: "/tutor/tutoria" },
     { label: "Contestações", href: "/tutor/contestacoes" },
     { label: "Feedbacks", href: "/tutor/feedbacks" },
     { label: "Desempenho", href: "/tutor/desempenho" },
-    { label: "Área do aluno", href: "/aluno" },
 ]
 
 // Moldura de todas as telas do tutor. Tutor não é perfil de login: ele entra como aluno,
@@ -41,7 +40,7 @@ export default async function TutorLayout({ children }: { children: React.ReactN
 
     return (
         <AreaComRodape>
-            <Header links={LINKS} inicio="/tutor" nome={nome} />
+            <Header links={LINKS} inicio="/tutor" nome={nome} perfil={{ rotulo: "Tutor", trocarPara: "/aluno" }} />
 
             {"erro" in tutorias ? (
                 // API fora ou erro 500: não dá para saber se é tutor, então a página não abre

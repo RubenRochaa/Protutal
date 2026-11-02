@@ -3,7 +3,7 @@ import { AreaComRodape } from '@/components/footer/areaComRodape'
 import { getCookieServer, getNomeServer, getPerfilServer } from '@/lib/cookieServer'
 import { getAutenticado } from '@/lib/apiServer'
 import { sessaoExpiradaNaPagina } from '@/lib/sessaoExpirada'
-import { LINK_TUTOR, MENU_ALUNO, MENU_PROFESSOR } from '@/lib/menus'
+import { MENU_ALUNO, MENU_PROFESSOR } from '@/lib/menus'
 
 // Moldura da página de Ajuda. Ela fica fora das áreas /professor e /aluno,
 // então o menu do Header é escolhido aqui pelo cookie "perfil".
@@ -22,13 +22,13 @@ export default async function AjudaLayout({ children }: { children: React.ReactN
     if(perfil === "professor"){
         return (
             <AreaComRodape>
-                <Header links={MENU_PROFESSOR} inicio="/professor" nome={nome} />
+                <Header links={MENU_PROFESSOR} inicio="/professor" nome={nome} perfil={{ rotulo: "Professor" }} />
                 {children}
             </AreaComRodape>
         )
     }
 
-    // Mesma regra do layout do aluno: "Área do tutor" só aparece se a rota T1 responder 200
+    // Mesma regra do layout do aluno: o ícone de troca para /tutor só aparece se a rota T1 responder 200
     const tutorias = await getAutenticado("/tutores/me/tutorias")
 
     // Fora do try/catch: o redirect do Next funciona lançando um erro
@@ -38,7 +38,12 @@ export default async function AjudaLayout({ children }: { children: React.ReactN
 
     return (
         <AreaComRodape>
-            <Header links={ehTutor ? [...MENU_ALUNO, LINK_TUTOR] : MENU_ALUNO} inicio="/aluno" nome={nome} />
+            <Header
+            links={MENU_ALUNO}
+            inicio="/aluno"
+            nome={nome}
+            perfil={{ rotulo: "Aluno", trocarPara: ehTutor ? "/tutor" : undefined }}
+            />
             {children}
         </AreaComRodape>
     )

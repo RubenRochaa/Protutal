@@ -7,9 +7,10 @@ import { useState } from 'react'
 import { usePathname } from 'next/navigation'
 import { useFormStatus } from 'react-dom'
 import { Loader } from '../loader'
-import { Bell, CircleUserRound, Menu, X } from 'lucide-react'
+import { ArrowLeftRight, Bell, CircleUserRound, Menu, X } from 'lucide-react'
 import { iniciais } from '@/lib/formatacao'
 import { Avatar } from '../avatar'
+import { Etiqueta } from '../etiqueta'
 import { handleLogout } from './actions'
 
 interface LinkMenu {
@@ -27,6 +28,12 @@ interface Props {
     inicio: string;
     // Nome do usuário logado, para o avatar com as iniciais. Sem nome, fica o ícone
     nome?: string | null;
+    // Tipo de conta mostrado no selo ao lado do avatar. Quem decide é o layout (servidor).
+    // trocarPara: só para quem é tutor, destino do ícone de troca ("/tutor" ou "/aluno")
+    perfil?: {
+        rotulo: "Professor" | "Aluno" | "Tutor";
+        trocarPara?: string;
+    };
 }
 
 // Ícones dos itens que aparecem sem texto, ao lado do avatar
@@ -59,10 +66,11 @@ function BotaoSair(){
 
 // Cabeçalho das áreas logadas: logo, menu (recebido por props), ícone do usuário e "Sair".
 // No celular e tablet os links ficam escondidos atrás do botão de menu.
-export function Header({ links, inicio, nome }: Props){
+export function Header({ links, inicio, nome, perfil }: Props){
     const pathname = usePathname();
     const [menuAberto, setMenuAberto] = useState(false);
     const ativo = hrefAtivo(links, pathname);
+    const tituloTroca = perfil?.trocarPara === "/tutor" ? "Ir para a área do tutor" : "Ir para a área do aluno";
 
     // Itens com ícone (ex.: Notificações) ficam ao lado do avatar, fora do menu de texto
     const menu = links.filter((link) => !link.icone);
@@ -122,6 +130,25 @@ export function Header({ links, inicio, nome }: Props){
                             </Link>
                         )
                     })}
+
+                    {/* Selo do tipo de conta: só informa, não é clicável */}
+                    {perfil && (
+                        <span className={styles.selo}>
+                            <Etiqueta>{perfil.rotulo}</Etiqueta>
+                        </span>
+                    )}
+
+                    {/* Só para tutor: alterna entre a área do aluno e a do tutor (mesmo estilo do sino) */}
+                    {perfil?.trocarPara && (
+                        <Link
+                        href={perfil.trocarPara}
+                        className={styles.atalho}
+                        aria-label={tituloTroca}
+                        title={tituloTroca}
+                        >
+                            <ArrowLeftRight aria-hidden="true" />
+                        </Link>
+                    )}
 
                     {/* A API não tem foto de usuário: avatar com as iniciais do nome (ou o ícone, sem nome) */}
                     {nome && iniciais(nome) ? (
