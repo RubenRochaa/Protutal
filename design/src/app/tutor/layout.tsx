@@ -8,9 +8,9 @@ import { sessaoExpiradaNaPagina } from '@/lib/sessaoExpirada'
 import { ErroCarregamento } from '../professor/components/erroCarregamento'
 import { buscarTutorias } from './buscas'
 
-// Menu do tutor (estrutura dos prints). "Área do aluno" volta para as telas de tutorado
+// Menu do tutor (estrutura dos prints), sem "Início": a logo leva para lá.
+// "Área do aluno" volta para as telas de tutorado
 const LINKS = [
-    { label: "Início", href: "/tutor" },
     { label: "Atividades", href: "/tutor/atividades" },
     { label: "Tutoria", href: "/tutor/tutoria" },
     { label: "Contestações", href: "/tutor/contestacoes" },
@@ -41,7 +41,7 @@ export default async function TutorLayout({ children }: { children: React.ReactN
 
     return (
         <AreaComRodape>
-            <Header links={LINKS} nome={nome} />
+            <Header links={LINKS} inicio="/tutor" nome={nome} />
 
             {"erro" in tutorias ? (
                 // API fora ou erro 500: não dá para saber se é tutor, então a página não abre

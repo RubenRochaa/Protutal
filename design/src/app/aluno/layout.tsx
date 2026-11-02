@@ -26,7 +26,7 @@ export default async function AlunoLayout({ children }: { children: React.ReactN
 
     return (
         <AreaComRodape>
-            <Header links={ehTutor ? [...MENU_ALUNO, LINK_TUTOR] : MENU_ALUNO} nome={nome} />
+            <Header links={ehTutor ? [...MENU_ALUNO, LINK_TUTOR] : MENU_ALUNO} inicio="/aluno" nome={nome} />
             {children}
         </AreaComRodape>
     )

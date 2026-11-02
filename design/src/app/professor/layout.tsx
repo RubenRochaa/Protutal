@@ -15,7 +15,7 @@ export default async function ProfessorLayout({ children }: { children: React.Re
 
     return (
         <AreaComRodape>
-            <Header links={MENU_PROFESSOR} nome={nome} />
+            <Header links={MENU_PROFESSOR} inicio="/professor" nome={nome} />
             {children}
         </AreaComRodape>
     )

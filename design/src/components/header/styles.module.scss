@@ -90,6 +90,29 @@
     stroke-width: 1.5;
 }
 
+// Ícone ao lado do avatar (ex.: Notificações), no mesmo traço do ícone do usuário
+.atalho{
+    display: flex;
+    align-items: center;
+    color: var(--gray-700);
+    transition: color 0.2s;
+
+    svg{
+        width: 30px;
+        height: 30px;
+        stroke-width: 1.5;
+    }
+
+    &:hover{
+        color: var(--red-700);
+    }
+}
+
+// Página aberta é a do ícone: fica vermelho, como o link ativo do menu
+.atalhoAtivo{
+    color: var(--red-700);
+}
+
 .sair{
     display: inline-flex;
     align-items: center;
@@ -137,6 +160,11 @@
         height: 36px;
     }
 
+    .atalho svg{
+        width: 24px;
+        height: 24px;
+    }
+
     .acoes{
         gap: 10px;
     }
@@ -166,8 +194,7 @@
     .link, .linkAtivo, .linkEmBreve{
         padding: 14px 16px;
         border-top: 1px solid var(--gray-300);
-    }
-}
+    }}
 
 @media (max-width: 375px){
     .logoImagem{

@@ -19,7 +19,7 @@ export default async function AjudaLayout({ children }: { children: React.ReactN
     if(perfil === "professor"){
         return (
             <AreaComRodape>
-                <Header links={MENU_PROFESSOR} nome={nome} />
+                <Header links={MENU_PROFESSOR} inicio="/professor" nome={nome} />
                 {children}
             </AreaComRodape>
         )
@@ -35,7 +35,7 @@ export default async function AjudaLayout({ children }: { children: React.ReactN
 
     return (
         <AreaComRodape>
-            <Header links={ehTutor ? [...MENU_ALUNO, LINK_TUTOR] : MENU_ALUNO} nome={nome} />
+            <Header links={ehTutor ? [...MENU_ALUNO, LINK_TUTOR] : MENU_ALUNO} inicio="/aluno" nome={nome} />
             {children}
         </AreaComRodape>
     )
