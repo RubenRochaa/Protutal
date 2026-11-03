@@ -108,6 +108,25 @@
     }
 }
 
+// Selo do tipo de conta (componente Etiqueta): não encolhe nem quebra linha.
+// Altura, largura mínima e fonte fixas para "Professor", "Aluno" e "Tutor" ficarem do mesmo tamanho
+// (".selo > span" tem prioridade sobre a classe da Etiqueta)
+.selo{
+    display: flex;
+    flex-shrink: 0;
+}
+
+.selo > span{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: var(--altura-selo);
+    min-width: var(--largura-selo);
+    padding: 0 10px;
+    font-size: var(--fonte-selo);
+    line-height: 1;
+}
+
 // Página aberta é a do ícone: fica vermelho, como o link ativo do menu
 .atalhoAtivo{
     color: var(--red-700);
@@ -203,5 +222,16 @@
 
     .sair{
         padding: 6px 14px;
+    }
+
+    .acoes{
+        gap: 8px;
+    }
+
+    // Selo menor para não empurrar o "Sair" para fora da tela (igual nas três áreas)
+    .selo > span{
+        min-width: var(--largura-selo-sm);
+        padding: 0 8px;
+        font-size: var(--fonte-selo-sm);
     }
 }

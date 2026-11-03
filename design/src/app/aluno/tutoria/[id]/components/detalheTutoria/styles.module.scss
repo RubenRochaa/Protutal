@@ -48,16 +48,12 @@
     gap: 32px;
 }
 
-// Pílula branca com o tutor e o botão do chat
+// Tutor e o botão do chat, direto no card
 .tutor{
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     gap: 16px 20px;
-    padding: 16px 20px;
-    border-radius: var(--radius-card);
-    background-color: var(--white);
-    box-shadow: var(--shadow-card);
 }
 
 .nome{
@@ -101,10 +97,6 @@
 
     .dado{
         font-size: 1.05rem;
-    }
-
-    .tutor{
-        padding: 14px 12px;
     }
 
     .botao{

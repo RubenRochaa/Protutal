@@ -7,7 +7,7 @@ interface Props {
     size?: "medio" | "grande";
 }
 
-// Indicador de carregamento no mesmo quadro branco do EmptyState.
+// Indicador de carregamento no mesmo formato do EmptyState (sem caixa própria).
 // Pode ser usado direto no loading.tsx da rota: export default function LoadingPage(){ return <Loading /> }
 export function Loading({ mensagem = "Carregando...", size = "medio" }: Props){
     return (

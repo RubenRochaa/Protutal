@@ -26,10 +26,28 @@
 
   --border-input: #CFCFCF;
   --shadow-card: 0 8px 24px rgba(0, 0, 0, 0.15);
+  --shadow-card-leve: 0 1px 3px rgba(0, 0, 0, 0.08); // componente Card
 
   --radius-card: 16px;
+  --radius-card-sm: 12px; // componente Card
+  --radius-item: 8px;     // itens de lista com borda dentro dos cards
   --radius-input: 6px;
   --radius-pill: 999px;
+
+  --fonte-titulo-card: 1.05rem; // título do Card
+  --fonte-destaque: 1.25rem;    // texto em destaque dentro do card (ex.: nome do tutor)
+  --fonte-acao-card: 0.9rem;    // link no cabeçalho do Card (ex.: "Ver todas")
+  --fonte-rotulo: 0.85rem;      // rótulo pequeno acima de um dado (ex.: "Tutor:")
+  --fonte-indicador: 2rem;      // número grande dos indicadores (Visão geral da sala)
+  --fonte-subaba: 0.9rem;       // pílulas das sub-abas da sala
+  --fonte-aba-sm: 0.8rem;       // abas principais da sala no celular (375 px)
+
+  // Selo do tipo de conta no Header: igual em todas as áreas
+  --fonte-selo: 0.75rem;
+  --altura-selo: 22px;
+  --largura-selo: 72px;
+  --fonte-selo-sm: 0.7rem; // celular (375 px)
+  --largura-selo-sm: 60px;
 }
 
 button {

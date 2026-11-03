@@ -11,10 +11,10 @@ import { formatarNota } from '@/lib/formatacao'
 import { Contestacao } from '@/lib/types'
 import { ToastErro } from '@/app/aluno/components/toastErro'
 
-const TITULO = "Avaliações com justificativa"
+const TITULO = "Contestações pendentes"
 const LIMITE = 5
 
-// Card "Avaliações com justificativa": contestações de nota pendentes (rota P16)
+// Card "Contestações pendentes": contestações de nota pendentes (rota P16)
 export async function CardContestacoes(){
     const resultado = await getAutenticado<Contestacao[]>("/contestacoes", { status: "pendente" })
 
@@ -26,7 +26,7 @@ export async function CardContestacoes(){
     }
 
     return (
-        <Card titulo={TITULO}>
+        <Card titulo={TITULO} acao={<Link href="/tutor/contestacoes" className={pagina.verTodas}>Ver todas</Link>}>
             {resultado.dados.length === 0 ? (
                 <EmptyState mensagem="Nenhuma contestação pendente." imagem={null} />
             ) : (
@@ -43,8 +43,6 @@ export async function CardContestacoes(){
                     ))}
                 </ul>
             )}
-
-            <Link href="/tutor/contestacoes" className={pagina.verTodas}>Ver todas</Link>
         </Card>
     )
 }

@@ -10,7 +10,7 @@
     gap: 20px;
 }
 
-// Pílula branca com o número grande em vermelho
+// Bloco em cinza-claro com o número grande em vermelho
 .numero{
     display: flex;
     flex-direction: column-reverse;
@@ -18,9 +18,8 @@
     justify-content: center;
     gap: 4px;
     padding: 16px 12px;
-    border-radius: var(--radius-card);
-    background-color: var(--white);
-    box-shadow: var(--shadow-card);
+    border-radius: var(--radius-item);
+    background-color: var(--gray-100);
     text-align: center;
 }
 

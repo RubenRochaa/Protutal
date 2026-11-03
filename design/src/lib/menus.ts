@@ -27,6 +27,3 @@ export const MENU_ALUNO: LinkMenu[] = [
     { label: "Meu desempenho", href: "/aluno/desempenho" },
     { label: "Tutoria", href: "/aluno/tutoria" },
 ]
-
-// Aparece no menu do aluno só para quem é tutor (rota T1 respondeu 200)
-export const LINK_TUTOR: LinkMenu = { label: "Área do tutor", href: "/tutor" }

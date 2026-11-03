@@ -27,13 +27,15 @@ export async function CardTutoria(){
 
     return (
         <Card titulo={TITULO}>
-            {resultado.dados.map((tutoria) => (
-                <div key={tutoria.id_tutoria} className={styles.quadro}>
-                    <p className={styles.rotulo}>Tutor:</p>
-                    <p className={styles.nome}>{tutoria.tutor.nome}</p>
-                    <p className={styles.sala}>Sala {tutoria.sala.nome}</p>
-                </div>
-            ))}
+            <div className={styles.lista}>
+                {resultado.dados.map((tutoria) => (
+                    <div key={tutoria.id_tutoria} className={styles.tutoria}>
+                        <p className={styles.rotulo}>Tutor:</p>
+                        <p className={styles.nome}>{tutoria.tutor.nome}</p>
+                        <p className={styles.sala}>Sala {tutoria.sala.nome}</p>
+                    </div>
+                ))}
+            </div>
         </Card>
     )
 }

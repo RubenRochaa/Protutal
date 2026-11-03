@@ -1,12 +1,8 @@
-// Quadro branco do print, com os campos empilhados
+// Campos empilhados, direto no card
 .form{
     display: flex;
     flex-direction: column;
     gap: 14px;
-    padding: 20px;
-    border-radius: var(--radius-card);
-    background-color: var(--white);
-    box-shadow: var(--shadow-card);
 }
 
 .enviar{
@@ -15,10 +11,6 @@
 }
 
 @media (max-width: 375px){
-    .form{
-        padding: 14px;
-    }
-
     .enviar{
         width: 100%;
     }
