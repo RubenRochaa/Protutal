@@ -6,8 +6,8 @@ import { PageBanner } from '@/components/pageBanner'
 import { ListaTutorias, TITULO_TUTORIAS } from './components/listaTutorias'
 import { QueroSerTutor, TITULO_QUERO_SER_TUTOR } from './components/queroSerTutor'
 
-// Tela "Minhas tutorias" do aluno (rota A3) e, no fim, a seção "Quero ser tutor"
-// (GET /alunos/me/salas e A13).
+// Tela de tutoria do aluno: primeiro a seção "Quero ser tutor" (GET /alunos/me/salas e A13)
+// e, abaixo, "Minhas tutorias" (rota A3).
 // Cada bloco busca a própria rota dentro do seu Suspense
 export default function TutoriaAlunoPage(){
     return (
@@ -15,12 +15,12 @@ export default function TutoriaAlunoPage(){
             <PageBanner titulo="Tutoria" />
 
             <div className={styles.conteudo}>
-                <Suspense fallback={<Card titulo={TITULO_TUTORIAS} sublinhado><Loading /></Card>}>
-                    <ListaTutorias />
-                </Suspense>
-
                 <Suspense fallback={<Card titulo={TITULO_QUERO_SER_TUTOR} sublinhado><Loading /></Card>}>
                     <QueroSerTutor />
+                </Suspense>
+
+                <Suspense fallback={<Card titulo={TITULO_TUTORIAS} sublinhado><Loading /></Card>}>
+                    <ListaTutorias />
                 </Suspense>
             </div>
         </main>

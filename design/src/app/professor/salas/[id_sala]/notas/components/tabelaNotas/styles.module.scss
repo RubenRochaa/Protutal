@@ -1,9 +1,9 @@
-// Quadro branco arredondado; a rolagem lateral fica só aqui dentro
+// Moldura com borda fina; a rolagem lateral fica só aqui dentro
 .quadro{
     overflow-x: auto;
-    border-radius: var(--radius-card);
+    border: 1px solid var(--gray-300);
+    border-radius: var(--radius-item);
     background-color: var(--white);
-    box-shadow: var(--shadow-card);
 }
 
 .tabela{

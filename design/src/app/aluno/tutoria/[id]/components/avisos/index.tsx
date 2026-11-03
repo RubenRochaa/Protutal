@@ -7,6 +7,7 @@ import { sessaoExpiradaNaPagina } from '@/lib/sessaoExpirada'
 import { formatarDataHora } from '@/lib/formatacao'
 import { AvisoSala } from '@/lib/types'
 import { ToastErro } from '../../../../components/toastErro'
+import { MASCOTES } from '@/lib/mascotes'
 
 export const TITULO_AVISOS = "Avisos da sala"
 
@@ -25,7 +26,7 @@ export async function Avisos({ idSala }: Props){
 
         // 403: o aluno não está matriculado na sala. Estado da tela, sem toast
         if(getErrorStatus(resultado.erro) === 403){
-            return <Card titulo={TITULO_AVISOS} sublinhado><EmptyState mensagem="Você não tem acesso aos avisos desta sala." /></Card>
+            return <Card titulo={TITULO_AVISOS} sublinhado><EmptyState mensagem="Você não tem acesso aos avisos desta sala." imagem={MASCOTES.badRequest} /></Card>
         }
 
         return <Card titulo={TITULO_AVISOS} sublinhado><ToastErro mensagem={getErrorMessage(resultado.erro)} /></Card>

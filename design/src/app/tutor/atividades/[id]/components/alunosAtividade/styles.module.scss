@@ -1,0 +1,103 @@
+// Quadro cinza "Alunos que enviaram" do print 6
+.bloco{
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px;
+    border-radius: var(--radius-card);
+    background-color: var(--gray-100);
+}
+
+.titulo{
+    color: var(--red-700);
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+// O item inteiro é um botão que abre o modal
+.item{
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: none;
+    border-radius: var(--radius-card);
+    background: none;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition: transform 0.15s;
+
+    &:hover{
+        transform: translateY(-2px);
+    }
+}
+
+.modal{
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.aluno{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+}
+
+.dados{
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    dt{
+        color: var(--gray-700);
+        font-size: 0.85rem;
+    }
+
+    dd{
+        font-weight: 500;
+        overflow-wrap: anywhere;
+    }
+}
+
+.download{
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--red-700);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.nota{
+    font-size: 1.6rem;
+    font-weight: 600;
+}
+
+.form{
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 16px;
+    border: none;
+    border-radius: var(--radius-card);
+    background-color: var(--gray-100);
+}
+
+.legenda{
+    float: left;
+    color: var(--red-700);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.aguardando{
+    color: var(--red-700);
+    font-weight: 500;
+}

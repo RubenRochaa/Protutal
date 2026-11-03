@@ -1,0 +1,46 @@
+// Duas colunas como no print 6; uma no tablet e no celular
+.grade{
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 32px;
+    align-items: start;
+}
+
+.esquerda,
+.direita{
+    gap: 16px;
+}
+
+.titulo{
+    font-size: 1.3rem;
+    font-weight: 400;
+    overflow-wrap: anywhere;
+}
+
+// Rótulos vermelhos e sublinhados, como no print
+.rotulo{
+    color: var(--red-700);
+    font-size: 1.3rem;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+// Bloco em cinza-claro com o prazo ("Prazo: 20/9/2026")
+.quadro{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px 20px;
+    padding: 16px 20px;
+    border-radius: var(--radius-item);
+    background-color: var(--gray-100);
+    font-size: 1.1rem;
+}
+
+@media (max-width: 768px){
+    .grade{
+        grid-template-columns: minmax(0, 1fr);
+        gap: 24px;
+    }
+}

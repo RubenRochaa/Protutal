@@ -8,7 +8,7 @@
 // Mesmo efeito do item da tela "Minhas atividades"; o foco vem do :focus-visible do globals
 .item{
     display: block;
-    border-radius: var(--radius-card);
+    border-radius: var(--radius-item);
     transition: transform 0.15s;
 
     &:hover{
@@ -18,7 +18,7 @@
 }
 
 .verTodas{
-    align-self: flex-end;
+    font-size: var(--fonte-acao-card);
     color: var(--red-700);
     font-weight: 600;
     text-decoration: underline;

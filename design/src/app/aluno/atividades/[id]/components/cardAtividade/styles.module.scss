@@ -5,13 +5,12 @@
     overflow-wrap: anywhere;
 }
 
-// Pílula branca, como os itens do Figma
+// Bloco em cinza-claro para separar a descrição do resto do card
 .descricao{
     margin-top: 8px;
     padding: 16px 20px;
-    border-radius: var(--radius-card);
-    background-color: var(--white);
-    box-shadow: var(--shadow-card);
+    border-radius: var(--radius-item);
+    background-color: var(--gray-100);
     line-height: 1.5;
     // Mantém as quebras de linha que o tutor digitou
     white-space: pre-line;

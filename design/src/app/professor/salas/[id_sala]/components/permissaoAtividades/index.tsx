@@ -3,6 +3,7 @@
 import styles from './styles.module.scss'
 import { TutorSala } from '@/lib/types'
 import { useAcao } from '@/lib/useAcao'
+import { Loader } from '@/components/loader'
 import { handlePermissaoAtividades } from '@/app/professor/actions'
 
 interface Props {
@@ -47,6 +48,7 @@ export function PermissaoAtividades({ idSala, tutores }: Props){
             </button>
 
             <span id="permissao-explicacao" className={styles.explicacao}>
+                {pendente && <Loader size="pequeno" decorativo />}
                 {pendente ? "Salvando..." : explicacao}
             </span>
         </div>

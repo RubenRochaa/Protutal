@@ -92,7 +92,7 @@ export function ModalAviso({ aberto, onFechar, idSala, salas }: Props){
 
                 <div className={lista.formAcoes}>
                     <Botao variante="secundario" onClick={fechar} disabled={pendente}>Cancelar</Botao>
-                    <Botao type="submit" disabled={pendente}>{pendente ? "Enviando..." : "Enviar"}</Botao>
+                    <Botao type="submit" carregando={pendente}>{pendente ? "Enviando..." : "Enviar"}</Botao>
                 </div>
             </form>
         </Modal>

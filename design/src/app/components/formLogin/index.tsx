@@ -73,10 +73,10 @@ export function FormLogin({ cadastroConcluido = false, sessaoExpirada = false }:
             required
             />
 
-            {/* Ainda não existe rota de recuperação de senha na API */}
-            <button type="button" className={styles.esqueceu} disabled title="Em breve">
-                Esqueceu sua senha? <span className={styles.emBreve}>Em breve</span>
-            </button>
+            {/* Leva para outra tela (pedido do link de redefinição, rota O5), por isso é Link */}
+            <Link href="/esqueci-senha" className={styles.esqueceu}>
+                Esqueceu sua senha?
+            </Link>
 
             {/* Login recusado (403) por e-mail não confirmado, ou cadastro recém-feito */}
             {estado.emailNaoConfirmado ? (

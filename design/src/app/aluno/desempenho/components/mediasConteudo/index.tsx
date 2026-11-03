@@ -7,6 +7,7 @@ import { ConteudosDominados } from '@/lib/types'
 import { buscarConteudosDominados, buscarDesempenho } from '../../../buscas'
 import { ToastErro } from '../../../components/toastErro'
 import { SeloStatus } from '../../../components/seloStatus'
+import { MASCOTES } from '@/lib/mascotes'
 
 export const TITULO_CONTEUDO = "Média por conteúdo"
 
@@ -44,7 +45,7 @@ export async function MediasConteudo({ etapa }: Props){
     const conteudos = "dados" in resultadoConteudos ? resultadoConteudos.dados : null
 
     return (
-        <Card titulo={TITULO_CONTEUDO} sublinhado>
+        <Card titulo={TITULO_CONTEUDO} sublinhado imagem={MASCOTES.desempenho}>
             {/* A A7 não filtra por etapa: com filtro, a média é da etapa e o selo é geral */}
             {etapa && conteudos && (
                 <p className={styles.aviso}>A classificação Dominado/Com dificuldade considera todas as etapas.</p>

@@ -5,16 +5,16 @@
     list-style: none;
 }
 
-// Mesma pílula do ListItem, com a nota e o botão à direita (como no print)
+// Mesma linha com borda do ListItem, com a nota e o botão à direita (como no print)
 .item{
     display: flex;
     align-items: center;
     gap: 12px;
     min-height: 60px;
     padding: 12px 20px 12px 16px;
-    border-radius: var(--radius-card);
+    border: 1px solid var(--gray-300);
+    border-radius: var(--radius-item);
     background-color: var(--white);
-    box-shadow: var(--shadow-card);
 }
 
 .bolinha{

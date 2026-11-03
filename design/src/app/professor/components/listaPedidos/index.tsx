@@ -69,7 +69,7 @@ export function ListaPedidos({ pedidos, mostrarSala = false, mensagemVazia }: Pr
                         Recusar
                     </Botao>
                     <Botao
-                    disabled={pendente}
+                    carregando={pendente}
                     onClick={() => executar(() => handleAceitarPedido(aberto.id_pedido, aberto.sala_pedido.id_sala), fechar)}
                     >
                         {pendente ? "Enviando..." : "Aceitar"}

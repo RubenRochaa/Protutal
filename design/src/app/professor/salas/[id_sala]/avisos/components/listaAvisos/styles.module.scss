@@ -11,6 +11,12 @@
     text-align: center;
 }
 
+// O formulário de envio fica do tamanho do conteúdo, sem esticar até a altura da lista
+// (".grade > .cartaoEnviar" vence o height: 100% do Card)
+.grade > .cartaoEnviar{
+    height: auto;
+}
+
 // Tablet e celular: o cartão de envio sobe para cima da lista
 @media (max-width: 768px){
     .grade{

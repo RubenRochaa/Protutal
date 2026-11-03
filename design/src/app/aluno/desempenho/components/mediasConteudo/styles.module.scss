@@ -4,14 +4,11 @@
     text-align: center;
 }
 
+// Lista direto no card (sem caixa própria)
 .lista{
     display: flex;
     flex-direction: column;
     gap: 12px;
-    padding: 16px 20px;
-    border-radius: var(--radius-card);
-    background-color: var(--white);
-    box-shadow: var(--shadow-card);
     list-style: none;
 }
 
@@ -54,10 +51,4 @@
 
 .barraBaixa{
     background-color: var(--red-700);
-}
-
-@media (max-width: 375px){
-    .lista{
-        padding: 14px 12px;
-    }
 }
