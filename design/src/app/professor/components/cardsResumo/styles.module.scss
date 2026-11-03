@@ -8,7 +8,7 @@
 // O cartão inteiro é clicável e sobe um pouco no hover
 .link{
     display: block;
-    border-radius: var(--radius-card);
+    border-radius: var(--radius-card-sm);
     transition: transform 0.2s;
 
     &:hover{
@@ -25,7 +25,7 @@
     min-height: 160px;
 }
 
-// Pílula branca com o texto do atalho, no lugar do antigo "Em breve"
+// Faixa cinza-claro com o texto do atalho, no lugar do antigo "Em breve"
 .corpo{
     flex: 1;
     display: flex;
@@ -33,8 +33,8 @@
     justify-content: space-between;
     gap: 8px;
     padding: 10px 14px;
-    border-radius: var(--radius-card);
-    background-color: var(--white);
+    border-radius: var(--radius-item);
+    background-color: var(--gray-100);
 }
 
 .texto{

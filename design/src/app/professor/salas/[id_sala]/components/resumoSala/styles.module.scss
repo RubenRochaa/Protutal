@@ -11,10 +11,11 @@
     gap: 12px;
 }
 
+// Cada dado em um bloco cinza-claro dentro do card
 .dado{
     padding: 12px 16px;
-    border-radius: var(--radius-card);
-    background-color: var(--white);
+    border-radius: var(--radius-item);
+    background-color: var(--gray-100);
 
     dt{
         color: var(--gray-700);

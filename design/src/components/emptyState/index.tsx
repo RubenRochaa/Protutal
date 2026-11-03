@@ -11,7 +11,7 @@ interface Props {
     imagem?: ImagemMascote | null;
 }
 
-// Lista vazia: quadro branco com o mascote e o texto centralizado (print "Anos Passados").
+// Lista vazia: mascote e texto centralizado, sem caixa própria (print "Anos Passados").
 // Na tela, use dentro de um Card: <Card><EmptyState mensagem="..." /></Card>
 export function EmptyState({ mensagem, acao, imagem = MASCOTES.areasVazias }: Props){
     return (

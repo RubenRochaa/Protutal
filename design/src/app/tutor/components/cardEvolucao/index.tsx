@@ -7,9 +7,9 @@ import { sessaoExpiradaNaPagina } from '@/lib/sessaoExpirada'
 import { ToastErro } from '@/app/aluno/components/toastErro'
 import { buscarDesempenho } from '../../buscas'
 
-const TITULO = "Minhas notas e evolução"
+const TITULO = "Feedbacks recebidos"
 
-// Card "Minhas notas e evolução": média dos feedbacks dos alunos por etapa (rota T6).
+// Card "Feedbacks recebidos": média dos feedbacks dos alunos por etapa (rota T6).
 // A T6 traz um item por vínculo, com os ativos primeiro: usamos o primeiro não revogado
 export async function CardEvolucao(){
     const resultado = await buscarDesempenho()

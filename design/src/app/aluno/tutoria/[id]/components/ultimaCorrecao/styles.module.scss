@@ -1,12 +1,8 @@
-// Quadro branco do print, com o tutor em cima e a correção embaixo
+// Direto no card (sem caixa própria): o tutor em cima e a correção embaixo
 .quadro{
     display: flex;
     flex-direction: column;
     gap: 10px;
-    padding: 16px 20px;
-    border-radius: var(--radius-card);
-    background-color: var(--white);
-    box-shadow: var(--shadow-card);
     overflow-wrap: anywhere;
 }
 
@@ -58,10 +54,6 @@
 }
 
 @media (max-width: 375px){
-    .quadro{
-        padding: 14px 12px;
-    }
-
     .comentario{
         font-size: 1rem;
     }

@@ -5,16 +5,16 @@
     list-style: none;
 }
 
-// Pílula branca do Figma, inteira clicável
+// Linha com borda fina, inteira clicável
 .item{
     display: flex;
     flex-direction: column;
     gap: 10px;
     height: 100%;
     padding: 16px 20px;
-    border-radius: var(--radius-card);
+    border: 1px solid var(--gray-300);
+    border-radius: var(--radius-item);
     background-color: var(--white);
-    box-shadow: var(--shadow-card);
     transition: transform 0.2s;
 
     &:hover{

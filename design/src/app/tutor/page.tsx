@@ -23,11 +23,11 @@ export default function TutorPage(){
                     <CardPendentes />
                 </Suspense>
 
-                <Suspense fallback={<Card titulo="Minhas notas e evolução"><Loading /></Card>}>
+                <Suspense fallback={<Card titulo="Feedbacks recebidos"><Loading /></Card>}>
                     <CardEvolucao />
                 </Suspense>
 
-                <Suspense fallback={<Card titulo="Avaliações com justificativa"><Loading /></Card>}>
+                <Suspense fallback={<Card titulo="Contestações pendentes"><Loading /></Card>}>
                     <CardContestacoes />
                 </Suspense>
             </div>
