@@ -1,0 +1,28 @@
+// Desktop: atividade à esquerda e envio à direita, como no Figma
+.grade{
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    gap: 40px;
+    align-items: start;
+}
+
+.direita{
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+// Celular e tablet: uma coluna, com a atividade em cima
+@media (max-width: 768px){
+    .grade{
+        grid-template-columns: minmax(0, 1fr);
+        gap: 32px;
+    }
+}
+
+@media (max-width: 375px){
+    .grade,
+    .direita{
+        gap: 24px;
+    }
+}

@@ -6,8 +6,10 @@ import { sessaoExpiradaNaPagina } from '@/lib/sessaoExpirada'
 import { PageBanner } from '@/components/pageBanner'
 import { ErroCarregamento } from '../../components/erroCarregamento'
 import { buscarSala } from './buscarSala'
+import { buscarTutores } from './buscarTutores'
 import { AbasSala } from './components/abasSala'
 import { SalaIndisponivel } from './components/salaIndisponivel'
+import { PermissaoAtividades } from './components/permissaoAtividades'
 
 interface Props {
     children: React.ReactNode;
@@ -22,7 +24,12 @@ const SALA_INDISPONIVEL = [400, 403, 404]
 // a barra com o botão de voltar e as abas. Cada aba (page.tsx) aparece em "children".
 export default async function SalaLayout({ children, params }: Props){
     const { id_sala } = await params
-    const resultado = await buscarSala(id_sala)
+    // A P24 (tutores ativos) dá o estado do interruptor de permissão (P29) no topo da sala.
+    // buscarTutores tem cache: a Visão geral reaproveita a mesma resposta
+    const [resultado, tutores] = await Promise.all([
+        buscarSala(id_sala),
+        buscarTutores(id_sala)
+    ])
 
     // Fora do try/catch: o redirect do Next funciona lançando um erro
     if("erro" in resultado) sessaoExpiradaNaPagina(resultado.erro)
@@ -33,11 +40,12 @@ export default async function SalaLayout({ children, params }: Props){
 
         return (
             <main>
-                <PageBanner titulo="Detalhes da sala" />
+                {/* 403 = sala de outro professor: a faixa vira "Acesso negado" */}
+                <PageBanner titulo={status === 403 ? "Acesso negado" : "Detalhes da sala"} />
 
                 <div className={styles.conteudo}>
                     {status !== null && SALA_INDISPONIVEL.includes(status)
-                        ? <SalaIndisponivel mensagem={mensagem} />
+                        ? <SalaIndisponivel mensagem={mensagem} acessoNegado={status === 403} />
                         : <ErroCarregamento mensagem={mensagem} />
                     }
                 </div>
@@ -52,21 +60,27 @@ export default async function SalaLayout({ children, params }: Props){
             <PageBanner titulo={`Detalhes ${sala.nome}`} />
 
             <div className={styles.conteudo}>
-                <div className={styles.barra}>
-                    <Link href="/professor#salas" className={styles.voltar}>
-                        <ArrowLeft size={20} aria-hidden="true" />
-                        Minhas salas
-                    </Link>
+                {/* Barra e as duas linhas de abas ficam juntas, num bloco só */}
+                <div className={styles.topoSala}>
+                    <div className={styles.barra}>
+                        <Link href="/professor#salas" className={styles.voltar}>
+                            <ArrowLeft size={20} aria-hidden="true" />
+                            Minhas salas
+                        </Link>
 
-                    <span className={styles.info}>
-                        {sala.serie}ª série · {sala.ano_letivo}
-                    </span>
+                        <span className={styles.info}>
+                            {sala.serie}ª série · {sala.ano_letivo}
+                        </span>
 
-                    {/* Espaço reservado: permissão de criar atividades (P29), lote A3 */}
-                    <div className={styles.acoes} />
+                        {/* Permissão de criar atividades (P29). Se a P24 falhar, o interruptor
+                            não aparece: a aba aberta já mostra o erro de carregamento */}
+                        <div className={styles.acoes}>
+                            {"dados" in tutores && <PermissaoAtividades idSala={sala.id_sala} tutores={tutores.dados} />}
+                        </div>
+                    </div>
+
+                    <AbasSala idSala={sala.id_sala} />
                 </div>
-
-                <AbasSala idSala={sala.id_sala} />
 
                 {children}
             </div>

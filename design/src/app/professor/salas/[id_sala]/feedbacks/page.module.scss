@@ -1,0 +1,19 @@
+.resumo{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 24px;
+    padding: 12px 16px;
+    border-radius: var(--radius-card);
+    background-color: var(--gray-100);
+}
+
+.rubrica{
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--red-700);
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}

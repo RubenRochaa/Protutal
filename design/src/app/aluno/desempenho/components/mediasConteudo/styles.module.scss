@@ -1,0 +1,54 @@
+.aviso{
+    color: var(--gray-700);
+    font-size: 0.85rem;
+    text-align: center;
+}
+
+// Lista direto no card (sem caixa própria)
+.lista{
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    list-style: none;
+}
+
+.item{
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.linha{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 10px;
+}
+
+.nome{
+    flex: 1;
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.media{
+    font-weight: 600;
+}
+
+// Barra horizontal de 0 a 10
+.trilho{
+    height: 10px;
+    border-radius: var(--radius-pill);
+    background-color: var(--gray-300);
+    overflow: hidden;
+}
+
+.barra{
+    height: 100%;
+    border-radius: var(--radius-pill);
+    background-color: var(--green-500);
+}
+
+.barraBaixa{
+    background-color: var(--red-700);
+}

@@ -1,0 +1,107 @@
+// Botão secundário: contorno vermelho
+.botao{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: 40px;
+    padding: 0 14px;
+    border: 1px solid var(--red-700);
+    border-radius: var(--radius-input);
+    background-color: var(--white);
+    color: var(--red-700);
+    font-weight: 500;
+    white-space: nowrap;
+
+    &:hover{
+        background-color: var(--gray-100);
+    }
+}
+
+.form{
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.atividade{
+    font-weight: 600;
+    overflow-wrap: anywhere;
+}
+
+.aviso{
+    color: var(--gray-700);
+    font-size: 0.9rem;
+}
+
+.campo{
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+// Mesmo rótulo do Input (src/components/input)
+.label{
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+// Mesmo visual do textarea do formResposta
+.textarea{
+    padding: 10px 12px;
+    border: 1px solid var(--border-input);
+    border-radius: var(--radius-input);
+    background-color: var(--white);
+    color: var(--black);
+    line-height: 1.4;
+    resize: vertical;
+
+    &::placeholder{
+        color: var(--gray-500);
+    }
+
+    &:focus{
+        border-color: var(--red-700);
+    }
+}
+
+.erro{
+    color: var(--red-700);
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.botoes{
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.cancelar{
+    height: 44px;
+    padding: 0 24px;
+    border: 1px solid var(--gray-500);
+    border-radius: var(--radius-input);
+    background-color: var(--white);
+    color: var(--black);
+    font-weight: 500;
+
+    &:hover{
+        background-color: var(--gray-100);
+    }
+}
+
+.enviar{
+    width: 220px;
+}
+
+@media (max-width: 375px){
+    .botoes{
+        flex-direction: column-reverse;
+    }
+
+    .cancelar,
+    .enviar{
+        width: 100%;
+    }
+}

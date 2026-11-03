@@ -1,0 +1,40 @@
+.filtro{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.opcao, .ativo{
+    height: 40px;
+    padding: 0 18px;
+    border-radius: var(--radius-pill);
+    font-weight: 500;
+    transition: background-color 0.2s;
+
+    &:disabled{
+        cursor: wait;
+    }
+}
+
+.opcao{
+    border: 1px solid var(--gray-500);
+    background-color: var(--white);
+    color: var(--black);
+
+    &:hover:not(:disabled){
+        background-color: var(--gray-100);
+    }
+}
+
+.ativo{
+    border: 1px solid var(--red-700);
+    background-color: var(--red-700);
+    color: var(--white);
+}
+
+@media (max-width: 375px){
+    .opcao, .ativo{
+        flex: 1;
+        padding: 0 12px;
+    }
+}

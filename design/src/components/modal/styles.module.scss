@@ -3,7 +3,8 @@
     width: min(720px, 100% - 32px);
     max-width: none;
     max-height: 85vh;
-    padding: 24px 28px 28px;
+    // O padding fica na .janela: assim só o clique fora dela conta como clique no fundo
+    padding: 0;
     border: 0;
     border-radius: var(--radius-card);
     background-color: var(--white);
@@ -15,6 +16,10 @@
     &::backdrop{
         background-color: rgba(0, 0, 0, 0.45);
     }
+}
+
+.janela{
+    padding: 24px 28px 28px;
 }
 
 .topo{
@@ -47,8 +52,17 @@
     }
 }
 
+// Rodapé com os botões de ação, alinhados à direita
+.acoes{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 24px;
+}
+
 @media (max-width: 375px){
-    .modal{
+    .janela{
         padding: 20px 16px 24px;
     }
 

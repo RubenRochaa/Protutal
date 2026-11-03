@@ -24,9 +24,10 @@
     align-items: center;
 }
 
+// A imagem é só o texto, sem margem em volta (424 x 62)
 .logoImagem{
     width: auto;
-    height: 44px;
+    height: 22px;
 }
 
 .nav{
@@ -89,21 +90,52 @@
     stroke-width: 1.5;
 }
 
-.avatar{
+// Ícone ao lado do avatar (ex.: Notificações), no mesmo traço do ícone do usuário
+.atalho{
     display: flex;
     align-items: center;
-    justify-content: center;
+    color: var(--gray-700);
+    transition: color 0.2s;
+
+    svg{
+        width: 30px;
+        height: 30px;
+        stroke-width: 1.5;
+    }
+
+    &:hover{
+        color: var(--red-700);
+    }
+}
+
+// Selo do tipo de conta (componente Etiqueta): não encolhe nem quebra linha.
+// Altura, largura mínima e fonte fixas para "Professor", "Aluno" e "Tutor" ficarem do mesmo tamanho
+// (".selo > span" tem prioridade sobre a classe da Etiqueta)
+.selo{
+    display: flex;
     flex-shrink: 0;
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    background-color: var(--red-700);
-    color: var(--white);
-    font-weight: 600;
-    font-size: 1.1rem;
+}
+
+.selo > span{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: var(--altura-selo);
+    min-width: var(--largura-selo);
+    padding: 0 10px;
+    font-size: var(--fonte-selo);
+    line-height: 1;
+}
+
+// Página aberta é a do ícone: fica vermelho, como o link ativo do menu
+.atalhoAtivo{
+    color: var(--red-700);
 }
 
 .sair{
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
     padding: 6px 18px;
     border: 0;
     border-radius: var(--radius-pill);
@@ -139,16 +171,17 @@
     }
 
     .logoImagem{
-        height: 34px;
+        height: 18px;
     }
 
-    .usuario, .avatar{
+    .usuario{
         width: 36px;
         height: 36px;
     }
 
-    .avatar{
-        font-size: 0.9rem;
+    .atalho svg{
+        width: 24px;
+        height: 24px;
     }
 
     .acoes{
@@ -180,15 +213,25 @@
     .link, .linkAtivo, .linkEmBreve{
         padding: 14px 16px;
         border-top: 1px solid var(--gray-300);
-    }
-}
+    }}
 
 @media (max-width: 375px){
     .logoImagem{
-        height: 28px;
+        height: 15px;
     }
 
     .sair{
         padding: 6px 14px;
+    }
+
+    .acoes{
+        gap: 8px;
+    }
+
+    // Selo menor para não empurrar o "Sair" para fora da tela (igual nas três áreas)
+    .selo > span{
+        min-width: var(--largura-selo-sm);
+        padding: 0 8px;
+        font-size: var(--fonte-selo-sm);
     }
 }

@@ -5,15 +5,6 @@
     align-items: start;
 }
 
-// Desktop: "Realizadas" à esquerda, como no Figma
-.realizadas{
-    order: 1;
-}
-
-.naoEntregues{
-    order: 2;
-}
-
 .lista{
     display: flex;
     flex-direction: column;
@@ -21,16 +12,11 @@
     list-style: none;
 }
 
-// Celular e tablet: uma coluna, na ordem do HTML ("Não entregues" primeiro)
+// Celular e tablet: uma coluna, na ordem do HTML ("Não entregues" em cima)
 @media (max-width: 768px){
     .grade{
         grid-template-columns: minmax(0, 1fr);
         gap: 32px;
-    }
-
-    .realizadas,
-    .naoEntregues{
-        order: 0;
     }
 }
 

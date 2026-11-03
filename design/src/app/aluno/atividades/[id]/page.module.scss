@@ -1,0 +1,36 @@
+// Mesmas medidas da tela "Minhas atividades" (../page.module.scss)
+.conteudo{
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 32px 72px 48px;
+}
+
+.voltar{
+    display: flex;
+    align-items: center;
+    align-self: flex-start;
+    gap: 6px;
+    color: var(--red-700);
+    font-weight: 600;
+
+    &:hover{
+        text-decoration: underline;
+        text-underline-offset: 3px;
+    }
+}
+
+@media (max-width: 768px){
+    .conteudo{
+        padding: 24px 24px 40px;
+    }
+}
+
+@media (max-width: 375px){
+    .conteudo{
+        gap: 20px;
+        padding: 20px 16px 32px;
+    }
+}
