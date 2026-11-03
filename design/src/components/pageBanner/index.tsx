@@ -9,12 +9,15 @@ interface Props {
     imagem?: ImagemMascote;
 }
 
-// Faixa em degradê vermelho -> vinho com o título da página, logo abaixo do Header
+// Faixa em degradê vermelho -> vinho com o título da página, logo abaixo do Header.
+// O conteúdo fica num container da mesma largura das páginas, alinhado com os cards
 export function PageBanner({ titulo, imagem }: Props){
     return (
-        <section className={styles.banner}>
-            <h1 className={styles.titulo}>{titulo}</h1>
-            {imagem && <Mascote imagem={imagem} className={styles.imagem} preload />}
+        <section className={imagem ? `${styles.banner} ${styles.comImagem}` : styles.banner}>
+            <div className={styles.conteudo}>
+                <h1 className={styles.titulo}>{titulo}</h1>
+                {imagem && <Mascote imagem={imagem} className={styles.imagem} preload />}
+            </div>
         </section>
     )
 }
