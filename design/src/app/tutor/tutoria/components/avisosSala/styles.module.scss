@@ -1,0 +1,38 @@
+.nomeSala{
+    color: var(--red-700);
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+// Linha com borda fina, com o texto do aviso em várias linhas
+.aviso{
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 14px 20px;
+    border: 1px solid var(--gray-300);
+    border-radius: var(--radius-item);
+    background-color: var(--white);
+    overflow-wrap: anywhere;
+}
+
+.titulo{
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.texto{
+    line-height: 1.5;
+    white-space: pre-line;
+}
+
+.info{
+    color: var(--gray-700);
+    font-size: 0.85rem;
+}
+
+@media (max-width: 375px){
+    .aviso{
+        padding: 12px;
+    }
+}

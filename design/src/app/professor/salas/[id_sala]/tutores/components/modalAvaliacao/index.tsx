@@ -12,6 +12,7 @@ import { Modal } from '@/components/modal'
 import { Input } from '@/components/input'
 import { Textarea } from '@/components/textarea'
 import { Botao } from '@/components/botao'
+import { Loader } from '@/components/loader'
 import { buscarAvaliacoesTutor, handleAvaliarTutor } from '@/app/professor/actions'
 
 interface Props {
@@ -79,7 +80,7 @@ export function ModalAvaliacao({ tutor, onFechar }: Props){
                 <section className={styles.historico} aria-busy={carregando}>
                     <h3 className={styles.subtitulo}>Avaliações anteriores</h3>
 
-                    {carregando && <p className={lista.detalhe}>Carregando...</p>}
+                    {carregando && <Loader />}
 
                     {!carregando && historico && (
                         <>
@@ -127,7 +128,7 @@ export function ModalAvaliacao({ tutor, onFechar }: Props){
 
                     <div className={lista.formAcoes}>
                         <Botao variante="secundario" onClick={fechar} disabled={pendente}>Fechar</Botao>
-                        <Botao type="submit" disabled={pendente}>{pendente ? "Enviando..." : "Registrar avaliação"}</Botao>
+                        <Botao type="submit" carregando={pendente}>{pendente ? "Enviando..." : "Registrar avaliação"}</Botao>
                     </div>
                 </form>
             </div>

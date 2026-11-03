@@ -5,6 +5,7 @@ import { useEffect } from 'react'
 import { toast } from 'sonner'
 import { ErrorState } from '@/components/errorState'
 import { EmptyState } from '@/components/emptyState'
+import { MASCOTES } from '@/lib/mascotes'
 
 interface Props {
     mensagem: string;
@@ -28,7 +29,7 @@ export function ErroCarregamento({ mensagem, status = null }: Props){
 
     return (
         <div className={styles.erro}>
-            {recusa ? <EmptyState mensagem={mensagem} /> : <ErrorState mensagem={mensagem} />}
+            {recusa ? <EmptyState mensagem={mensagem} imagem={MASCOTES.badRequest} /> : <ErrorState mensagem={mensagem} />}
         </div>
     )
 }

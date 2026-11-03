@@ -1,4 +1,4 @@
-// Quadro branco do print, com rolagem própria
+// Moldura com borda fina dentro do card, com rolagem própria
 .lista{
     display: flex;
     flex-direction: column;
@@ -7,9 +7,9 @@
     min-height: 200px;
     padding: 20px;
     overflow-y: auto;
-    border-radius: var(--radius-card);
+    border: 1px solid var(--gray-300);
+    border-radius: var(--radius-item);
     background-color: var(--white);
-    box-shadow: var(--shadow-card);
     list-style: none;
 }
 
@@ -42,15 +42,15 @@
     font-size: 1.05rem;
 }
 
-// Bolha cinza com sombra, como no print
+// Bolha cinza-claro com borda fina, sem sombra
 .bolha{
     display: flex;
     flex-direction: column;
     gap: 8px;
     padding: 12px 16px;
-    border-radius: var(--radius-card);
-    background-color: var(--gray-300);
-    box-shadow: var(--shadow-card);
+    border: 1px solid var(--gray-300);
+    border-radius: var(--radius-card-sm);
+    background-color: var(--gray-100);
 }
 
 // Comunicado do tutor: borda vermelha para se destacar das mensagens comuns

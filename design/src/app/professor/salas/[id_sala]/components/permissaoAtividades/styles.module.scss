@@ -54,6 +54,9 @@
 }
 
 .explicacao{
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
     color: var(--gray-700);
     font-size: 0.8rem;
 }

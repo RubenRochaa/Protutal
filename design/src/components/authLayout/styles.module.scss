@@ -1,18 +1,29 @@
 // Desktop (1280): painel à esquerda + cartão à direita.
 // Tablet e celular (até 768): painel vira uma faixa no topo e o cartão fica embaixo.
 
+// O arquivo do mascote tem 500x500 px com borda transparente. Frações do lado da imagem:
+// - os tênis terminam a 85% da altura: bottom de -15% deixa o mascote "em pé" na borda
+//   de baixo do painel e a sombra cinza fica abaixo dela, escondida pelo overflow;
+// - sobra 11% transparente à direita do desenho;
+// - o desenho fica 6% à direita do centro da imagem: translateX(-56%) o centraliza.
+$sobra-base: 0.15;
+$sobra-direita: 0.11;
+
 .container{
     display: flex;
     min-height: 100vh;
 }
 
+// Logo e frase no centro da parte de cima; o padding de baixo reserva o espaço do mascote
 .painel{
     position: relative;
     overflow: hidden;
     flex: 0 0 42%;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    padding: 32px 24px 240px;
     background: linear-gradient(180deg, var(--red-700) 0%, var(--red-900) 55%, var(--red-dark) 100%);
 }
 
@@ -34,12 +45,39 @@
     }
 }
 
-.logo{
+// position: relative deixa a logo e a frase por cima da marca d'água
+.marca{
     position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo{
+    line-height: 0;
+}
+
+.logoImagem{
+    display: block;
+    width: 260px;
+    height: auto;
+}
+
+.frase{
     color: var(--white);
-    font-size: 2.25rem;
-    font-weight: 700;
-    letter-spacing: 2px;
+    opacity: 0.85;
+    font-size: 1rem;
+    text-align: center;
+}
+
+.mascote{
+    position: absolute;
+    left: 50%;
+    width: 320px;
+    height: 320px;
+    bottom: -$sobra-base * 320px;
+    transform: translateX(-56%);
 }
 
 .conteudo{
@@ -53,23 +91,26 @@
 .cartao{
     width: 100%;
     max-width: 380px;
-    padding: 0 24px 20px;
+    padding: 20px 24px;
     border-radius: var(--radius-card);
     background-color: var(--white);
     box-shadow: var(--shadow-card);
     overflow: hidden;
 }
 
+// Controle segmentado: faixa cinza em pílula com a aba ativa como pílula vermelha dentro
 .abas{
     display: flex;
-    margin: 0 -24px 20px;
+    gap: 4px;
+    padding: 4px;
+    margin-bottom: 20px;
     background-color: var(--gray-300);
-    border-radius: var(--radius-card) var(--radius-card) var(--radius-pill) var(--radius-pill);
+    border-radius: var(--radius-pill);
 }
 
 .aba, .abaAtiva{
     flex: 1;
-    padding: 10px 0;
+    padding: 8px 0;
     border-radius: var(--radius-pill);
     text-align: center;
     font-weight: 500;
@@ -89,21 +130,75 @@
     color: var(--white);
 }
 
+.ajuda{
+    display: block;
+    margin-top: 14px;
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--gray-700);
+
+    &:hover{
+        color: var(--red-700);
+        text-decoration: underline;
+    }
+}
+
 @media (max-width: 768px){
     .container{
         flex-direction: column;
     }
 
+    // Faixa no topo: logo e frase à esquerda, mascote à direita na borda de baixo
     .painel{
         flex: 0 0 160px;
+        flex-direction: row;
+        justify-content: flex-start;
+        padding: 0 24px;
     }
 
-    .logo{
-        font-size: 1.75rem;
+    .marca{
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .logoImagem{
+        width: 180px;
+    }
+
+    .frase{
+        font-size: 0.9rem;
+        text-align: left;
+    }
+
+    .mascote{
+        left: auto;
+        right: 24px - $sobra-direita * 140px;
+        width: 140px;
+        height: 140px;
+        bottom: -$sobra-base * 140px;
+        transform: none;
     }
 
     .conteudo{
         align-items: flex-start;
         padding: 24px 16px;
+    }
+}
+
+@media (max-width: 375px){
+    .painel{
+        padding: 0 16px;
+    }
+
+    .logoImagem{
+        width: 150px;
+    }
+
+    .frase{
+        display: none;
+    }
+
+    .mascote{
+        right: 16px - $sobra-direita * 140px;
     }
 }

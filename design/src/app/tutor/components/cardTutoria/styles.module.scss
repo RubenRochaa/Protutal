@@ -1,0 +1,8 @@
+// Atalho como link de verdade (Botao secundário), direto no card e à esquerda.
+// flex: 1 ocupa a altura que sobra para o botão ficar no meio do card
+.corpo{
+    flex: 1;
+    display: flex;
+    align-items: center;
+    min-height: 96px;
+}

@@ -1,0 +1,31 @@
+// Coluna de campos do print 5 (sem o quadro de upload, que não tem rota)
+.card{
+    max-width: 640px;
+}
+
+.form{
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.linha{
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+// "Enviar" e "Cancelar" lado a lado, como no print
+.acoes{
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    margin-top: 8px;
+}
+
+@media (max-width: 375px){
+    .linha,
+    .acoes{
+        grid-template-columns: minmax(0, 1fr);
+    }
+}

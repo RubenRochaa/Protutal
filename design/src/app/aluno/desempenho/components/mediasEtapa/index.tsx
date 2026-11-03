@@ -4,6 +4,7 @@ import { sessaoExpiradaNaPagina } from '@/lib/sessaoExpirada'
 import { buscarDesempenho } from '../../../buscas'
 import { GraficoEtapas } from '@/components/graficoEtapas'
 import { ToastErro } from '../../../components/toastErro'
+import { MASCOTES } from '@/lib/mascotes'
 
 export const TITULO_ETAPAS = "Média por etapa"
 
@@ -27,7 +28,7 @@ export async function MediasEtapa({ etapa }: Props){
     if(resultado.dados.media_geral.total_notas === 0) return null
 
     return (
-        <Card titulo={TITULO_ETAPAS} sublinhado>
+        <Card titulo={TITULO_ETAPAS} sublinhado imagem={MASCOTES.desempenho}>
             <GraficoEtapas etapas={resultado.dados.por_etapa} />
         </Card>
     )

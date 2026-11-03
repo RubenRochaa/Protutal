@@ -20,10 +20,6 @@ interface Props {
     tutores: TutorSala[];
 }
 
-// Permissões do Figma (p07) que não têm rota na API: aparecem desabilitadas (decisão D4).
-// "Criar atividades" tem rota (P29) e fica no topo da sala, valendo para todos os tutores
-const PERMISSOES_SEM_ROTA = ["Vincular materiais", "Modelo de correção"]
-
 // Lista dos tutores ativos com "Avaliar" (P9/P10) e "Remover" (P8).
 // No Figma o "Remover?" é um checkbox; aqui é um botão por tutor, porque checkbox sugere
 // seleção e não uma ação, e remover pede confirmação.
@@ -35,6 +31,10 @@ export function ListaTutores({ tutores }: Props){
     return (
         <div className={lista.tela}>
             <Card titulo={`Tutores (${tutores.length})`} sublinhado>
+                {/* As outras permissões do Figma (p07) não têm rota na API; só a P29 existe */}
+                <p className={lista.ajuda}>
+                    A permissão de criar atividades fica no topo da sala e vale para todos os tutores.
+                </p>
                 {tutores.length === 0 ? (
                     <EmptyState mensagem={`A sala ainda não tem tutores. Os tutores entram quando você aceita um pedido na aba "Pedidos".`} />
                 ) : (
@@ -65,19 +65,6 @@ export function ListaTutores({ tutores }: Props){
                         ))}
                     </ul>
                 )}
-            </Card>
-
-            <Card titulo="Outras permissões dos tutores" sublinhado>
-                <p className={lista.ajuda}>
-                    A permissão de criar atividades fica no topo da sala e vale para todos os tutores.
-                </p>
-                <ul className={lista.lista}>
-                    {PERMISSOES_SEM_ROTA.map((permissao) => (
-                        <li key={permissao} aria-disabled="true" className={styles.desabilitado}>
-                            <ListItem direita={<Etiqueta>Em breve</Etiqueta>}>{permissao}</ListItem>
-                        </li>
-                    ))}
-                </ul>
             </Card>
 
             <ConfirmDialog

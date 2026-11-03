@@ -8,6 +8,8 @@ import { AuthAlunoController } from './controllers/aluno/AuthAlunoController';
 
 import { ConfirmarEmailController } from './controllers/ConfirmarEmailController';
 import { ReenviarConfirmacaoEmailController } from './controllers/ReenviarConfirmacaoEmailController';
+import { SolicitarRedefinicaoSenhaController } from './controllers/SolicitarRedefinicaoSenhaController';
+import { RedefinirSenhaController } from './controllers/RedefinirSenhaController';
 
 import { CreateSalaController } from './controllers/professor/CreateSalaController';
 import { ListSalaController } from './controllers/professor/ListSalaController';
@@ -91,6 +93,14 @@ router.post('/confirmacao-email/reenviar', new ReenviarConfirmacaoEmailControlle
 // link enviado no cadastro de professor e aluno (RN20); responde página HTML, não JSON.
 // token inexistente ou já usado (400) -> expirado (410) -> confirma e limpa o token (200)
 router.get('/confirmacao-email/:token', new ConfirmarEmailController().handle);
+
+// -- ROTAS REDEFINIÇÃO DE SENHA (pública) --
+// envia o link de redefinição (token de 30 minutos) para professor e/ou aluno com e-mail confirmado;
+// e-mail ausente ou vazio (400); nos demais casos, sempre a mesma mensagem (200), para não revelar cadastros
+router.post('/redefinicao-senha/solicitar', new SolicitarRedefinicaoSenhaController().handle);
+// troca a senha com o token do link (O5). ordem: campos (400) -> token inválido, expirado ou já usado (400) -> 200.
+// o token deixa de valer sozinho depois da troca, porque é assinado com o hash da senha antiga
+router.post('/redefinicao-senha', new RedefinirSenhaController().handle);
 
 // -- ROTAS SALA (somente professor autenticado) --
 router.post('/salas', isAuthenticated, isProfessor, new CreateSalaController().handle);

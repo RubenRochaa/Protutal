@@ -2,6 +2,7 @@
 
 import styles from './styles.module.scss'
 import { Modal } from '../modal'
+import { Loader } from '../loader'
 
 interface Props {
     aberto: boolean;
@@ -40,6 +41,7 @@ export function ConfirmDialog({
                     {textoCancelar}
                 </button>
                 <button type="button" className={styles.confirmar} onClick={onConfirmar} disabled={pendente}>
+                    {pendente && <Loader size="pequeno" variant="branco" decorativo />}
                     {pendente ? "Enviando..." : textoConfirmar}
                 </button>
             </>

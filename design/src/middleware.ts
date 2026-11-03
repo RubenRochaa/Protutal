@@ -8,14 +8,20 @@ const AREAS: Record<string, string> = {
     "/tutor": "aluno",
 }
 
+function combina(pathname: string, rota: string){
+    return pathname === rota || pathname.startsWith(rota + "/")
+}
+
 // Só confere os cookies. Quem garante a permissão de verdade é a API (401/403).
 // Não existe rota /me na API, então o token não é validado aqui.
 export function middleware(req: NextRequest){
     const { pathname } = req.nextUrl
 
-    const area = Object.keys(AREAS).find((rota) => pathname === rota || pathname.startsWith(rota + "/"))
+    const area = Object.keys(AREAS).find((rota) => combina(pathname, rota))
 
-    // Login, cadastro e arquivos públicos: livres
+    // Login, cadastro, /esqueci-senha, /redefinir-senha, /ajuda e arquivos públicos: livres
+    // (nem entram no matcher abaixo, então abrem com ou sem sessão).
+    // /ajuda decide no próprio layout o que mostrar para quem está ou não logado
     if(!area) return NextResponse.next();
 
     const token = req.cookies.get("session")?.value

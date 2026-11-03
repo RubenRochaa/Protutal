@@ -10,6 +10,10 @@
 
 // Mesmo visual do Button (que é só de envio de formulário)
 .confirmar, .cancelar{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
     height: 44px;
     padding: 0 20px;
     border-radius: var(--radius-input);
