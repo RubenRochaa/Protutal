@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
 
 import { colors, fonts, radius, spacing } from "../../styles/theme";
 
@@ -12,30 +12,49 @@ interface AbasSegmentadasProps<T extends string> {
     opcoes: OpcaoAba<T>[];
     valor: T;
     onChange: (valor: T) => void;
+    // true = abas com a largura do texto, roláveis para o lado (ex.: as 5 abas da sala do professor).
+    // false = as abas dividem a largura da tela
+    rolavel?: boolean;
 }
 
 // Seletor em pílula do Figma (ex.: "Pendentes | Realizadas", "Dúvidas | Materiais"):
 // a opção escolhida fica vermelha, as outras cinza
-export function AbasSegmentadas<T extends string>({ opcoes, valor, onChange }: AbasSegmentadasProps<T>){
+export function AbasSegmentadas<T extends string>({ opcoes, valor, onChange, rolavel = false }: AbasSegmentadasProps<T>){
+    const abas = opcoes.map((opcao) => {
+        const ativa = opcao.valor === valor;
+
+        return (
+            <TouchableOpacity
+            key={opcao.valor}
+            style={[styles.aba, rolavel ? styles.abaRolavel : styles.abaFixa, ativa && styles.abaAtiva]}
+            onPress={() => onChange(opcao.valor)}
+            accessibilityRole="tab"
+            accessibilityState={{ selected: ativa }}
+            >
+                <Text style={[styles.texto, ativa && styles.textoAtivo]} numberOfLines={1}>
+                    {opcao.rotulo}
+                </Text>
+            </TouchableOpacity>
+        )
+    });
+
+    if(rolavel){
+        return (
+            <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            style={styles.rolagem}
+            contentContainerStyle={styles.container}
+            accessibilityRole="tablist"
+            >
+                {abas}
+            </ScrollView>
+        )
+    }
+
     return (
         <View style={styles.container} accessibilityRole="tablist">
-            {opcoes.map((opcao) => {
-                const ativa = opcao.valor === valor;
-
-                return (
-                    <TouchableOpacity
-                    key={opcao.valor}
-                    style={[styles.aba, ativa && styles.abaAtiva]}
-                    onPress={() => onChange(opcao.valor)}
-                    accessibilityRole="tab"
-                    accessibilityState={{ selected: ativa }}
-                    >
-                        <Text style={[styles.texto, ativa && styles.textoAtivo]} numberOfLines={1}>
-                            {opcao.rotulo}
-                        </Text>
-                    </TouchableOpacity>
-                )
-            })}
+            {abas}
         </View>
     )
 }
@@ -47,11 +66,19 @@ const styles = StyleSheet.create({
         borderRadius: radius.pill,
         backgroundColor: colors.gray300
     },
+    rolagem:{
+        flexGrow: 0
+    },
     aba:{
-        flex: 1,
         alignItems: "center",
         paddingVertical: spacing.sm,
         borderRadius: radius.pill
+    },
+    abaFixa:{
+        flex: 1
+    },
+    abaRolavel:{
+        paddingHorizontal: spacing.lg
     },
     abaAtiva:{
         backgroundColor: colors.red700

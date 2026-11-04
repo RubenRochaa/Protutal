@@ -1,69 +1,116 @@
 import React from "react";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createBottomTabNavigator, BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator, NativeStackScreenProps } from "@react-navigation/native-stack";
-import { useNavigation } from "@react-navigation/native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { CompositeScreenProps, NavigatorScreenParams } from "@react-navigation/native";
 
-import EmConstrucao from "../pages/EmConstrucao";
+import PainelProfessor from "../pages/professor/Inicio";
+import ListaSalas from "../pages/professor/Salas";
+import Sala from "../pages/professor/Sala";
+import DetalheAtividadeProfessor from "../pages/professor/DetalheAtividade";
+import ExportarNotas from "../pages/professor/ExportarNotas";
+import TutoriaAnos from "../pages/professor/Tutoria";
+import HistoricoTutoria from "../pages/professor/HistoricoTutoria";
+import DesempenhoSalas from "../pages/professor/DesempenhoSalas";
+import Notificacoes from "../pages/professor/Notificacoes";
+import { SubAbaSala } from "../pages/professor/Sala/abas";
+import { StatusContestacao } from "../lib/types";
 import { tabOptions, tabScreenOptions } from "./tabOptions";
 
-// Pilha do professor: as abas e, por cima delas, Notificações (o sino do Header),
-// porque no site Notificações também fica fora do menu de texto, ao lado do avatar
+// Telas da área do professor (menu do site em design/src/lib/menus.ts).
+// Cada aba tem a sua pilha; as telas abertas de mais de uma aba (sala, notificações...)
+// são registradas em cada pilha, para o "voltar" voltar para onde o professor estava
 export type ProfessorStackParamsList = {
-    Abas: undefined;
+    PainelProfessor: undefined;
+    ListaSalas: undefined;
+    TutoriaAnos: undefined;
+    HistoricoTutoria: undefined;
+    DesempenhoSalas: undefined;
+    // subaba: abre direto numa sub-aba (ex.: Notificações -> Contestações pendentes)
+    Sala: { id_sala: number; nome?: string; subaba?: SubAbaSala; status?: StatusContestacao };
+    DetalheAtividadeProfessor: { id_atividade: number };
+    // Sino do Header (no site fica ao lado do avatar, fora do menu de texto)
     Notificacoes: undefined;
+    // id_sala: sala já escolhida
+    ExportarNotas: { id_sala?: number } | undefined;
 };
 
-// Mesmos itens do menu do professor no site (MENU_PROFESSOR), mais "Início" (no site é a logo)
+// Mesmos itens do menu do professor no site, mais "Início" (no site é a logo)
 export type ProfessorTabParamsList = {
-    Inicio: undefined;
-    Salas: undefined;
-    Tutoria: undefined;
-    Desempenho: undefined;
+    Inicio: NavigatorScreenParams<ProfessorStackParamsList>;
+    Salas: NavigatorScreenParams<ProfessorStackParamsList>;
+    Tutoria: NavigatorScreenParams<ProfessorStackParamsList>;
+    Desempenho: NavigatorScreenParams<ProfessorStackParamsList>;
 };
 
-const Stack = createNativeStackNavigator<ProfessorStackParamsList>();
+// Props de uma tela do professor: navega na própria pilha e também para as outras abas
+export type ProfessorScreenProps<T extends keyof ProfessorStackParamsList> = CompositeScreenProps<
+    NativeStackScreenProps<ProfessorStackParamsList, T>,
+    BottomTabScreenProps<ProfessorTabParamsList>
+>;
+
 const Tab = createBottomTabNavigator<ProfessorTabParamsList>();
+const Stack = createNativeStackNavigator<ProfessorStackParamsList>();
 
-// Tela provisória de uma aba do professor, com o sino que abre Notificações
-function TelaProfessor({ title }: { title: string }){
-    const navigation = useNavigation<NativeStackNavigationProp<ProfessorStackParamsList>>();
-
-    return <EmConstrucao title={title} onNotificacoes={() => navigation.navigate("Notificacoes")} />
+// Telas abertas a partir de várias abas
+function telasComuns(){
+    return (
+        <>
+            {/* Uma tela por sala: abrir outra sala não reaproveita a tela da anterior */}
+            <Stack.Screen name="Sala" component={Sala} getId={({ params }) => String(params.id_sala)} />
+            <Stack.Screen name="DetalheAtividadeProfessor" component={DetalheAtividadeProfessor} />
+            <Stack.Screen name="Notificacoes" component={Notificacoes} />
+            <Stack.Screen name="ExportarNotas" component={ExportarNotas} />
+        </>
+    )
 }
 
-function Notificacoes({ navigation }: NativeStackScreenProps<ProfessorStackParamsList, "Notificacoes">){
-    return <EmConstrucao title="Notificações" onBack={navigation.goBack} />
+function InicioStack(){
+    return (
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="PainelProfessor" component={PainelProfessor} />
+            {telasComuns()}
+        </Stack.Navigator>
+    )
 }
 
-function ProfessorTabs() {
-    return(
-        <Tab.Navigator screenOptions={tabScreenOptions}>
-            <Tab.Screen name="Inicio" options={tabOptions("Início", "home")}>
-                {() => <TelaProfessor title="Início" />}
-            </Tab.Screen>
+function SalasStack(){
+    return (
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="ListaSalas" component={ListaSalas} />
+            {telasComuns()}
+        </Stack.Navigator>
+    )
+}
 
-            <Tab.Screen name="Salas" options={tabOptions("Salas", "layers")}>
-                {() => <TelaProfessor title="Salas" />}
-            </Tab.Screen>
+function TutoriaStack(){
+    return (
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="TutoriaAnos" component={TutoriaAnos} />
+            <Stack.Screen name="HistoricoTutoria" component={HistoricoTutoria} />
+            {telasComuns()}
+        </Stack.Navigator>
+    )
+}
 
-            <Tab.Screen name="Tutoria" options={tabOptions("Tutoria", "users")}>
-                {() => <TelaProfessor title="Tutoria" />}
-            </Tab.Screen>
-
-            <Tab.Screen name="Desempenho" options={tabOptions("Desempenho", "bar-chart-2")}>
-                {() => <TelaProfessor title="Desempenho" />}
-            </Tab.Screen>
-        </Tab.Navigator>
+function DesempenhoStack(){
+    return (
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="DesempenhoSalas" component={DesempenhoSalas} />
+            {telasComuns()}
+        </Stack.Navigator>
     )
 }
 
 function ProfessorRoutes() {
     return(
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="Abas" component={ProfessorTabs} />
-            <Stack.Screen name="Notificacoes" component={Notificacoes} />
-        </Stack.Navigator>
+        // Mesmo comportamento das áreas do aluno e do tutor: a aba que ficou para trás volta
+        // para a primeira tela e a barra some com o teclado aberto
+        <Tab.Navigator screenOptions={{ ...tabScreenOptions, popToTopOnBlur: true, tabBarHideOnKeyboard: true }}>
+            <Tab.Screen name="Inicio" component={InicioStack} options={tabOptions("Início", "home")} />
+            <Tab.Screen name="Salas" component={SalasStack} options={tabOptions("Salas", "layers")} />
+            <Tab.Screen name="Tutoria" component={TutoriaStack} options={tabOptions("Tutoria", "users")} />
+            <Tab.Screen name="Desempenho" component={DesempenhoStack} options={tabOptions("Desempenho", "bar-chart-2")} />
+        </Tab.Navigator>
     )
 }
 

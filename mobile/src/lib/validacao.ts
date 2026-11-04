@@ -67,3 +67,17 @@ export function validarNota(texto: string, campo = "nota"): { valor: number } | 
 
     return { valor }
 }
+
+// Nova sala (rota P19): mesmas regras e mensagens do site e do CreateSalaService
+export function validarSala(nome: string, serie: string, anoLetivo: string): string | null {
+    if(nome.trim() === "") return "O campo nome é obrigatório";
+    if(nome.trim().length > 100) return "O nome deve ter no máximo 100 caracteres";
+
+    if(serie.trim() === "") return "O campo serie é obrigatório";
+    if(!["1", "2", "3"].includes(serie.trim())) return "A serie deve ser 1, 2 ou 3";
+
+    if(anoLetivo.trim() === "") return "O campo ano_letivo é obrigatório";
+    if(!Number.isInteger(Number(anoLetivo))) return "O ano_letivo deve ser um número inteiro";
+
+    return null
+}
