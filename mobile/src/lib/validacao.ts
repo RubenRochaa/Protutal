@@ -51,3 +51,19 @@ export function validarEmailRecuperacao(email: string): string | null {
 
     return null
 }
+
+// Nota de 0 a 10 com no máximo 2 casas (mesma regra e mensagens do site e das rotas T3 e T4).
+// Aceita vírgula ("8,5") e devolve o número que a API espera (8.5).
+// "campo" é o nome usado pela rota: "valor" na T3 e na T4
+export function validarNota(texto: string, campo = "nota"): { valor: number } | { erro: string } {
+    const limpo = texto.trim().replace(",", ".")
+
+    if(limpo === "" || !/^\d+(\.\d+)?$/.test(limpo)) return { erro: `O campo ${campo} é obrigatório e deve ser um número` };
+
+    const valor = Number(limpo)
+
+    if(valor < 0 || valor > 10) return { erro: `A ${campo} deve estar entre 0 e 10` };
+    if((limpo.split(".")[1] ?? "").length > 2) return { erro: `A ${campo} deve ter no máximo 2 casas decimais` };
+
+    return { valor }
+}

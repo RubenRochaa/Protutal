@@ -141,9 +141,22 @@ export interface AtividadeDetalheAluno {
     } | null;
 }
 
-// A A2 também responde ao tutor que criou a atividade, com perfil "tutor".
-// Na área do aluno essa visão não é usada: só o campo perfil importa
-export type AtividadeDetalhe = AtividadeDetalheAluno | { perfil: "tutor" };
+// Detalhe da atividade na visão do tutor que a criou (rota A2 - GET /atividades/:id, perfil "tutor")
+export interface AtividadeDetalheTutor {
+    perfil: "tutor";
+    id_atividade: number;
+    titulo: string;
+    descricao: string | null;
+    tipo: string;
+    etapa: number;
+    data_entrega: string;
+    conteudo: { id_conteudo: number; nome: string } | null;
+    sala: { id_sala: number; nome: string; serie: number; ano_letivo: number };
+    destinatarios: { id_aluno: number; nome: string }[];
+}
+
+// A A2 responde conforme quem pede: o aluno destinatário ou o tutor que criou a atividade
+export type AtividadeDetalhe = AtividadeDetalheAluno | AtividadeDetalheTutor;
 
 // Tipo de atividade com o rótulo em português (rota T8 - GET /tipos-atividade)
 export interface TipoAtividadeOpcao {
@@ -175,4 +188,125 @@ export interface DesempenhoAluno {
     por_etapa: MediaEtapa[];
     por_conteudo: MediaConteudo[];
     notas: NotaAluno[];
+}
+
+// ---------- Área do tutor: respostas da API (mesmos tipos de design/src/lib/types.ts) ----------
+
+// Tutoria em que o aluno logado é o tutor (rota T1 - GET /tutores/me/tutorias).
+// A T1 não devolve o id_aluno do tutorado
+export interface TutoriaTutor {
+    id_tutoria: number;
+    status: StatusTutoria;
+    meta_aprendizagem: string | null;
+    data_inicio: string;
+    data_fim: string | null;
+    aluno: { nome: string };
+    sala: { id_sala: number; nome: string; serie: number };
+}
+
+// Atividade criada pelo tutor, com as contagens (rota T2 - GET /tutores/me/atividades)
+export interface AtividadeTutor {
+    id_atividade: number;
+    titulo: string;
+    tipo: string;
+    etapa: number;
+    data_entrega: string;
+    conteudo: { id_conteudo: number; nome: string } | null;
+    sala: { id_sala: number; nome: string };
+    total_destinatarios: number;
+    total_entregues: number;
+    total_com_nota: number;
+}
+
+// Conteúdo cadastrado pelo professor na sala (rota P2 - GET /salas/:id/conteudos)
+export interface ConteudoSala {
+    id_conteudo: number;
+    nome: string;
+}
+
+// Situação da entrega, calculada pela API comparando o envio com o prazo
+export type StatusEntrega = "pendente" | "entregue" | "entregue_com_atraso";
+
+// Entregas e notas de uma atividade (rota P12 - GET /atividades/:id/respostas)
+export interface RespostaAlunoAtividade {
+    aluno: { id_aluno: number; nome: string };
+    resposta: {
+        id_resposta: number;
+        texto: string | null;
+        conteudo_file: string | null;
+        data_envio: string;
+    } | null;
+    nota: { id_nota: number; valor: number; comentario: string | null } | null;
+    status: StatusEntrega;
+}
+
+export interface RespostasAtividade {
+    id_atividade: number;
+    titulo: string;
+    tipo: string;
+    data_entrega: string;
+    alunos: RespostaAlunoAtividade[];
+}
+
+// Contestação de nota nas atividades do tutor (rota P16 - GET /contestacoes)
+export interface ContestacaoTutor {
+    id_contestacao: number;
+    comentario: string;
+    status: StatusContestacao;
+    data_envio: string;
+    decisao: string | null;
+    data_resolucao: string | null;
+    nota: { id_nota: number; valor: number };
+    aluno: { id_aluno: number; nome: string };
+    atividade: { id_atividade: number; titulo: string; etapa: number; conteudo: { nome: string } | null };
+    sala: { id_sala: number; nome: string };
+    tutor: { id_tutor_sala: number; nome: string };
+}
+
+// Feedback (com rubrica) que o tutorado deu ao tutor
+export interface FeedbackRecebido {
+    id_feedback: number;
+    etapa: number;
+    nota: number;
+    comentario: string | null;
+    // URL da rubrica (Cloudinary)
+    rubrica_file: string | null;
+    data: string;
+}
+
+// Lista de feedbacks recebidos (rota T7 - GET /feedbacks)
+export interface FeedbacksTutor {
+    resumo: { total_feedbacks: number; media_notas: number | null };
+    feedbacks: (FeedbackRecebido & {
+        id_tutoria: number;
+        aluno: { id_aluno: number; nome: string };
+        tutor: { id_tutor_sala: number; nome: string };
+        sala: { id_sala: number; nome: string; serie: number; ano_letivo: number };
+    })[];
+}
+
+// Desempenho do tutor por vínculo/sala (rota T6 - GET /tutores/me/desempenho).
+// Médias null = sem nota (nunca tratar como 0)
+export interface DesempenhoVinculo {
+    id_tutor_sala: number;
+    sala: { id_sala: number; nome: string; serie: number; ano_letivo: number };
+    revogado: boolean;
+    data_revogacao: string | null;
+    feedback: {
+        media_geral: number | null;
+        quantidade: number;
+        por_etapa: MediaEtapa[];
+        feedbacks: (FeedbackRecebido & { aluno: { nome: string } })[];
+    };
+    avaliacoes_professor: {
+        media_geral: number | null;
+        quantidade: number;
+        avaliacoes: {
+            id_avaliacao: number;
+            nota: number;
+            comentario: string;
+            data: string;
+            professor: { nome: string };
+        }[];
+    };
 }

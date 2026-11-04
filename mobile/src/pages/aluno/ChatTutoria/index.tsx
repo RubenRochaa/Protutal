@@ -8,14 +8,14 @@ import {
     TextInput,
     TouchableOpacity,
     KeyboardAvoidingView,
-    Platform,
-    Linking
+    Platform
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
 
 import { Header } from "../../../components/Header";
+import { BalaoMensagem } from "../../../components/BalaoMensagem";
+import { ItemMaterial } from "../../../components/ItemMaterial";
 import { Badge } from "../../../components/Badge";
-import { Avatar } from "../../../components/Avatar";
 import { Button } from "../../../components/Button";
 import { Loader } from "../../../components/Loader";
 import { EmptyState } from "../../../components/EmptyState";
@@ -26,11 +26,11 @@ import { ToastContext } from "../../../contexts/ToastContext";
 import { api } from "../../../services/api";
 import { useBuscar } from "../../../lib/useBuscar";
 import { getErrorMessage, getErrorStatus } from "../../../lib/getErrorMessage";
-import { formatarData, formatarDataHora } from "../../../lib/formatacao";
+import { formatarData } from "../../../lib/formatacao";
 import { MASCOTES } from "../../../lib/mascotes";
 import { MaterialSala, MensagemTutoria, TutoriaAluno } from "../../../lib/types";
 import { AlunoScreenProps } from "../../../routes/aluno.routes";
-import { colors, fonts, fontSizes, radius, shadows, spacing } from "../../../styles/theme";
+import { colors, fonts, fontSizes, radius, spacing } from "../../../styles/theme";
 
 type Aba = "duvidas" | "materiais";
 
@@ -40,17 +40,6 @@ interface Dados {
     mensagens: MensagemTutoria[];
     // null = a rota falhou; "sem_acesso" = 403 da A5
     materiais: MaterialSala[] | "sem_acesso" | null;
-}
-
-// Ícone pelo tipo do arquivo (a API só aceita .pdf .doc .docx .xls .xlsx .csv)
-function iconeMaterial(url: string): { nome: React.ComponentProps<typeof Feather>["name"]; rotulo: string } {
-    const extensao = url.split("?")[0].split(".").pop()?.toLowerCase() ?? "";
-
-    if(extensao === "pdf") return { nome: "file-text", rotulo: "PDF" };
-    if(extensao === "doc" || extensao === "docx") return { nome: "file-text", rotulo: extensao.toUpperCase() };
-    if(extensao === "xls" || extensao === "xlsx" || extensao === "csv") return { nome: "grid", rotulo: extensao.toUpperCase() };
-
-    return { nome: "file", rotulo: "Arquivo" };
 }
 
 // Tela de chat da tutoria (prints "Chat" e "Dúvidas / Materiais"): o seletor do topo troca entre
@@ -110,56 +99,11 @@ export default function ChatTutoria({ navigation, route }: AlunoScreenProps<"Cha
     }
 
     function renderMensagem({ item }: { item: MensagemTutoria }){
-        const minha = item.remetente.tipo === "tutorado";
-
-        return (
-            <View style={[styles.linhaMensagem, minha && styles.linhaMinha]}>
-                {!minha && <Avatar nome={item.remetente.nome} />}
-
-                <View style={[styles.corpo, minha && styles.corpoMinha]}>
-                    <Text style={styles.autor}>{minha ? "Você" : item.remetente.nome}</Text>
-
-                    <View style={[styles.bolha, minha ? styles.bolhaMinha : styles.bolhaTutor, !!item.assunto && styles.comunicado]}>
-                        {item.assunto && (
-                            <View style={styles.cabecalhoComunicado}>
-                                <Badge label="Comunicado" variant="destaque" />
-                                <Text style={styles.assunto}>{item.assunto}</Text>
-                            </View>
-                        )}
-
-                        <Text style={[styles.textoMensagem, minha && styles.textoMinha]}>{item.texto}</Text>
-                        <Text style={[styles.hora, minha && styles.horaMinha]}>{formatarDataHora(item.data_envio)}</Text>
-                    </View>
-                </View>
-            </View>
-        )
+        return <BalaoMensagem mensagem={item} meuTipo="tutorado" />;
     }
 
     function renderMaterial({ item }: { item: MaterialSala }){
-        const icone = iconeMaterial(item.arquivo);
-
-        return (
-            <TouchableOpacity
-            style={styles.material}
-            onPress={() => Linking.openURL(item.arquivo)}
-            accessibilityRole="link"
-            accessibilityLabel={`Abrir ${item.titulo}`}
-            >
-                <View style={styles.iconeMaterial}>
-                    <Feather name={icone.nome} size={22} color={colors.white} />
-                </View>
-
-                <View style={styles.dadosMaterial}>
-                    <Text style={styles.tituloMaterial}>{item.titulo}</Text>
-                    {item.descricao && <Text style={styles.texto}>{item.descricao}</Text>}
-                    <Text style={styles.textoSecundario}>
-                        {icone.rotulo} · Enviado por {item.tutor.nome} em {formatarData(item.data_envio)}
-                    </Text>
-                </View>
-
-                <Feather name="download" size={22} color={colors.red700} />
-            </TouchableOpacity>
-        )
+        return <ItemMaterial material={item} detalhe={`Enviado por ${item.tutor.nome} em ${formatarData(item.data_envio)}`} />;
     }
 
     const refresh = (
@@ -330,71 +274,6 @@ const styles = StyleSheet.create({
     separador:{
         height: spacing.md
     },
-    linhaMensagem:{
-        flexDirection: "row",
-        alignItems: "flex-end",
-        gap: spacing.sm
-    },
-    linhaMinha:{
-        justifyContent: "flex-end"
-    },
-    corpo:{
-        maxWidth: "80%",
-        gap: 2
-    },
-    corpoMinha:{
-        alignItems: "flex-end"
-    },
-    autor:{
-        fontFamily: fonts.medium,
-        fontSize: fontSizes.selo,
-        color: colors.gray700
-    },
-    bolha:{
-        gap: spacing.xs,
-        paddingVertical: spacing.sm,
-        paddingHorizontal: spacing.md,
-        borderRadius: radius.card
-    },
-    bolhaTutor:{
-        backgroundColor: colors.gray100,
-        borderWidth: 1,
-        borderColor: colors.gray300,
-        borderBottomLeftRadius: spacing.xs
-    },
-    bolhaMinha:{
-        backgroundColor: colors.red700,
-        borderBottomRightRadius: spacing.xs
-    },
-    comunicado:{
-        borderWidth: 2,
-        borderColor: colors.red700
-    },
-    cabecalhoComunicado:{
-        gap: spacing.xs
-    },
-    assunto:{
-        fontFamily: fonts.semibold,
-        fontSize: 15,
-        color: colors.black
-    },
-    textoMensagem:{
-        fontFamily: fonts.regular,
-        fontSize: 15,
-        color: colors.black
-    },
-    textoMinha:{
-        color: colors.white
-    },
-    hora:{
-        alignSelf: "flex-end",
-        fontFamily: fonts.regular,
-        fontSize: 11,
-        color: colors.gray700
-    },
-    horaMinha:{
-        color: colors.gray300
-    },
     barraEnvio:{
         flexDirection: "row",
         alignItems: "flex-end",
@@ -450,43 +329,5 @@ const styles = StyleSheet.create({
         fontFamily: fonts.semibold,
         fontSize: fontSizes.tituloCard,
         color: colors.red700
-    },
-    material:{
-        flexDirection: "row",
-        alignItems: "center",
-        gap: spacing.md,
-        padding: spacing.lg,
-        borderWidth: 1,
-        borderColor: colors.gray300,
-        borderRadius: radius.cardSm,
-        backgroundColor: colors.white,
-        ...shadows.cardLeve
-    },
-    iconeMaterial:{
-        width: 44,
-        height: 44,
-        borderRadius: radius.item,
-        alignItems: "center",
-        justifyContent: "center",
-        backgroundColor: colors.red700
-    },
-    dadosMaterial:{
-        flex: 1,
-        gap: 2
-    },
-    tituloMaterial:{
-        fontFamily: fonts.semibold,
-        fontSize: 15,
-        color: colors.black
-    },
-    texto:{
-        fontFamily: fonts.regular,
-        fontSize: 14,
-        color: colors.black
-    },
-    textoSecundario:{
-        fontFamily: fonts.regular,
-        fontSize: 13,
-        color: colors.gray700
     }
 })
