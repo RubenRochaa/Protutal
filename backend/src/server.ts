@@ -34,9 +34,11 @@ app.use((req: Request, res: Response) => {
 // handler global de erros: precisa ter os 4 parâmetros para o Express reconhecê-lo
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     if (err instanceof AppError) {
-        // erro lançado pela aplicação com status HTTP definido (ex.: 400, 401, 404, 409)
+        // erro lançado pela aplicação com status HTTP definido (ex.: 400, 401, 404, 409).
+        // os "dados" extras (quando existem) vão junto, ex.: { error, codigo, liberado_em }
         return res.status(err.statusCode).json({
-            error: err.message
+            error: err.message,
+            ...err.dados
         })
     }
 

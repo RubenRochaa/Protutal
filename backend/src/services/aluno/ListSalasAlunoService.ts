@@ -1,6 +1,6 @@
 import prismaClient from "../../prisma";
 import { parseIdOpcional } from "../../helpers/parseIdOpcional";
-import { buscarImpedimentoAluno } from "../../helpers/verificarPedidoTutoria";
+import { buscarImpedimentosPorSala } from "../../helpers/verificarPedidoTutoria";
 
 interface ListSalasAlunoRequest {
     id_aluno: number;
@@ -15,10 +15,11 @@ class ListSalasAlunoService {
 
         // consultas fixas, independente da quantidade de salas (sem uma consulta por sala):
         // as matrículas do aluno (com sala e professor) e as regras do pedido de tutoria.
-        // as regras (já é tutor, pedido pendente) dependem só do aluno, então valem para todas as salas;
+        // as regras são avaliadas por sala (já é tutor / revogado / recusa recente nesta sala);
+        // só "pedido pendente" vale para todas as salas;
         // sem filtro, ano_letivo fica undefined e o Prisma ignora o campo;
         // select explícito: do professor sai só o nome (sem email, senha ou tokens)
-        const [matriculas, impedimento] = await Promise.all([
+        const [matriculas, situacaoDaSala] = await Promise.all([
             prismaClient.matricula.findMany({
                 where: {
                     id_aluno: id_aluno,
@@ -47,22 +48,28 @@ class ListSalasAlunoService {
                     { sala: { nome: "asc" } }
                 ]
             }),
-            buscarImpedimentoAluno(id_aluno)
+            buscarImpedimentosPorSala(id_aluno)
         ]);
 
         // a regra de matrícula do POST sempre passa aqui, porque só entram salas em que o aluno está matriculado.
         // se o aluno não tiver matrícula, volta lista vazia e isso não é erro
-        return matriculas.map(({ sala }) => ({
-            id_sala: sala.id_sala,
-            nome: sala.nome,
-            serie: sala.serie,
-            ano_letivo: sala.ano_letivo,
-            professor: sala.professor,
-            pode_pedir_tutoria: impedimento === null,
-            motivo: impedimento === null
-                ? null
-                : { codigo: impedimento.codigo, mensagem: impedimento.mensagem }
-        }));
+        return matriculas.map(({ sala }) => {
+            const { impedimento, liberado_em } = situacaoDaSala(sala.id_sala);
+
+            return {
+                id_sala: sala.id_sala,
+                nome: sala.nome,
+                serie: sala.serie,
+                ano_letivo: sala.ano_letivo,
+                professor: sala.professor,
+                pode_pedir_tutoria: impedimento === null,
+                motivo: impedimento === null
+                    ? null
+                    : { codigo: impedimento.codigo, mensagem: impedimento.mensagem },
+                // quando o aluno pode pedir de novo nesta sala (recusa recente), em ISO; senão null
+                liberado_em: liberado_em ? liberado_em.toISOString() : null
+            };
+        });
     }
 }
 

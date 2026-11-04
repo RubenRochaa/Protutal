@@ -46,6 +46,8 @@ export interface SalaAluno {
     professor: { nome: string };
     pode_pedir_tutoria: boolean;
     motivo: { codigo: string; mensagem: string } | null;
+    // Pedido recusado há menos de 2h nesta sala: quando o aluno pode pedir de novo (ISO). Senão null
+    liberado_em: string | null;
 }
 
 // Material de apoio da sala (rota A5 - GET /salas/:id/materiais)
