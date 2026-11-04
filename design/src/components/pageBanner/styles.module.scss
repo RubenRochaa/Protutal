@@ -1,11 +1,48 @@
+// O arquivo do mascote tem 500x500 px com borda transparente. Frações do lado da imagem:
+// - os tênis terminam a 85% da altura: bottom de -15% deixa o mascote "em pé" na borda
+//   de baixo e a sombra cinza fica abaixo dela, escondida pelo overflow do banner;
+// - sobra 11% transparente à direita do desenho, que ocupa 66% da largura.
+$sobra-base: 0.15;
+$sobra-direita: 0.11;
+$largura-visivel: 0.66;
+
+// Posiciona o mascote de lado $lado no canto direito do container com padding $padding
+// e reserva à direita do título o espaço visível do desenho
+@mixin mascote($lado, $padding){
+    .imagem{
+        width: $lado;
+        height: $lado;
+        right: $padding - $sobra-direita * $lado;
+        bottom: -$sobra-base * $lado;
+    }
+
+    .comImagem .titulo{
+        padding-right: $largura-visivel * $lado + 16px;
+    }
+}
+
 .banner{
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    min-height: 96px;
+    background: linear-gradient(90deg, var(--red-500) 0%, var(--red-700) 45%, var(--wine-800) 100%);
+}
+
+// Mesma largura máxima e padding lateral das páginas: o título começa alinhado com os cards
+.conteudo{
+    position: relative;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    min-height: 96px;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
     padding: 16px 72px;
-    background: linear-gradient(90deg, var(--red-500) 0%, var(--red-700) 45%, var(--wine-800) 100%);
+}
+
+// Com mascote o banner fica mais alto, para caber o desenho inteiro
+.comImagem{
+    min-height: 140px;
 }
 
 .titulo{
@@ -14,17 +51,22 @@
     font-weight: 600;
 }
 
-// Mascote do "Bem-vindo": não encolhe o título, só diminui nas telas menores
 .imagem{
-    flex-shrink: 0;
-    width: 112px;
-    height: 112px;
-    margin: -8px 0;
+    position: absolute;
 }
+
+@include mascote(190px, 72px);
 
 @media (max-width: 768px){
     .banner{
         min-height: 72px;
+    }
+
+    .comImagem{
+        min-height: 96px;
+    }
+
+    .conteudo{
         padding: 12px 24px;
     }
 
@@ -32,20 +74,24 @@
         font-size: 1.6rem;
     }
 
-    .imagem{
-        width: 72px;
-        height: 72px;
-        margin: -4px 0;
-    }
+    @include mascote(120px, 24px);
 }
 
+// No celular o mascote some, para o título não ficar espremido
 @media (max-width: 375px){
-    .banner{
+    .comImagem{
+        min-height: 72px;
+    }
+
+    .conteudo{
         padding: 12px 16px;
     }
 
     .imagem{
-        width: 56px;
-        height: 56px;
+        display: none;
+    }
+
+    .comImagem .titulo{
+        padding-right: 0;
     }
 }

@@ -1,19 +1,10 @@
 import { redirect } from 'next/navigation'
 import { Header } from '@/components/header'
+import { AreaComRodape } from '@/components/footer/areaComRodape'
 import { getNomeServer, getPerfilServer } from '@/lib/cookieServer'
 import { getAutenticado } from '@/lib/apiServer'
 import { sessaoExpiradaNaPagina } from '@/lib/sessaoExpirada'
-
-// Menu do aluno, na ordem do Figma. Os itens com "emBreve" ainda não têm tela
-const LINKS = [
-    { label: "Início", href: "/aluno" },
-    { label: "Minhas atividades", href: "/aluno/atividades" },
-    { label: "Meu desempenho", href: "/aluno/desempenho" },
-    { label: "Tutoria", href: "/aluno/tutoria" },
-]
-
-// Aparece só para quem é tutor (rota T1 respondeu 200)
-const LINK_TUTOR = { label: "Área do tutor", href: "/tutor" }
+import { MENU_ALUNO } from '@/lib/menus'
 
 // Moldura de todas as telas do aluno: Header em cima e a página embaixo.
 // O middleware já barra quem não é aluno; conferimos de novo aqui por segurança.
@@ -23,7 +14,7 @@ export default async function AlunoLayout({ children }: { children: React.ReactN
     if(perfil !== "aluno") redirect(perfil ? `/${perfil}` : "/")
 
     // Tutor é aluno com vínculo ativo: a rota T1 só responde 200 para ele.
-    // 403 (não é tutor), 500 ou sem conexão: o item fica escondido, sem toast
+    // 403 (não é tutor), 500 ou sem conexão: o ícone de troca fica escondido, sem toast
     // (os cards da página já avisam quando a API está fora)
     const tutorias = await getAutenticado("/tutores/me/tutorias")
 
@@ -34,9 +25,14 @@ export default async function AlunoLayout({ children }: { children: React.ReactN
     const nome = await getNomeServer()
 
     return (
-        <>
-            <Header links={ehTutor ? [...LINKS, LINK_TUTOR] : LINKS} nome={nome} />
+        <AreaComRodape>
+            <Header
+            links={MENU_ALUNO}
+            inicio="/aluno"
+            nome={nome}
+            perfil={{ rotulo: "Aluno", trocarPara: ehTutor ? "/tutor" : undefined }}
+            />
             {children}
-        </>
+        </AreaComRodape>
     )
 }

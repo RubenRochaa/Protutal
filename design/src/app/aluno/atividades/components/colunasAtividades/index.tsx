@@ -20,12 +20,16 @@ interface ColunaProps {
     titulo: string;
     atividades: AtividadeAluno[];
     vazio: string;
-    className: string;
 }
 
-function Coluna({ titulo, atividades, vazio, className }: ColunaProps){
+// Prazo em milissegundos, para comparar na ordenação
+function prazo(atividade: AtividadeAluno){
+    return new Date(atividade.data_entrega).getTime()
+}
+
+function Coluna({ titulo, atividades, vazio }: ColunaProps){
     return (
-        <Card titulo={titulo} className={className}>
+        <Card titulo={titulo}>
             {atividades.length === 0 ? (
                 <EmptyState mensagem={vazio} imagem={MASCOTES.atividades} />
             ) : (
@@ -42,7 +46,7 @@ function Coluna({ titulo, atividades, vazio, className }: ColunaProps){
 }
 
 // Busca as atividades do aluno (rota A1) uma vez só e separa em duas colunas.
-// A ordem da API (prazo mais próximo primeiro) é mantida em cada coluna
+// Cada coluna é ordenada aqui no front, sem mudar a chamada à API
 export async function ColunasAtividades({ etapa }: Props){
     const resultado = await getAutenticado<AtividadeAluno[]>(
         "/alunos/me/atividades",
@@ -56,25 +60,28 @@ export async function ColunasAtividades({ etapa }: Props){
         return <ToastErro mensagem={getErrorMessage(resultado.erro)} />
     }
 
-    const naoEntregues = resultado.dados.filter((atividade) => atividade.status === "pendente")
-    const realizadas = resultado.dados.filter((atividade) => atividade.status !== "pendente")
+    const pendentes = resultado.dados.filter((atividade) => atividade.status === "pendente")
+    const entregues = resultado.dados.filter((atividade) => atividade.status !== "pendente")
+
+    // Não entregues: prazo mais antigo primeiro (atrasadas no topo, depois as que vencem antes)
+    const naoEntregues = [...pendentes].sort((a, b) => prazo(a) - prazo(b))
+    // Realizadas: prazo mais recente primeiro
+    const realizadas = [...entregues].sort((a, b) => prazo(b) - prazo(a))
 
     return (
-        // "Não entregues" vem primeiro no HTML: no celular e no tablet fica em cima,
-        // porque é o que o aluno precisa fazer. No desktop o CSS põe "Realizadas" à esquerda, como no Figma
+        // "Não entregues" vem primeiro em todas as larguras (à esquerda no desktop, em cima no celular),
+        // porque é o que o aluno precisa fazer
         <div className={styles.grade}>
             <Coluna
-            titulo="Atividades não entregues"
+            titulo={`Atividades não entregues (${naoEntregues.length})`}
             atividades={naoEntregues}
             vazio={etapa ? MSG_FILTRO_VAZIO : "Nenhuma atividade pendente. Bom trabalho!"}
-            className={styles.naoEntregues}
             />
 
             <Coluna
-            titulo="Atividades realizadas"
+            titulo={`Atividades realizadas (${realizadas.length})`}
             atividades={realizadas}
             vazio={etapa ? MSG_FILTRO_VAZIO : "Você ainda não entregou nenhuma atividade."}
-            className={styles.realizadas}
             />
         </div>
     )

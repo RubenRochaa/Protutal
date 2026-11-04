@@ -986,7 +986,7 @@ E-mail confirmado! Você já pode entrar no Protutal.
 - **Método:** POST
 - **URL:** `/pedidos-tutoria`
 - **Autenticação:** token obrigatório (perfil: aluno)
-- **Descrição:** Cria um pedido de tutoria com status `pendente` para uma sala em que o aluno logado está matriculado. O aluno não pode ter outro pedido pendente e não pode já ser tutor, porque `Tutor.id_aluno` é único: quem já tem registro em `Tutor` não pede de novo, nem para outra sala.
+- **Descrição:** Cria um pedido de tutoria com status `pendente` para uma sala em que o aluno logado está matriculado. As regras valem por sala: o aluno não pode pedir numa sala em que já é tutor (vínculo `Tutor_sala` ativo) nem numa sala em que foi revogado. Ele pode pedir em outra sala, mesmo sendo tutor. Ele também não pode ter outro pedido pendente, em nenhuma sala. Depois de uma recusa, só pode pedir de novo na mesma sala 2 horas depois da `data_decisao` (constante `INTERVALO_NOVO_PEDIDO_MS`). Recusa com `data_decisao` nula não bloqueia.
 - **Parâmetros de rota:** Não possui
 - **Parâmetros de query:** Não possui
 - **Corpo da requisição:**
@@ -1023,11 +1023,25 @@ E-mail confirmado! Você já pode entrar no Protutal.
 | 400 | O campo id_sala é obrigatório e deve ser um número inteiro | `id_sala` ausente, `null` ou que não é inteiro positivo |
 | 404 | Sala não encontrada | Não existe sala com esse id |
 | 400 | Você não está matriculado nesta sala | O aluno não tem matrícula na sala |
-| 409 | Você já é tutor | O aluno já tem registro em `Tutor` |
+| 409 | Você já é tutor nesta sala | O aluno tem `Tutor_sala` ativo nesta sala |
+| 409 | Seu cargo de tutor foi revogado nesta sala | O aluno tem `Tutor_sala` revogado nesta sala |
 | 409 | Você já tem um pedido de tutoria pendente | Já existe pedido `pendente` do aluno, em qualquer sala |
+| 409 | Seu último pedido nesta sala foi recusado. Aguarde 2 horas para enviar um novo pedido | A recusa mais recente nesta sala tem menos de 2 horas |
 | 500 | Erro interno do servidor | Erro inesperado |
 
-> ⚠️ Divergência: o perfil errado devolve **403**, e já ser tutor ou ter pedido pendente devolve **409**. Os dois códigos estão fora da lista padrão. "Você não está matriculado nesta sala" é uma relação que não existe e devolve **400**, não 404.
+Os erros 409 trazem também o campo `codigo` (`ja_e_tutor`, `tutor_revogado`, `pedido_pendente` ou `recusa_recente`). Na recusa recente vem ainda `liberado_em`, em ISO:
+
+```json
+{
+  "error": "Seu último pedido nesta sala foi recusado. Aguarde 2 horas para enviar um novo pedido",
+  "codigo": "recusa_recente",
+  "liberado_em": "2026-11-03T16:30:00.000Z"
+}
+```
+
+O GET `/alunos/me/salas` devolve as mesmas regras por sala (`pode_pedir_tutoria`, `motivo`) e o campo `liberado_em` (ISO ou `null`).
+
+> ⚠️ Divergência: o perfil errado devolve **403**, e as regras de negócio (já é tutor, revogado, pedido pendente e recusa recente) devolvem **409**. Os dois códigos estão fora da lista padrão. "Você não está matriculado nesta sala" é uma relação que não existe e devolve **400**, não 404.
 
 ---
 
@@ -1080,7 +1094,7 @@ E-mail confirmado! Você já pode entrar no Protutal.
 - **Método:** PATCH
 - **URL:** `/pedidos-tutoria/:id/aceitar`
 - **Autenticação:** token obrigatório (perfil: professor, dono da sala do pedido)
-- **Descrição:** Aceita um pedido pendente. Numa única transação, a rota muda o pedido para `aceito` (com `data_decisao` e o professor), cria o registro em `Tutor` e o vínculo `Tutor_sala` com `pode_criar_ativ: false`. O `id_sala` do corpo precisa ser a mesma sala escolhida no pedido, e o aluno ainda precisa estar matriculado nela. Se dois professores aceitarem ao mesmo tempo, só o primeiro grava.
+- **Descrição:** Aceita um pedido pendente. Numa única transação, a rota muda o pedido para `aceito` (com `data_decisao` e o professor), cria o registro em `Tutor` (ou reaproveita o que já existe, se o aluno já é tutor em outra sala) e o vínculo `Tutor_sala` com `pode_criar_ativ: false`. O `id_sala` do corpo precisa ser a mesma sala escolhida no pedido, e o aluno ainda precisa estar matriculado nela. Se dois professores aceitarem ao mesmo tempo, só o primeiro grava.
 - **Parâmetros de rota:**
 
 | Nome | Tipo | Obrigatório | Descrição |
@@ -1137,7 +1151,8 @@ E-mail confirmado! Você já pode entrar no Protutal.
 | 403 | Você não tem permissão para acessar esta sala | A sala é de outro professor |
 | 400 | Este pedido foi feito para outra sala | O `id_sala` do corpo é diferente da sala do pedido |
 | 400 | O aluno não está matriculado nesta sala | O aluno não tem mais matrícula na sala |
-| 409 | Este aluno já é tutor | O aluno já tem registro em `Tutor` (violação de UNIQUE ao criar) |
+| 409 | Este aluno já é tutor nesta sala | O aluno já tem `Tutor_sala` ativo nesta sala |
+| 409 | Este aluno já é tutor | Dois aceites ao mesmo tempo criaram o `Tutor` (violação de UNIQUE) |
 | 500 | Erro interno do servidor | Erro inesperado |
 
 > ⚠️ Divergência: sala de outro professor devolve **403**, e pedido já decidido ou aluno que já é tutor devolve **409**. Os dois códigos estão fora da lista padrão. "Pedido feito para outra sala" e "aluno não matriculado" devolvem **400**, não 404.
@@ -3507,7 +3522,7 @@ Pontos ambíguos, incompletos ou inconsistentes encontrados ao comparar o códig
 
 ### 5.3 Regras de negócio inconsistentes ou incompletas
 11. **Duas tutorias ativas do aluno na mesma sala.** A P7 não deixa reabrir uma tutoria se o aluno já tem outra tutoria ativa na mesma sala. A P30 só bloqueia tutoria ativa entre **o mesmo tutor e o mesmo aluno**, então permite criar uma segunda tutoria ativa para o aluno com outro tutor da mesma sala.
-12. **Tutor em uma única sala.** `Tutor.id_aluno` é único, e a A13 recusa com "Você já é tutor". Nenhuma rota cria um segundo `Tutor_sala` para um aluno que já é tutor, e um tutor revogado também não consegue pedir de novo, embora a tabela `Tutor_sala` permita vários vínculos.
+12. **Tutor em várias salas, um registro em `Tutor`.** `Tutor.id_aluno` é único, então a P27 reaproveita o `Tutor` do aluno e cria só um `Tutor_sala` novo. `Tutor.id_pedido` continua apontando para o primeiro pedido aceito. Na sala em que foi revogado, o aluno não pode pedir de novo (A13 devolve 409).
 13. **Tutor só com vínculos revogados não vê o próprio histórico.** A T6 (pelo `isTutor`) e a T7 (pela conferência no service) exigem pelo menos um vínculo ativo, embora os services incluam os vínculos revogados no resultado.
 14. **P27 com `id_sala` redundante.** O corpo exige `id_sala`, mas o valor precisa ser igual ao `id_sala` do próprio pedido.
 15. **A5: qualquer professor vê os materiais de qualquer sala.** Nas demais rotas de professor, só o dono da sala tem acesso (RN07). O comentário do código indica que foi uma decisão.

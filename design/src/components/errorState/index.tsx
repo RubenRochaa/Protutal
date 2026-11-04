@@ -15,7 +15,7 @@ interface Props {
     imagem?: ImagemMascote | null;
 }
 
-// Erro de conexão: quadro branco com o mascote, a mensagem e o botão "Tentar novamente".
+// Erro de conexão: sem caixa própria, com o mascote, a mensagem e o botão "Tentar novamente".
 // Sem "retry": recarrega os dados da página (os Server Components buscam de novo na API).
 // No error.tsx da rota, passe o retry que o Next entrega: <ErrorState retry={retry} />
 export function ErrorState({ mensagem = MSG_SEM_CONEXAO, retry, imagem = MASCOTES.badRequest }: Props){

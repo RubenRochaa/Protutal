@@ -1,21 +1,21 @@
 import styles from './pagina.module.scss'
 import { redirect } from 'next/navigation'
 import { Header } from '@/components/header'
+import { AreaComRodape } from '@/components/footer/areaComRodape'
 import { getNomeServer, getPerfilServer } from '@/lib/cookieServer'
 import { getErrorMessage, getErrorStatus } from '@/lib/getErrorMessage'
 import { sessaoExpiradaNaPagina } from '@/lib/sessaoExpirada'
 import { ErroCarregamento } from '../professor/components/erroCarregamento'
 import { buscarTutorias } from './buscas'
 
-// Menu do tutor (estrutura dos prints). "Área do aluno" volta para as telas de tutorado
+// Menu do tutor (estrutura dos prints), sem "Início": a logo leva para lá.
+// A volta para as telas de tutorado é o ícone de troca ao lado do selo "Tutor"
 const LINKS = [
-    { label: "Início", href: "/tutor" },
     { label: "Atividades", href: "/tutor/atividades" },
     { label: "Tutoria", href: "/tutor/tutoria" },
     { label: "Contestações", href: "/tutor/contestacoes" },
     { label: "Feedbacks", href: "/tutor/feedbacks" },
     { label: "Desempenho", href: "/tutor/desempenho" },
-    { label: "Área do aluno", href: "/aluno" },
 ]
 
 // Moldura de todas as telas do tutor. Tutor não é perfil de login: ele entra como aluno,
@@ -39,8 +39,8 @@ export default async function TutorLayout({ children }: { children: React.ReactN
     const nome = await getNomeServer()
 
     return (
-        <>
-            <Header links={LINKS} nome={nome} />
+        <AreaComRodape>
+            <Header links={LINKS} inicio="/tutor" nome={nome} perfil={{ rotulo: "Tutor", trocarPara: "/aluno" }} />
 
             {"erro" in tutorias ? (
                 // API fora ou erro 500: não dá para saber se é tutor, então a página não abre
@@ -48,6 +48,6 @@ export default async function TutorLayout({ children }: { children: React.ReactN
                     <ErroCarregamento mensagem={getErrorMessage(tutorias.erro)} status={getErrorStatus(tutorias.erro)} />
                 </main>
             ) : children}
-        </>
+        </AreaComRodape>
     )
 }

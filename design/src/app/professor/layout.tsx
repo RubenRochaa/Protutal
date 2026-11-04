@@ -1,16 +1,8 @@
 import { redirect } from 'next/navigation'
 import { Header } from '@/components/header'
+import { AreaComRodape } from '@/components/footer/areaComRodape'
 import { getNomeServer, getPerfilServer } from '@/lib/cookieServer'
-
-// Menu do professor, na ordem do Figma (p13), mais "Notificações"
-// (pedidos e contestações pendentes de todas as salas). "Sair" fica no próprio Header.
-const LINKS = [
-    { label: "Início", href: "/professor" },
-    { label: "Salas", href: "/professor#salas" },
-    { label: "Tutoria", href: "/professor/tutoria" },
-    { label: "Desempenho", href: "/professor/desempenho" },
-    { label: "Notificações", href: "/professor/notificacoes" },
-]
+import { MENU_PROFESSOR } from '@/lib/menus'
 
 // Moldura de todas as telas do professor: Header em cima e a página embaixo.
 // O middleware já barra quem não é professor; conferimos de novo aqui por segurança.
@@ -22,9 +14,9 @@ export default async function ProfessorLayout({ children }: { children: React.Re
     const nome = await getNomeServer()
 
     return (
-        <>
-            <Header links={LINKS} nome={nome} />
+        <AreaComRodape>
+            <Header links={MENU_PROFESSOR} inicio="/professor" nome={nome} perfil={{ rotulo: "Professor" }} />
             {children}
-        </>
+        </AreaComRodape>
     )
 }

@@ -15,7 +15,27 @@
     }
 
     &:disabled{
-        opacity: 0.6;
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+}
+
+// Botão desabilitado com o aviso e o timer embaixo (mesmo visual do queroSerTutor)
+.bloqueado{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+}
+
+.motivo{
+    max-width: 280px;
+    color: var(--gray-700);
+    font-size: 0.85rem;
+    text-align: right;
+
+    strong{
+        font-variant-numeric: tabular-nums;
     }
 }
 
@@ -53,6 +73,16 @@
 @media (max-width: 375px){
     .botao{
         width: 100%;
+    }
+
+    .bloqueado{
+        width: 100%;
+        align-items: stretch;
+    }
+
+    .motivo{
+        max-width: none;
+        text-align: left;
     }
 
     .botoes{

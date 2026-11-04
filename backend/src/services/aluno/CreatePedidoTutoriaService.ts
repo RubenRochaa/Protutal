@@ -1,6 +1,6 @@
 import prismaClient from "../../prisma";
 import { AppError } from "../../errors/AppError";
-import { IMPEDIMENTOS_PEDIDO_TUTORIA, buscarImpedimentoAluno } from "../../helpers/verificarPedidoTutoria";
+import { IMPEDIMENTOS_PEDIDO_TUTORIA, buscarImpedimentosPorSala } from "../../helpers/verificarPedidoTutoria";
 
 interface PedidoTutoriaRequest {
     id_aluno: number;
@@ -49,11 +49,18 @@ class CreatePedidoTutoriaService {
             throw new AppError(mensagem, status);
         }
 
-        // já é tutor (409) -> pedido pendente (409): regras compartilhadas com o GET /alunos/me/salas
-        const impedimento = await buscarImpedimentoAluno(id_aluno);
+        // já é tutor nesta sala -> revogado nesta sala -> pedido pendente -> recusa há menos de 2h nesta sala
+        // (todos 409): regras compartilhadas com o GET /alunos/me/salas
+        const situacaoDaSala = await buscarImpedimentosPorSala(id_aluno, idSala);
+        const { impedimento, liberado_em } = situacaoDaSala(idSala);
 
         if (impedimento) {
-            throw new AppError(impedimento.mensagem, impedimento.status);
+            // na recusa recente, o front recebe também quando o aluno pode pedir de novo
+            const dados = liberado_em
+                ? { codigo: impedimento.codigo, liberado_em: liberado_em.toISOString() }
+                : { codigo: impedimento.codigo };
+
+            throw new AppError(impedimento.mensagem, impedimento.status, dados);
         }
 
         const pedido = await prismaClient.pedido_tutoria.create({

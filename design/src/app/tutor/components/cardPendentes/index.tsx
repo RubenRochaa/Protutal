@@ -27,7 +27,7 @@ export async function CardPendentes(){
     const paraCorrigir = resultado.dados.filter((a) => a.total_entregues > a.total_com_nota)
 
     return (
-        <Card titulo={TITULO}>
+        <Card titulo={TITULO} acao={<Link href="/tutor/atividades" className={pagina.verTodas}>Ver todas</Link>}>
             {paraCorrigir.length === 0 ? (
                 <EmptyState mensagem="Nenhuma entrega esperando correção." imagem={null} />
             ) : (
@@ -46,8 +46,6 @@ export async function CardPendentes(){
                     ))}
                 </ul>
             )}
-
-            <Link href="/tutor/atividades" className={pagina.verTodas}>Ver todas</Link>
         </Card>
     )
 }
