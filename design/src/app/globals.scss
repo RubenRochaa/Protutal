@@ -40,13 +40,13 @@
   --fonte-rotulo: 0.85rem;      // rótulo pequeno acima de um dado (ex.: "Tutor:")
   --fonte-indicador: 2rem;      // número grande dos indicadores (Visão geral da sala)
   --fonte-subaba: 0.9rem;       // pílulas das sub-abas da sala
-  --fonte-aba-sm: 0.8rem;       // abas principais da sala no celular (375 px)
+  --fonte-aba-sm: 0.8rem;       // abas principais da sala no celular (até 480 px)
 
   // Selo do tipo de conta no Header: igual em todas as áreas
   --fonte-selo: 0.75rem;
   --altura-selo: 22px;
   --largura-selo: 72px;
-  --fonte-selo-sm: 0.7rem; // celular (375 px)
+  --fonte-selo-sm: 0.7rem; // celular (até 480 px)
   --largura-selo-sm: 60px;
 }
 
@@ -71,6 +71,18 @@ body {
 body, input, textarea, select, button {
   font-family: var(--font-poppins), sans-serif;
   font-size: 1rem;
+}
+
+// Sem o destaque cinza que o celular desenha ao tocar em links e botões
+html {
+  -webkit-tap-highlight-color: transparent;
+}
+
+// iPhone: campos com fonte menor que 16 px fazem o Safari dar zoom ao tocar
+@media (max-width: 480px){
+  input, textarea, select {
+    font-size: max(16px, 1em);
+  }
 }
 
 :focus-visible {

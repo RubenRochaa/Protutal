@@ -23,7 +23,7 @@
     margin-top: 8px;
 }
 
-@media (max-width: 375px){
+@media (max-width: 480px){
     .linha,
     .acoes{
         grid-template-columns: minmax(0, 1fr);

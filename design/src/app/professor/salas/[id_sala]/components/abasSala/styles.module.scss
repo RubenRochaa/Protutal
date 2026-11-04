@@ -79,8 +79,8 @@
     }
 }
 
-// Celular: fonte e padding menores para as 5 abas caberem em 375 px
-@media (max-width: 375px){
+// Celular: fonte e padding menores para as 5 abas caberem no celular (360 px)
+@media (max-width: 480px){
     .aba, .abaAtiva{
         padding: 8px 4px;
         font-size: var(--fonte-aba-sm);

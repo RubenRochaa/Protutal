@@ -78,7 +78,7 @@ $largura-visivel: 0.66;
 }
 
 // No celular o mascote some, para o título não ficar espremido
-@media (max-width: 375px){
+@media (max-width: 480px){
     .comImagem{
         min-height: 72px;
     }

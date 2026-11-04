@@ -110,6 +110,11 @@ export function Header({ links, inicio, nome, perfil }: Props){
                             {link.label}
                         </Link>
                     ))}
+
+                    {/* Celular (até 480 px): o "Sair" da barra some e aparece aqui, no fim do menu */}
+                    <form action={handleLogout} className={styles.sairMenu}>
+                        <BotaoSair />
+                    </form>
                 </nav>
 
                 <div className={styles.acoes}>
@@ -159,7 +164,7 @@ export function Header({ links, inicio, nome, perfil }: Props){
                         <CircleUserRound className={styles.usuario} aria-hidden="true" />
                     )}
 
-                    <form action={handleLogout}>
+                    <form action={handleLogout} className={styles.sairBarra}>
                         <BotaoSair />
                     </form>
 

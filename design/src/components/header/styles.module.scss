@@ -153,6 +153,11 @@
     }
 }
 
+// "Sair" dentro do menu: só aparece no celular (ver @media 480)
+.sairMenu{
+    display: none;
+}
+
 .botaoMenu{
     display: none;
     align-items: center;
@@ -215,17 +220,31 @@
         border-top: 1px solid var(--gray-300);
     }}
 
-@media (max-width: 375px){
+@media (max-width: 480px){
     .logoImagem{
         height: 15px;
     }
 
-    .sair{
-        padding: 6px 14px;
+    // Na barra ficam só os ícones, o avatar e o menu; o "Sair" vai para o fim do menu
+    .sairBarra{
+        display: none;
+    }
+
+    .sairMenu{
+        display: flex;
+        padding: 14px 16px;
+        border-top: 1px solid var(--gray-300);
     }
 
     .acoes{
         gap: 8px;
+    }
+
+    // Área de toque mínima de 40 x 40 px nos ícones e no botão de menu
+    .atalho, .botaoMenu{
+        justify-content: center;
+        min-width: 40px;
+        min-height: 40px;
     }
 
     // Selo menor para não empurrar o "Sair" para fora da tela (igual nas três áreas)

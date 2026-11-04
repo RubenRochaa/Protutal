@@ -102,7 +102,7 @@ A validação do cliente só melhora a experiência. Mesmo validado, o erro da A
 - Antes de criar um componente, procure em `src/components` se já existe um parecido. Reaproveite.
 - Componente usado por mais de uma tela vai para `src/components`. Componente de uma tela só fica na pasta da tela, em `components/`.
 - Cores, fontes e espaçamentos do Figma ficam como variáveis em `src/app/globals.scss`. Não repita valores fixos nos módulos.
-- Telas responsivas: testar em largura de celular (375 px), tablet (768 px) e desktop (1280 px).
+- Telas responsivas: testar em largura de celular (360 a 430 px; breakpoint `@media (max-width: 480px)`), tablet (768 px) e desktop (1280 px).
 
 ## Rotas da API disponíveis
 
