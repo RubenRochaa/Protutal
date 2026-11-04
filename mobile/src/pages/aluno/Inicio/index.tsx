@@ -1,8 +1,9 @@
-import React, { ReactNode, useCallback } from "react";
+import React, { useCallback } from "react";
 import { View, Text, Image, StyleSheet, ScrollView, RefreshControl, TouchableOpacity } from "react-native";
 import { Feather } from "@expo/vector-icons";
 
 import { Header } from "../../../components/Header";
+import { CardResumo } from "../../../components/CardResumo";
 import { Loader } from "../../../components/Loader";
 import { ErrorState } from "../../../components/ErrorState";
 import { GraficoEtapas } from "../../../components/GraficoEtapas";
@@ -14,7 +15,7 @@ import { formatarData } from "../../../lib/formatacao";
 import { MASCOTES } from "../../../lib/mascotes";
 import { AtividadeAluno, ContestacaoAluno, DesempenhoAluno, TutoriaAluno } from "../../../lib/types";
 import { AlunoScreenProps } from "../../../routes/aluno.routes";
-import { colors, fonts, fontSizes, radius, shadows, spacing } from "../../../styles/theme";
+import { colors, fonts, fontSizes, radius, spacing } from "../../../styles/theme";
 
 // O card "Atividades pendentes" do site mostra só as primeiras (a API já ordena pelo prazo)
 const LIMITE_PENDENTES = 5;
@@ -25,36 +26,6 @@ interface Dados {
     pendentes: AtividadeAluno[] | null;
     desempenho: DesempenhoAluno | null;
     contestacoes: ContestacaoAluno[] | null;
-}
-
-interface CardResumoProps {
-    icone: React.ComponentProps<typeof Feather>["name"];
-    titulo: string;
-    subtitulo?: string;
-    onPress: () => void;
-    children?: ReactNode;
-}
-
-// Card do Início no layout do Figma: ícone, título, resumo e a seta para a tela completa
-function CardResumo({ icone, titulo, subtitulo, onPress, children }: CardResumoProps){
-    return (
-        <View style={styles.card}>
-            <TouchableOpacity style={styles.cabecalho} onPress={onPress} accessibilityRole="button" accessibilityLabel={`${titulo}. ${subtitulo ?? ""}`}>
-                <View style={styles.icone}>
-                    <Feather name={icone} size={24} color={colors.white} />
-                </View>
-
-                <View style={styles.dados}>
-                    <Text style={styles.titulo}>{titulo}</Text>
-                    {subtitulo && <Text style={styles.subtitulo}>{subtitulo}</Text>}
-                </View>
-
-                <Feather name="chevron-right" size={22} color={colors.gray700} />
-            </TouchableOpacity>
-
-            {children}
-        </View>
-    )
 }
 
 const MSG_FALHA = "Não foi possível carregar.";
@@ -207,42 +178,6 @@ const styles = StyleSheet.create({
         fontFamily: fonts.semibold,
         fontSize: fontSizes.destaque,
         color: colors.white
-    },
-    card:{
-        gap: spacing.md,
-        padding: spacing.lg,
-        borderWidth: 1,
-        borderColor: colors.gray300,
-        borderRadius: radius.card,
-        backgroundColor: colors.white,
-        ...shadows.cardLeve
-    },
-    cabecalho:{
-        flexDirection: "row",
-        alignItems: "center",
-        gap: spacing.md
-    },
-    icone:{
-        width: 48,
-        height: 48,
-        borderRadius: radius.cardSm,
-        alignItems: "center",
-        justifyContent: "center",
-        backgroundColor: colors.gray700
-    },
-    dados:{
-        flex: 1,
-        gap: 2
-    },
-    titulo:{
-        fontFamily: fonts.semibold,
-        fontSize: fontSizes.tituloCard,
-        color: colors.black
-    },
-    subtitulo:{
-        fontFamily: fonts.regular,
-        fontSize: 14,
-        color: colors.gray700
     },
     linha:{
         fontFamily: fonts.regular,

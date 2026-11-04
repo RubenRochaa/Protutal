@@ -1,4 +1,4 @@
-import React, { useState, createContext, ReactNode, useEffect, useContext, useCallback } from "react";
+import React, { useState, createContext, ReactNode, useEffect, useContext, useCallback, useRef } from "react";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { isAxiosError } from "axios";
@@ -50,6 +50,9 @@ const ROTA_SESSAO = {
 const STORAGE_USER = "@protutal";
 const STORAGE_AREA = "@protutal:area";
 
+// Resposta das rotas do tutor quando o vínculo foi revogado (middleware isTutor do back)
+const MSG_SEM_VINCULO = "Acesso permitido somente para tutores com vínculo ativo";
+
 const USER_VAZIO: UserProps = {
     id: 0,
     nome: "",
@@ -83,6 +86,10 @@ export function AuthProvider({children}: AuthProviderProps){
     const [loading, setLoading] = useState(true)
 
     const isAuthenticated = !!user.token;
+
+    // Área atual para o interceptor (que é criado uma vez só)
+    const areaRef = useRef<Area>("aluno");
+    areaRef.current = area;
 
     const signOut = useCallback(async () => {
         // Remove só as chaves do Protutal (o AsyncStorage.clear apagaria tudo do app)
@@ -144,6 +151,20 @@ export function AuthProvider({children}: AuthProviderProps){
                 ){
                     await signOut();
                     showToast("erro", MSG_SESSAO_EXPIRADA);
+                }
+
+                // Vínculo de tutor revogado com a área do tutor aberta: volta para a área do aluno,
+                // como o site faz (redirect para /aluno no layout do tutor)
+                if(
+                    isAxiosError(err) &&
+                    err.response?.status === 403 &&
+                    err.response.data?.error === MSG_SEM_VINCULO &&
+                    areaRef.current === "tutor"
+                ){
+                    await AsyncStorage.setItem(STORAGE_AREA, "aluno");
+                    setEhTutor(false);
+                    setArea("aluno");
+                    showToast("erro", MSG_SEM_VINCULO);
                 }
 
                 return Promise.reject(err);

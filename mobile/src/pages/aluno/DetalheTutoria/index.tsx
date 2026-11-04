@@ -10,11 +10,12 @@ import { Button } from "../../../components/Button";
 import { Loader } from "../../../components/Loader";
 import { EmptyState } from "../../../components/EmptyState";
 import { ErrorState } from "../../../components/ErrorState";
+import { ItemAviso } from "../../../components/ItemAviso";
 
 import { api } from "../../../services/api";
 import { useBuscar } from "../../../lib/useBuscar";
 import { getErrorMessage, getErrorStatus } from "../../../lib/getErrorMessage";
-import { formatarData, formatarDataHora, formatarNota } from "../../../lib/formatacao";
+import { formatarData, formatarNota } from "../../../lib/formatacao";
 import { MASCOTES } from "../../../lib/mascotes";
 import { AvisoSala, DesempenhoAluno, NotaAluno, TutoriaAluno } from "../../../lib/types";
 import { AlunoScreenProps } from "../../../routes/aluno.routes";
@@ -157,13 +158,7 @@ export default function DetalheTutoria({ navigation, route }: AlunoScreenProps<"
                     {avisos === "sem_acesso" && <Text style={styles.textoSecundario}>Você não tem acesso aos avisos desta sala.</Text>}
                     {Array.isArray(avisos) && avisos.length === 0 && <Text style={styles.textoSecundario}>Nenhum aviso publicado.</Text>}
 
-                    {listaAvisos.map((aviso) => (
-                        <View key={aviso.id_aviso} style={styles.aviso}>
-                            <Text style={styles.tituloItem}>{aviso.titulo}</Text>
-                            <Text style={styles.texto}>{aviso.conteudo}</Text>
-                            <Text style={styles.textoSecundario}>Prof. {aviso.professor.nome} · {formatarDataHora(aviso.data_publicacao)}</Text>
-                        </View>
-                    ))}
+                    {listaAvisos.map((aviso) => <ItemAviso key={aviso.id_aviso} aviso={aviso} />)}
                 </Card>
 
                 {/* A A10 recusa feedback de tutoria finalizada (409): o botão só aparece na ativa */}
@@ -269,11 +264,5 @@ const styles = StyleSheet.create({
         fontFamily: fonts.medium,
         fontSize: 14,
         color: colors.red700
-    },
-    aviso:{
-        gap: spacing.xs,
-        paddingBottom: spacing.md,
-        borderBottomWidth: 1,
-        borderBottomColor: colors.gray300
     }
 })
