@@ -135,8 +135,9 @@ export async function handlePedirTutoria(_estado: ActionState, formData: FormDat
         // Fora do try/catch: o redirect do Next funciona lançando um erro
         await sessaoExpiradaNaAction(erro)
 
-        // 409 = já é tutor ou já tem pedido pendente (ex.: pedido feito em outra aba):
-        // atualiza a lista para os botões mostrarem o motivo
+        // 409 = já é tutor/revogado na sala, já tem pedido pendente ou pedido recusado há menos de 2h
+        // (ex.: pedido feito em outra aba): atualiza a lista para os botões mostrarem o motivo/timer.
+        // A mensagem da API vai para o toast
         if(getErrorStatus(erro) === 409) revalidatePath("/aluno/tutoria")
 
         return { error: getErrorMessage(erro) }

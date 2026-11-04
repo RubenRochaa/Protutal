@@ -46,8 +46,9 @@ export async function QueroSerTutor(){
                             </p>
                         </div>
 
-                        {sala.pode_pedir_tutoria
-                            ? <BotaoPedirTutoria idSala={sala.id_sala} nomeSala={sala.nome} />
+                        {/* Com liberado_em (recusa há menos de 2h), o próprio botão mostra o timer e se libera sozinho */}
+                        {sala.pode_pedir_tutoria || sala.liberado_em
+                            ? <BotaoPedirTutoria idSala={sala.id_sala} nomeSala={sala.nome} liberadoEm={sala.liberado_em} />
                             : (
                                 <div className={styles.bloqueado}>
                                     <button

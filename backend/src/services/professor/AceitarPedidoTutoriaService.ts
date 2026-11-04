@@ -107,7 +107,18 @@ class AceitarPedidoTutoriaService {
                     throw new AppError("Este pedido já foi decidido", 409);
                 }
 
-                const tutor = await tx.tutor.create({
+                // Tutor.id_aluno é único: o aluno que já é tutor em outra sala reaproveita o mesmo
+                // registro (id_pedido continua sendo o do primeiro aceite) e ganha só uma Tutor_sala nova
+                const tutorExistente = await tx.tutor.findUnique({
+                    where: {
+                        id_aluno: pedido.id_aluno
+                    },
+                    select: {
+                        id_tutor: true
+                    }
+                });
+
+                const tutor = tutorExistente ?? await tx.tutor.create({
                     data: {
                         id_aluno: pedido.id_aluno,
                         id_pedido: pedido.id_pedido
@@ -116,6 +127,22 @@ class AceitarPedidoTutoriaService {
                         id_tutor: true
                     }
                 });
+
+                // não pode haver dois vínculos ativos do mesmo tutor na mesma sala
+                const vinculoAtivo = await tx.tutor_sala.findFirst({
+                    where: {
+                        id_tutor: tutor.id_tutor,
+                        id_sala: idSala,
+                        data_revogacao: null
+                    },
+                    select: {
+                        id_tutor_sala: true
+                    }
+                });
+
+                if (vinculoAtivo) {
+                    throw new AppError("Este aluno já é tutor nesta sala", 409);
+                }
 
                 const tutorSala = await tx.tutor_sala.create({
                     data: {
@@ -155,7 +182,8 @@ class AceitarPedidoTutoriaService {
 
             return resultado;
         } catch (err) {
-            // P2002 = violação de UNIQUE em Tutor (id_aluno ou id_pedido): o aluno já virou tutor
+            // P2002 = violação de UNIQUE em Tutor (id_aluno ou id_pedido): o aluno virou tutor
+            // por outro aceite feito ao mesmo tempo que este
             if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === "P2002") {
                 throw new AppError("Este aluno já é tutor", 409);
             }
