@@ -88,7 +88,7 @@ export default function DetalheAtividade({ navigation, route }: ProfessorScreenP
         if(carregando) return <Loader />;
         if(!dados) return <ErrorState message={getErrorMessage(erro)} onRetry={tentarNovamente} />;
 
-        return null;
+        return undefined;
     }
 
     return (
@@ -113,7 +113,7 @@ export default function DetalheAtividade({ navigation, route }: ProfessorScreenP
                         {rotuloTipo(dados.atividade.tipo, dados.tipos)} · prazo {formatarDataHora(dados.atividade.data_entrega)}
                     </Text>
                 </View>
-            ) : null}
+            ) : undefined}
             ListEmptyComponent={conteudoVazio()}
             refreshControl={
                 <RefreshControl refreshing={atualizando} onRefresh={atualizar} colors={[colors.red700]} tintColor={colors.red700} />
