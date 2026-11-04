@@ -8,7 +8,7 @@ import { Loader } from "../../../components/Loader";
 import { EmptyState } from "../../../components/EmptyState";
 import { ErrorState } from "../../../components/ErrorState";
 import { AbasSegmentadas } from "../../../components/AbasSegmentadas";
-import { Decisao, ModalResolver } from "./ModalResolver";
+import { Decisao, ModalResolverContestacao } from "../../../components/ModalResolverContestacao";
 
 import { api } from "../../../services/api";
 import { useBuscar } from "../../../lib/useBuscar";
@@ -128,7 +128,7 @@ export default function Contestacoes({ navigation }: TutorScreenProps<"Contestac
             }
             />
 
-            <ModalResolver
+            <ModalResolverContestacao
             contestacao={selecionada}
             decisao={decisao}
             onClose={() => setSelecionada(null)}

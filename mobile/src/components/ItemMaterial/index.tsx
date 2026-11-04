@@ -25,13 +25,16 @@ function iconeMaterial(url: string): { nome: React.ComponentProps<typeof Feather
 // Material de apoio da sala (rota A5): tocar abre o arquivo no navegador do celular
 export function ItemMaterial({ material, detalhe }: ItemMaterialProps){
     const icone = iconeMaterial(material.arquivo);
+    // Materiais antigos (do seed) guardam um caminho local em vez da URL: não há o que abrir (igual ao site)
+    const linkWeb = /^https?:\/\//i.test(material.arquivo);
 
     return (
         <TouchableOpacity
         style={styles.material}
         onPress={() => Linking.openURL(material.arquivo)}
+        disabled={!linkWeb}
         accessibilityRole="link"
-        accessibilityLabel={`Abrir ${material.titulo}`}
+        accessibilityLabel={linkWeb ? `Abrir ${material.titulo}` : `${material.titulo}: arquivo indisponível`}
         >
             <View style={styles.icone}>
                 <Feather name={icone.nome} size={22} color={colors.white} />
@@ -41,9 +44,10 @@ export function ItemMaterial({ material, detalhe }: ItemMaterialProps){
                 <Text style={styles.titulo}>{material.titulo}</Text>
                 {material.descricao && <Text style={styles.texto}>{material.descricao}</Text>}
                 <Text style={styles.textoSecundario}>{icone.rotulo} · {detalhe}</Text>
+                {!linkWeb && <Text style={styles.textoSecundario}>Arquivo indisponível</Text>}
             </View>
 
-            <Feather name="download" size={22} color={colors.red700} />
+            {linkWeb && <Feather name="download" size={22} color={colors.red700} />}
         </TouchableOpacity>
     )
 }

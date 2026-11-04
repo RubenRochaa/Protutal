@@ -310,3 +310,119 @@ export interface DesempenhoVinculo {
         }[];
     };
 }
+
+// ---------- Área do professor: respostas da API (mesmos tipos de design/src/lib/types.ts) ----------
+// Reaproveitados das outras áreas: AvisoSala (P3), MaterialSala (A5), ConteudoSala (P2),
+// RespostasAtividade (P12), ContestacaoTutor (P16) e FeedbacksTutor (T7), que são as mesmas rotas
+
+// Sala do professor (rotas P19 - POST /salas e P20 - GET /salas)
+export interface Sala {
+    id_sala: number;
+    nome: string;
+    serie: number;
+    ano_letivo: number;
+    id_professor: number;
+}
+
+// Detalhe da sala (rota P1 - GET /salas/:id). Alunos, tutores e conteúdos têm rota própria
+export interface SalaDetalhe {
+    id_sala: number;
+    nome: string;
+    serie: number;
+    ano_letivo: number;
+    professor: { id_professor: number; nome: string };
+}
+
+// Aluno como as rotas P21 (GET /alunos) e P23 (GET /salas/:id/alunos) devolvem
+export interface AlunoSala {
+    id_aluno: number;
+    nome: string;
+    email: string;
+    // false = o aluno ainda não clicou no link de confirmação do e-mail
+    email_confirmado: boolean;
+}
+
+// Pedido pendente para ser tutor (rota P26 - GET /pedidos-tutoria), de todas as salas do professor
+export interface PedidoTutoria {
+    id_pedido: number;
+    data_solicitacao: string;
+    sala_pedido: { id_sala: number; nome: string };
+    aluno: { id_aluno: number; nome: string };
+    salas_matriculado: { id_sala: number; nome: string }[];
+}
+
+// Tutor ativo da sala (rota P24 - GET /salas/:id/tutores)
+export interface TutorSala {
+    id_tutor_sala: number;
+    id_tutor: number;
+    pode_criar_ativ: boolean;
+    data_definicao: string;
+    aluno: { id_aluno: number; nome: string; email: string };
+}
+
+// Avaliações do professor sobre um tutor (rota P10 - GET /tutores-sala/:id/avaliacoes).
+// Sem avaliações: media_notas null e lista vazia
+export interface AvaliacoesTutor {
+    tutor: { id_tutor_sala: number; nome: string; revogado: boolean };
+    resumo: { total_avaliacoes: number; media_notas: number | null };
+    avaliacoes: {
+        id_avaliacao: number;
+        nota: number;
+        comentario: string;
+        data: string;
+        professor: { nome: string };
+    }[];
+}
+
+// Tutoria da sala (rota P4 - GET /salas/:id/tutorias). Inclui as de tutores revogados
+export interface TutoriaSala {
+    id_tutoria: number;
+    status: StatusTutoria;
+    meta_aprendizagem: string | null;
+    data_inicio: string;
+    data_fim: string | null;
+    tutor: { nome: string };
+    aluno: { nome: string };
+}
+
+// Atividade lançada pelos tutores na sala (rota P11 - GET /salas/:id/atividades)
+export interface AtividadeSala {
+    id_atividade: number;
+    titulo: string;
+    tipo: string;
+    etapa: number;
+    data_entrega: string;
+    conteudo: { id_conteudo: number; nome: string } | null;
+    tutor: { id_tutor_sala: number; nome: string };
+    total_destinatarios: number;
+    total_entregues: number;
+    total_com_nota: number;
+}
+
+// Uma linha por nota lançada na sala (rota P14 - GET /salas/:id/notas)
+export interface NotaSala {
+    id_nota: number;
+    valor: number;
+    comentario: string | null;
+    data_lancamento: string;
+    aluno: { id_aluno: number; nome: string };
+    atividade: { id_atividade: number; titulo: string; tipo: string; etapa: number; data_entrega: string };
+    conteudo: { id_conteudo: number; nome: string } | null;
+    tutor: { id_tutor_sala: number; nome: string };
+    contestacao_pendente: boolean;
+}
+
+// Indicadores de cada tutor da sala (rota P13 - GET /salas/:id/desempenho-tutores).
+// Média null = sem nota (nunca 0)
+export interface DesempenhoTutorSala {
+    id_tutor_sala: number;
+    nome: string;
+    revogado: boolean;
+    data_revogacao: string | null;
+    feedback: {
+        media_geral: number | null;
+        quantidade: number;
+        por_etapa: MediaEtapa[];
+    };
+    avaliacoes_professor: { media_geral: number | null; quantidade: number };
+}

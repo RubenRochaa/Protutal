@@ -33,6 +33,11 @@ export function formatarNota(valor: number): string {
     return formatoNota.format(valor)
 }
 
+// Média que pode não existir (null = sem nota, nunca 0), como o formatarMedia do site
+export function formatarMedia(valor: number | null, semValor = "Sem nota"): string {
+    return valor === null ? semValor : formatarNota(valor)
+}
+
 // Primeira letra do primeiro e do último nome (ex.: "Ruben Rocha" -> "RR")
 export function iniciais(nome: string): string {
     const partes = nome.trim().split(/\s+/).filter(Boolean)
