@@ -1,4 +1,5 @@
-import { View, StatusBar, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -40,7 +41,8 @@ export default function App() {
       <NavigationContainer>
         <ToastProvider>
           <AuthProvider>
-            <StatusBar backgroundColor={colors.red700} barStyle='light-content' translucent={false}/>
+            {/* Texto claro. O fundo vermelho atrás da barra vem do Header/AuthLayout (insets.top) */}
+            <StatusBar style='light'/>
             <Routes/>
           </AuthProvider>
         </ToastProvider>

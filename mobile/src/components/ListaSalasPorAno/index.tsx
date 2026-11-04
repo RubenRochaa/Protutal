@@ -33,8 +33,8 @@ export function ListaSalasPorAno({ salas, onAbrir, topo, vazio, atualizando, onA
         stickySectionHeadersEnabled={false}
         contentContainerStyle={styles.lista}
         ItemSeparatorComponent={() => <View style={styles.separador} />}
-        ListHeaderComponent={topo ? <View style={styles.topo}>{topo}</View> : null}
-        ListEmptyComponent={vazio}
+        ListHeaderComponent={topo ? <View style={styles.topo}>{topo}</View> : undefined}
+        ListEmptyComponent={vazio ?? undefined}
         refreshControl={
             <RefreshControl refreshing={atualizando} onRefresh={onAtualizar} colors={[colors.red700]} tintColor={colors.red700} />
         }

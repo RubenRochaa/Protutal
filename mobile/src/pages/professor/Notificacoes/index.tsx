@@ -93,7 +93,7 @@ export default function Notificacoes({ navigation }: ProfessorScreenProps<"Notif
         if(carregando) return <Loader />;
         if(!dados) return <ErrorState message={getErrorMessage(erro)} onRetry={tentarNovamente} />;
 
-        return null;
+        return undefined;
     }
 
     return (
