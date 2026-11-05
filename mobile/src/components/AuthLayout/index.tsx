@@ -4,15 +4,13 @@ import {
     Text,
     Image,
     StyleSheet,
-    ScrollView,
-    TouchableOpacity,
-    KeyboardAvoidingView,
-    Platform
+    TouchableOpacity
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
+import { EvitarTeclado, RolagemTeclado } from "../EvitarTeclado";
 import { LOGO_MODO_ESCURO, MASCOTES } from "../../lib/mascotes";
 import { AuthStackParamsList } from "../../routes/auth.routes";
 import { colors, fonts, fontSizes, radius, shadows, spacing } from "../../styles/theme";
@@ -32,14 +30,8 @@ export function AuthLayout({ aba, onEntrar, onCadastrar, children }: AuthLayoutP
     const navigation = useNavigation<NativeStackNavigationProp<AuthStackParamsList>>();
 
     return (
-        <KeyboardAvoidingView
-        style={styles.container}
-        behavior={Platform.OS === "ios" ? "padding" : undefined}
-        >
-            <ScrollView
-            contentContainerStyle={[styles.scroll, { paddingBottom: insets.bottom + spacing.xxl }]}
-            keyboardShouldPersistTaps="handled"
-            >
+        <EvitarTeclado style={styles.container}>
+            <RolagemTeclado contentContainerStyle={[styles.scroll, { paddingBottom: insets.bottom + spacing.xxl }]}>
                 <View style={[styles.painel, { paddingTop: insets.top + spacing.xl }]}>
                     <Image
                     source={LOGO_MODO_ESCURO}
@@ -84,8 +76,8 @@ export function AuthLayout({ aba, onEntrar, onCadastrar, children }: AuthLayoutP
                         <Text style={styles.textoAjuda}>Precisa de ajuda?</Text>
                     </TouchableOpacity>
                 </View>
-            </ScrollView>
-        </KeyboardAvoidingView>
+            </RolagemTeclado>
+        </EvitarTeclado>
     )
 }
 

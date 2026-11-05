@@ -4,15 +4,13 @@ import {
     Text,
     StyleSheet,
     Modal,
-    ScrollView,
     TouchableOpacity,
-    KeyboardAvoidingView,
-    Platform,
     Linking,
     Alert
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
 
+import { EvitarTeclado, RolagemTeclado } from "../../../components/EvitarTeclado";
 import { Input } from "../../../components/Input";
 import { Button } from "../../../components/Button";
 import { TextArea } from "../../../components/TextArea";
@@ -198,7 +196,7 @@ export function ModalEnvio({ idAtividade, item, prazo, onClose, onNotaLancada }:
 
     return (
         <Modal visible={!!item} animationType="slide" transparent onRequestClose={fechar}>
-            <KeyboardAvoidingView style={styles.fundo} behavior={Platform.OS === "ios" ? "padding" : undefined}>
+            <EvitarTeclado style={styles.fundo}>
                 <View style={styles.janela}>
                     <View style={styles.cabecalho}>
                         <Text style={styles.titulo} accessibilityRole="header">Envio do aluno</Text>
@@ -207,11 +205,11 @@ export function ModalEnvio({ idAtividade, item, prazo, onClose, onNotaLancada }:
                         </TouchableOpacity>
                     </View>
 
-                    <ScrollView contentContainerStyle={styles.conteudo} keyboardShouldPersistTaps="handled">
+                    <RolagemTeclado contentContainerStyle={styles.conteudo}>
                         {corpo()}
-                    </ScrollView>
+                    </RolagemTeclado>
                 </View>
-            </KeyboardAvoidingView>
+            </EvitarTeclado>
         </Modal>
     )
 }

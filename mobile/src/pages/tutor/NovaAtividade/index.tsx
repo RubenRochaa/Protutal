@@ -1,8 +1,9 @@
 import React, { useCallback, useContext, useState } from "react";
-import { View, Text, StyleSheet, ScrollView, KeyboardAvoidingView, Platform } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import { Feather } from "@expo/vector-icons";
 
 import { Header } from "../../../components/Header";
+import { EvitarTeclado, RolagemTeclado } from "../../../components/EvitarTeclado";
 import { Card } from "../../../components/Card";
 import { Input } from "../../../components/Input";
 import { Button } from "../../../components/Button";
@@ -241,11 +242,11 @@ export default function NovaAtividade({ navigation, route }: TutorScreenProps<"N
         <View style={styles.container}>
             <Header title="Criar atividade" onBack={navigation.goBack} />
 
-            <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === "ios" ? "padding" : undefined}>
-                <ScrollView contentContainerStyle={styles.conteudo} keyboardShouldPersistTaps="handled">
+            <EvitarTeclado style={styles.container}>
+                <RolagemTeclado contentContainerStyle={styles.conteudo}>
                     {conteudo()}
-                </ScrollView>
-            </KeyboardAvoidingView>
+                </RolagemTeclado>
+            </EvitarTeclado>
         </View>
     )
 }
