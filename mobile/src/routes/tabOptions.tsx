@@ -3,6 +3,7 @@ import { Text } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { BottomTabNavigationOptions } from "@react-navigation/bottom-tabs";
 
+import { textoContador } from "../components/Contador";
 import { colors, fonts, fontSizes } from "../styles/theme";
 
 type IconName = ComponentProps<typeof Feather>["name"];
@@ -40,5 +41,19 @@ export function tabOptions(label: string, icon: IconName): BottomTabNavigationOp
                 {label}
             </Text>
         )
+    }
+}
+
+// Bolinha de notificação da aba (tabBarBadge), no estilo do Contador: vermelho do app e texto branco,
+// "9+" acima de 9. Com 0 não aparece
+export function badgeAba(valor: number | undefined): BottomTabNavigationOptions {
+    return {
+        tabBarBadge: valor && valor > 0 ? textoContador(valor) : undefined,
+        tabBarBadgeStyle: {
+            backgroundColor: colors.red700,
+            color: colors.white,
+            fontFamily: fonts.bold,
+            fontSize: 10
+        }
     }
 }

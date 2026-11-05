@@ -11,9 +11,11 @@ import { Loader } from "../../../components/Loader";
 import { EmptyState } from "../../../components/EmptyState";
 import { ErrorState } from "../../../components/ErrorState";
 import { AbasSegmentadas } from "../../../components/AbasSegmentadas";
+import { Contador } from "../../../components/Contador";
 
 import { api } from "../../../services/api";
 import { useBuscar } from "../../../lib/useBuscar";
+import { useContadores } from "../../../lib/useContadores";
 import { getErrorMessage } from "../../../lib/getErrorMessage";
 import { formatarData } from "../../../lib/formatacao";
 import { StatusTutoria, TutoriaTutor } from "../../../lib/types";
@@ -50,6 +52,7 @@ export default function Tutorados({ navigation }: TutorScreenProps<"Tutorados">)
     }, [filtro])
 
     const { dados, erro, carregando, atualizando, atualizar, tentarNovamente } = useBuscar(buscar);
+    const { chatPorTutoria, avisosPorSala } = useContadores();
 
     // Agrupa por sala na ordem da T1; a busca só filtra na tela
     const secoes = useMemo(() => {
@@ -87,6 +90,8 @@ export default function Tutorados({ navigation }: TutorScreenProps<"Tutorados">)
                     <TouchableOpacity style={styles.atalho} onPress={() => navigation.navigate("AvisosSala", params)} accessibilityRole="button">
                         <Feather name="bell" size={16} color={colors.red700} />
                         <Text style={styles.textoAtalho}>Avisos</Text>
+                        {/* Avisos novos desta sala (no site eles aparecem na própria página Tutoria) */}
+                        <Contador valor={avisosPorSala[section.id_sala]} />
                     </TouchableOpacity>
                 </View>
             </View>
@@ -127,6 +132,8 @@ export default function Tutorados({ navigation }: TutorScreenProps<"Tutorados">)
                     >
                         <Feather name="message-circle" size={16} color={colors.red700} />
                         <Text style={styles.textoAcao}>Abrir chat</Text>
+                        {/* Mensagens novas deste tutorado */}
+                        <Contador valor={chatPorTutoria[item.id_tutoria]} />
                     </TouchableOpacity>
 
                     {/* Atividade só para tutoria ativa (a T9 recusa a finalizada) */}

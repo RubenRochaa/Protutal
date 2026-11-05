@@ -25,6 +25,7 @@ import { ToastContext } from "../../../contexts/ToastContext";
 
 import { api } from "../../../services/api";
 import { useBuscar } from "../../../lib/useBuscar";
+import { useMarcarVisita } from "../../../lib/useContadores";
 import { getErrorMessage, getErrorStatus } from "../../../lib/getErrorMessage";
 import { formatarData } from "../../../lib/formatacao";
 import { MASCOTES } from "../../../lib/mascotes";
@@ -47,6 +48,10 @@ interface Dados {
 // Não há tempo real: as mensagens novas chegam com "Atualizar" ou puxando a lista
 export default function ChatTutoria({ navigation, route }: AlunoScreenProps<"ChatTutoria">){
     const { id_tutoria } = route.params;
+
+    // Chat em foco zera a bolinha de mensagens novas desta tutoria (e continua zerada enquanto estiver aberto)
+    useMarcarVisita(`chat:${id_tutoria}`);
+
     const { showToast } = useContext(ToastContext);
 
     const [aba, setAba] = useState<Aba>("duvidas");

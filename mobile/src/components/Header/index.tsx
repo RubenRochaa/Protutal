@@ -6,7 +6,9 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 import { SeloPerfil } from "../SeloPerfil";
+import { Contador, descricaoContador } from "../Contador";
 import { AuthContext } from "../../contexts/AuthContext";
+import { useContadores } from "../../lib/useContadores";
 import { LOGO_MODO_ESCURO } from "../../lib/mascotes";
 import { colors, fonts, spacing } from "../../styles/theme";
 
@@ -26,6 +28,8 @@ export function Header({ title, onBack, onNotificacoes }: HeaderProps){
     // A tela "Ajuda" existe em todas as pilhas logadas (professor, aluno e tutor) com o mesmo nome
     const navigation = useNavigation<NativeStackNavigationProp<{ Ajuda: undefined }>>();
     const route = useRoute();
+    // Pedidos + contestações pendentes (ProvedorContadores da área do professor)
+    const notificacoes = useContadores().menu.notificacoes ?? 0;
 
     // Mesmo rótulo do selo do site: professor, ou aluno/tutor conforme a área aberta
     const rotulo = user.perfil === "professor" ? "Professor" : area === "tutor" ? "Tutor" : "Aluno";
@@ -61,10 +65,12 @@ export function Header({ title, onBack, onNotificacoes }: HeaderProps){
                         <TouchableOpacity
                         onPress={onNotificacoes}
                         accessibilityRole="button"
-                        accessibilityLabel="Notificações"
+                        accessibilityLabel={notificacoes > 0 ? `Notificações (${descricaoContador(notificacoes)})` : "Notificações"}
                         hitSlop={8}
                         >
                             <Feather name="bell" size={22} color={colors.white} />
+                            {/* Bolinha clara: o Header é vermelho */}
+                            <Contador valor={notificacoes} canto claro />
                         </TouchableOpacity>
                     )}
 

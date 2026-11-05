@@ -8,10 +8,12 @@ import { Avatar } from "../../../components/Avatar";
 import { Loader } from "../../../components/Loader";
 import { EmptyState } from "../../../components/EmptyState";
 import { ErrorState } from "../../../components/ErrorState";
+import { Contador } from "../../../components/Contador";
 import { CardSala } from "./CardSala";
 
 import { api } from "../../../services/api";
 import { useBuscar } from "../../../lib/useBuscar";
+import { useContadores } from "../../../lib/useContadores";
 import { getErrorMessage } from "../../../lib/getErrorMessage";
 import { formatarData } from "../../../lib/formatacao";
 import { SalaAluno, TutoriaAluno } from "../../../lib/types";
@@ -40,6 +42,7 @@ export default function Tutoria({ navigation }: AlunoScreenProps<"MinhaTutoria">
     }, [])
 
     const { dados, erro, carregando, atualizando, atualizar, tentarNovamente } = useBuscar(buscar);
+    const { porTutoria } = useContadores();
 
     function renderTutoria(tutoria: TutoriaAluno){
         const ativa = tutoria.status === "ativa";
@@ -75,6 +78,12 @@ export default function Tutoria({ navigation }: AlunoScreenProps<"MinhaTutoria">
                 </Text>
 
                 <View style={styles.abrir}>
+                    {/* Mensagens novas do tutor + avisos novos da sala; sem contador o espaço some */}
+                    {porTutoria[tutoria.id_tutoria] > 0 && (
+                        <View style={styles.contador}>
+                            <Contador valor={porTutoria[tutoria.id_tutoria]} />
+                        </View>
+                    )}
                     <Text style={styles.textoAbrir}>Ver tutoria</Text>
                     <Feather name="chevron-right" size={18} color={colors.red700} />
                 </View>
@@ -234,6 +243,10 @@ const styles = StyleSheet.create({
         alignItems: "center",
         alignSelf: "flex-end",
         gap: 2
+    },
+    // Bolinha de notificação antes do "Ver tutoria"
+    contador:{
+        marginRight: spacing.xs
     },
     textoAbrir:{
         fontFamily: fonts.medium,

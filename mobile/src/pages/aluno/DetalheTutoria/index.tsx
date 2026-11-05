@@ -14,6 +14,7 @@ import { ItemAviso } from "../../../components/ItemAviso";
 
 import { api } from "../../../services/api";
 import { useBuscar } from "../../../lib/useBuscar";
+import { useContadores, useMarcarVisita } from "../../../lib/useContadores";
 import { getErrorMessage, getErrorStatus } from "../../../lib/getErrorMessage";
 import { formatarData, formatarNota } from "../../../lib/formatacao";
 import { MASCOTES } from "../../../lib/mascotes";
@@ -62,6 +63,10 @@ export default function DetalheTutoria({ navigation, route }: AlunoScreenProps<"
     }, [id_tutoria])
 
     const { dados, erro, carregando, atualizando, atualizar, tentarNovamente } = useBuscar(buscar);
+    const { chatPorTutoria } = useContadores();
+
+    // Os avisos da sala aparecem nesta tela: abrir o detalhe zera a bolinha de avisos (a sala vem da tutoria)
+    useMarcarVisita(dados?.tutoria ? `avisos:${dados.tutoria.sala.id_sala}` : null);
 
     function conteudo(){
         if(carregando) return <Loader />;
@@ -113,6 +118,8 @@ export default function DetalheTutoria({ navigation, route }: AlunoScreenProps<"
 
                     <Button
                     title="Abrir chat e materiais"
+                    // Mensagens novas do tutor
+                    contador={chatPorTutoria[tutoria.id_tutoria]}
                     onPress={() => navigation.navigate("ChatTutoria", { id_tutoria: tutoria.id_tutoria })}
                     />
                 </Card>

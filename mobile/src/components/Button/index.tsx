@@ -2,6 +2,7 @@ import React from "react";
 import { Text, StyleSheet, Pressable, PressableProps } from "react-native";
 
 import { Loader } from "../Loader";
+import { Contador } from "../Contador";
 import { colors, fonts, radius, sizes, spacing } from "../../styles/theme";
 
 interface ButtonProps extends Omit<PressableProps, "children"> {
@@ -11,10 +12,12 @@ interface ButtonProps extends Omit<PressableProps, "children"> {
     loading?: boolean;
     // "primario" = vermelho cheio; "secundario" = borda vermelha e fundo branco
     variant?: "primario" | "secundario";
+    // Bolinha de notificação depois do título (ex.: mensagens novas no "Abrir chat")
+    contador?: number;
 }
 
 // Botão do Protutal: mesmo tamanho, raio e cores do botão do site
-export function Button({ title, titleLoading, loading = false, variant = "primario", disabled, style, ...rest }: ButtonProps){
+export function Button({ title, titleLoading, loading = false, variant = "primario", disabled, style, contador, ...rest }: ButtonProps){
     const primario = variant === "primario";
     const desabilitado = !!disabled || loading;
 
@@ -37,6 +40,9 @@ export function Button({ title, titleLoading, loading = false, variant = "primar
             <Text style={[styles.texto, !primario && styles.textoSecundario]}>
                 {loading && titleLoading ? titleLoading : title}
             </Text>
+
+            {/* No botão vermelho a bolinha fica clara, como o "Abrir chat" do site */}
+            <Contador valor={contador} claro={primario} />
         </Pressable>
     )
 }

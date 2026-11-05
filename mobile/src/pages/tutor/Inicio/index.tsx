@@ -10,6 +10,7 @@ import { GraficoEtapas } from "../../../components/GraficoEtapas";
 
 import { api } from "../../../services/api";
 import { useBuscar } from "../../../lib/useBuscar";
+import { useContadores } from "../../../lib/useContadores";
 import { getErrorMessage } from "../../../lib/getErrorMessage";
 import { formatarNota } from "../../../lib/formatacao";
 import { MASCOTES } from "../../../lib/mascotes";
@@ -52,6 +53,7 @@ export default function Inicio({ navigation }: TutorScreenProps<"PainelTutor">){
     }, [])
 
     const { dados, erro, carregando, atualizando, atualizar, tentarNovamente } = useBuscar(buscar);
+    const { menu } = useContadores();
 
     function conteudo(){
         if(carregando) return <Loader />;
@@ -130,6 +132,8 @@ export default function Inicio({ navigation }: TutorScreenProps<"PainelTutor">){
                 icone="flag"
                 titulo="Contestações pendentes"
                 subtitulo={subtituloContestacoes}
+                // Contestações não é aba no app: a bolinha do menu "Contestações" do site fica aqui
+                contador={menu.contestacoes}
                 onPress={() => navigation.navigate("Contestacoes")}
                 >
                     {contestacoes?.slice(0, LIMITE).map((contestacao) => (
