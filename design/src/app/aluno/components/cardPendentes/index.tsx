@@ -35,24 +35,24 @@ export async function CardPendentes(){
 
     if(pendentes.length === 0){
         return (
-            <Card titulo={TITULO} acao={<VerTodas />}>
-                <EmptyState mensagem="Nenhuma atividade pendente." imagem={null} />
+            <Card titulo={TITULO}>
+                <EmptyState mensagem="Nenhuma atividade pendente." />
+                <VerTodas />
             </Card>
         )
     }
 
     return (
-        <Card titulo={TITULO} acao={<VerTodas />}>
+        <Card titulo={TITULO}>
             <ul className={styles.lista}>
                 {pendentes.slice(0, LIMITE).map((atividade) => (
                     <li key={atividade.id_atividade}>
-                        {/* O item inteiro leva ao detalhe da atividade */}
-                        <Link href={`/aluno/atividades/${atividade.id_atividade}`} className={styles.item}>
-                            <ListItem>{atividade.titulo}</ListItem>
-                        </Link>
+                        <ListItem>{atividade.titulo}</ListItem>
                     </li>
                 ))}
             </ul>
+
+            <VerTodas />
         </Card>
     )
 }
