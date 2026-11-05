@@ -5,6 +5,7 @@ import { Suspense } from 'react'
 import { ArrowLeft } from 'lucide-react'
 import { Loading } from '@/components/loading'
 import { PageBanner } from '@/components/pageBanner'
+import { MarcarVisita } from '@/components/contador'
 import { ChatTutor } from './components/chatTutor'
 
 interface Props {
@@ -23,6 +24,8 @@ export default async function ChatTutorPage({ params, searchParams }: Props){
     return (
         <main>
             <PageBanner titulo="Chat com tutorado" />
+            {/* Abrir o chat zera a bolinha de mensagens novas deste tutorado */}
+            <MarcarVisita tipo="chat" id={id} />
 
             <div className={pagina.conteudo}>
                 <Link href="/tutor/tutoria" className={lista.voltar}>

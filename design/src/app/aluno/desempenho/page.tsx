@@ -3,6 +3,7 @@ import { Suspense } from 'react'
 import { Card } from '@/components/card'
 import { Loading } from '@/components/loading'
 import { PageBanner } from '@/components/pageBanner'
+import { MarcarVisita } from '@/components/contador'
 import { FiltroEtapa } from '../components/filtroEtapa'
 import { NumerosDesempenho } from './components/numerosDesempenho'
 import { MediasEtapa, TITULO_ETAPAS } from './components/mediasEtapa'
@@ -28,6 +29,8 @@ export default async function DesempenhoAlunoPage({ searchParams }: Props){
     return (
         <main>
             <PageBanner titulo="Meu desempenho" />
+            {/* Abrir a tela zera a bolinha de notas novas do menu */}
+            <MarcarVisita tipo="notas" />
 
             <div className={styles.conteudo}>
                 <div className={styles.filtro}>

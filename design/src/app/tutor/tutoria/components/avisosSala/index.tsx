@@ -7,6 +7,7 @@ import { formatarDataHora } from '@/lib/formatacao'
 import { AvisoSala } from '@/lib/types'
 import { ToastErro } from '@/app/aluno/components/toastErro'
 import { MASCOTES } from '@/lib/mascotes'
+import { MarcarVisita } from '@/components/contador'
 
 interface TituloProps {
     nomeSala: string;
@@ -52,6 +53,7 @@ export async function AvisosSala({ idSala, nomeSala }: Props){
     if(resultado.dados.length === 0){
         return (
             <>
+                <MarcarVisita tipo="avisos" id={idSala} />
                 <TituloAvisosSala nomeSala={nomeSala} />
                 <EmptyState mensagem="Nenhum aviso publicado." />
             </>
@@ -63,6 +65,8 @@ export async function AvisosSala({ idSala, nomeSala }: Props){
 
     return (
         <>
+            {/* Avisos exibidos: zera a bolinha de avisos desta sala no menu "Tutoria" */}
+            <MarcarVisita tipo="avisos" id={idSala} />
             <TituloAvisosSala nomeSala={nomeSala} />
 
             {avisos.map((aviso) => (

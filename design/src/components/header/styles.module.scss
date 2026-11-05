@@ -37,7 +37,11 @@
     gap: 24px;
 }
 
+// inline-flex: a bolinha de notificação (Contador) fica ao lado do texto
 .link, .linkAtivo{
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
     font-weight: 600;
     font-size: 1.05rem;
     white-space: nowrap;
@@ -91,7 +95,9 @@
 }
 
 // Ícone ao lado do avatar (ex.: Notificações), no mesmo traço do ícone do usuário
+// position: relative: a bolinha de notificação fica no canto do ícone
 .atalho{
+    position: relative;
     display: flex;
     align-items: center;
     color: var(--gray-700);
@@ -159,6 +165,7 @@
 }
 
 .botaoMenu{
+    position: relative;
     display: none;
     align-items: center;
     justify-content: center;

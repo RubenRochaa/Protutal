@@ -7,6 +7,7 @@ import { Avatar } from '@/components/avatar'
 import { Botao } from '@/components/botao'
 import { Etiqueta } from '@/components/etiqueta'
 import { EmptyState } from '@/components/emptyState'
+import { ContadorTutoria } from '@/components/contador'
 import { getErrorMessage, getErrorStatus } from '@/lib/getErrorMessage'
 import { sessaoExpiradaNaPagina } from '@/lib/sessaoExpirada'
 import { formatarData } from '@/lib/formatacao'
@@ -92,6 +93,8 @@ export async function ListaTutorados({ status }: Props){
                                         <span className={styles.acoes}>
                                             <Botao pequeno href={`/tutor/tutorias/${tutoria.id_tutoria}/chat`}>
                                                 <MessageCircle size={16} aria-hidden="true" /> Abrir chat
+                                                {/* Mensagens novas deste tutorado */}
+                                                <ContadorTutoria idTutoria={tutoria.id_tutoria} tipo="chat" claro />
                                             </Botao>
                                             {ativa && (
                                                 <Botao pequeno variante="secundario" href={`/tutor/atividades/nova?tutoria=${tutoria.id_tutoria}`}>

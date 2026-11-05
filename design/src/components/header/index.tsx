@@ -9,18 +9,12 @@ import { useFormStatus } from 'react-dom'
 import { Loader } from '../loader'
 import { ArrowLeftRight, Bell, CircleUserRound, Menu, X } from 'lucide-react'
 import { iniciais } from '@/lib/formatacao'
+import { LinkMenu } from '@/lib/menus'
+import { useContadores } from '@/lib/useContadores'
 import { Avatar } from '../avatar'
 import { Etiqueta } from '../etiqueta'
+import { Contador, descricaoContador } from '../contador'
 import { handleLogout } from './actions'
-
-interface LinkMenu {
-    label: string;
-    href: string;
-    // Tela ainda não feita: o item aparece desabilitado, com o selo "Em breve"
-    emBreve?: boolean;
-    // Item mostrado só como ícone, ao lado do avatar (ver ICONES)
-    icone?: "notificacao";
-}
 
 interface Props {
     links: LinkMenu[];
@@ -76,6 +70,12 @@ export function Header({ links, inicio, nome, perfil }: Props){
     const menu = links.filter((link) => !link.icone);
     const atalhos = links.filter((link) => link.icone);
 
+    // Bolinhas de notificação (calculadas no ProvedorContadores do layout da área)
+    const contadores = useContadores().menu;
+    const contadorDe = (link: LinkMenu) => link.contador && !link.emBreve ? contadores[link.contador] ?? 0 : 0;
+    // No celular e tablet os links ficam escondidos: o botão de menu mostra a soma deles
+    const totalMenu = menu.reduce((total, link) => total + contadorDe(link), 0);
+
     return (
         <header className={styles.header}>
             <div className={styles.conteudo}>
@@ -108,6 +108,7 @@ export function Header({ links, inicio, nome, perfil }: Props){
                         onClick={() => setMenuAberto(false)}
                         >
                             {link.label}
+                            <Contador valor={contadorDe(link)} />
                         </Link>
                     ))}
 
@@ -121,6 +122,8 @@ export function Header({ links, inicio, nome, perfil }: Props){
                     {/* Só o ícone aparece; o label vira o nome lido pelo leitor de tela e a dica do mouse */}
                     {atalhos.map((link) => {
                         const Icone = ICONES[link.icone!]
+                        const contador = contadorDe(link)
+                        const rotulo = contador > 0 ? `${link.label} (${descricaoContador(contador)})` : link.label
 
                         return (
                             <Link
@@ -128,10 +131,11 @@ export function Header({ links, inicio, nome, perfil }: Props){
                             href={link.href}
                             className={link.href === ativo ? `${styles.atalho} ${styles.atalhoAtivo}` : styles.atalho}
                             aria-current={link.href === ativo ? "page" : undefined}
-                            aria-label={link.label}
-                            title={link.label}
+                            aria-label={rotulo}
+                            title={rotulo}
                             >
                                 <Icone aria-hidden="true" />
+                                <Contador valor={contador} canto />
                             </Link>
                         )
                     })}
@@ -174,9 +178,10 @@ export function Header({ links, inicio, nome, perfil }: Props){
                     onClick={() => setMenuAberto(!menuAberto)}
                     aria-expanded={menuAberto}
                     aria-controls="menu-principal"
-                    aria-label={menuAberto ? "Fechar menu" : "Abrir menu"}
+                    aria-label={menuAberto ? "Fechar menu" : totalMenu > 0 ? `Abrir menu (${descricaoContador(totalMenu)})` : "Abrir menu"}
                     >
                         {menuAberto ? <X size={26} /> : <Menu size={26} />}
+                        {!menuAberto && <Contador valor={totalMenu} canto />}
                     </button>
                 </div>
             </div>

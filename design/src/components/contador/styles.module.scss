@@ -1,0 +1,41 @@
+// Bolinha de notificação: vermelho do tema com texto branco, legível no ícone e no item de menu
+.contador{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    border-radius: var(--radius-pill);
+    background-color: var(--red-700);
+    color: var(--white);
+    font-size: 0.7rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+// Em cima do ícone: o contorno branco separa a bolinha do traço do ícone
+.canto{
+    position: absolute;
+    top: -4px;
+    right: -6px;
+    box-shadow: 0 0 0 2px var(--white);
+    pointer-events: none;
+}
+
+// Dentro de botão vermelho (ex.: "Abrir chat")
+.claro{
+    background-color: var(--white);
+    color: var(--red-700);
+}
+
+// Texto só para leitor de tela
+.leitor{
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}
