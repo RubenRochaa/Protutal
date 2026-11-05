@@ -3,6 +3,7 @@ import { useFocusEffect } from "@react-navigation/native";
 
 import { ToastContext } from "../contexts/ToastContext";
 import { getErrorMessage, getErrorStatus } from "./getErrorMessage";
+import { useContadores } from "./useContadores";
 
 interface Opcoes {
     // Status que são um estado da tela e não falha (ex.: 404 = "não encontrada"): sem toast
@@ -69,6 +70,16 @@ export function useBuscar<T>(buscar: () => Promise<T>, { semToast = [] }: Opcoes
             executar(jaBuscou.current && !mudouBusca ? "foco" : "inicial");
             jaBuscou.current = true;
         }, [buscar, executar])
+    )
+
+    // A tela ganhou foco: atualiza também os contadores de notificação
+    // (equivale à troca de página do site; a busca é uma só, feita pelo ProvedorContadores)
+    const { atualizar: atualizarContadores } = useContadores();
+
+    useFocusEffect(
+        useCallback(() => {
+            atualizarContadores();
+        }, [atualizarContadores])
     )
 
     return {

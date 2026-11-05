@@ -15,6 +15,7 @@ import Notificacoes from "../pages/professor/Notificacoes";
 import Ajuda from "../pages/Ajuda";
 import { SubAbaSala } from "../pages/professor/Sala/abas";
 import { StatusContestacao } from "../lib/types";
+import { ProvedorContadores } from "../lib/useContadores";
 import { tabOptions, tabScreenOptions } from "./tabOptions";
 
 // Telas da área do professor (menu do site em design/src/lib/menus.ts).
@@ -107,14 +108,17 @@ function DesempenhoStack(){
 
 function ProfessorRoutes() {
     return(
-        // Mesmo comportamento das áreas do aluno e do tutor: a aba que ficou para trás volta
-        // para a primeira tela e a barra some com o teclado aberto
-        <Tab.Navigator screenOptions={{ ...tabScreenOptions, popToTopOnBlur: true, tabBarHideOnKeyboard: true }}>
-            <Tab.Screen name="Inicio" component={InicioStack} options={tabOptions("Início", "home")} />
-            <Tab.Screen name="Salas" component={SalasStack} options={tabOptions("Salas", "layers")} />
-            <Tab.Screen name="Tutoria" component={TutoriaStack} options={tabOptions("Tutoria", "users")} />
-            <Tab.Screen name="Desempenho" component={DesempenhoStack} options={tabOptions("Desempenho", "bar-chart-2")} />
-        </Tab.Navigator>
+        // Contador do sino do Header (pedidos + contestações pendentes)
+        <ProvedorContadores area="professor">
+            {/* Mesmo comportamento das áreas do aluno e do tutor: a aba que ficou para trás volta
+                para a primeira tela e a barra some com o teclado aberto */}
+            <Tab.Navigator screenOptions={{ ...tabScreenOptions, popToTopOnBlur: true, tabBarHideOnKeyboard: true }}>
+                <Tab.Screen name="Inicio" component={InicioStack} options={tabOptions("Início", "home")} />
+                <Tab.Screen name="Salas" component={SalasStack} options={tabOptions("Salas", "layers")} />
+                <Tab.Screen name="Tutoria" component={TutoriaStack} options={tabOptions("Tutoria", "users")} />
+                <Tab.Screen name="Desempenho" component={DesempenhoStack} options={tabOptions("Desempenho", "bar-chart-2")} />
+            </Tab.Navigator>
+        </ProvedorContadores>
     )
 }
 

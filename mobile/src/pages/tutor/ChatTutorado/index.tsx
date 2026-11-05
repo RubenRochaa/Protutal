@@ -24,6 +24,7 @@ import { ToastContext } from "../../../contexts/ToastContext";
 
 import { api } from "../../../services/api";
 import { useBuscar } from "../../../lib/useBuscar";
+import { useMarcarVisita } from "../../../lib/useContadores";
 import { getErrorMessage, getErrorStatus } from "../../../lib/getErrorMessage";
 import { MASCOTES } from "../../../lib/mascotes";
 import { MensagemTutoria, TutoriaTutor } from "../../../lib/types";
@@ -45,6 +46,10 @@ type Dados =
 // que é a mensagem com assunto. Não há tempo real: "Atualizar" ou puxar a lista
 export default function ChatTutorado({ navigation, route }: TutorScreenProps<"ChatTutorado">){
     const { id_tutoria } = route.params;
+
+    // Chat em foco zera a bolinha de mensagens novas desta tutoria (e continua zerada enquanto estiver aberto)
+    useMarcarVisita(`chat:${id_tutoria}`);
+
     const { showToast } = useContext(ToastContext);
 
     const [aba, setAba] = useState<Aba>("");

@@ -14,7 +14,8 @@ import ConteudosAprendidos from "../pages/aluno/ConteudosAprendidos";
 import ChatTutoria from "../pages/aluno/ChatTutoria";
 import FeedbackTutor from "../pages/aluno/FeedbackTutor";
 import Ajuda from "../pages/Ajuda";
-import { tabOptions, tabScreenOptions } from "./tabOptions";
+import { ProvedorContadores, useContadores } from "../lib/useContadores";
+import { badgeAba, tabOptions, tabScreenOptions } from "./tabOptions";
 
 // Telas da área do aluno. Cada aba tem a sua pilha; as telas usadas em mais de uma aba
 // (ex.: Detalhe da atividade) são registradas em cada pilha, para o "voltar" voltar para onde o aluno estava
@@ -108,16 +109,29 @@ function DesempenhoStack(){
     )
 }
 
-function AlunoRoutes() {
+// Abas com a bolinha de notificação (mesmos contadores do menu do aluno no site)
+function AbasAluno() {
+    const { menu } = useContadores();
+
     return(
         // popToTopOnBlur: ao trocar de aba, a pilha da aba que ficou para trás volta para a primeira tela.
         // tabBarHideOnKeyboard: no Android a barra some com o teclado aberto (campo do chat e formulários)
         <Tab.Navigator screenOptions={{ ...tabScreenOptions, popToTopOnBlur: true, tabBarHideOnKeyboard: true }}>
             <Tab.Screen name="Inicio" component={InicioStack} options={tabOptions("Início", "home")} />
-            <Tab.Screen name="Atividades" component={AtividadesStack} options={tabOptions("Minhas atividades", "book")} />
-            <Tab.Screen name="Tutoria" component={TutoriaStack} options={tabOptions("Tutoria", "message-circle")} />
-            <Tab.Screen name="Desempenho" component={DesempenhoStack} options={tabOptions("Meu desempenho", "trending-up")} />
+            <Tab.Screen name="Atividades" component={AtividadesStack} options={{ ...tabOptions("Minhas atividades", "book"), ...badgeAba(menu.atividades) }} />
+            {/* Chat e avisos ficam dentro da Tutoria: o contador soma os dois */}
+            <Tab.Screen name="Tutoria" component={TutoriaStack} options={{ ...tabOptions("Tutoria", "message-circle"), ...badgeAba(menu.tutoria) }} />
+            <Tab.Screen name="Desempenho" component={DesempenhoStack} options={{ ...tabOptions("Meu desempenho", "trending-up"), ...badgeAba(menu.desempenho) }} />
         </Tab.Navigator>
+    )
+}
+
+function AlunoRoutes() {
+    return(
+        // Contadores da área do aluno (tutorado); a área do tutor tem os próprios
+        <ProvedorContadores area="aluno">
+            <AbasAluno />
+        </ProvedorContadores>
     )
 }
 

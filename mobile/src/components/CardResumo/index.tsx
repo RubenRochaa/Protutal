@@ -2,6 +2,7 @@ import React, { ReactNode } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Feather } from "@expo/vector-icons";
 
+import { Contador } from "../Contador";
 import { colors, fonts, fontSizes, radius, shadows, spacing } from "../../styles/theme";
 
 interface CardResumoProps {
@@ -10,11 +11,13 @@ interface CardResumoProps {
     subtitulo?: string;
     onPress: () => void;
     children?: ReactNode;
+    // Bolinha de notificação ao lado do título (ex.: contestações pendentes do tutor)
+    contador?: number;
 }
 
 // Card das telas de Início (aluno e tutor) no layout do Figma:
 // ícone, título, resumo e a seta para a tela completa
-export function CardResumo({ icone, titulo, subtitulo, onPress, children }: CardResumoProps){
+export function CardResumo({ icone, titulo, subtitulo, onPress, children, contador }: CardResumoProps){
     return (
         <View style={styles.card}>
             <TouchableOpacity style={styles.cabecalho} onPress={onPress} accessibilityRole="button" accessibilityLabel={`${titulo}. ${subtitulo ?? ""}`}>
@@ -23,7 +26,10 @@ export function CardResumo({ icone, titulo, subtitulo, onPress, children }: Card
                 </View>
 
                 <View style={styles.dados}>
-                    <Text style={styles.titulo}>{titulo}</Text>
+                    <View style={styles.linhaTitulo}>
+                        <Text style={styles.titulo}>{titulo}</Text>
+                        <Contador valor={contador} />
+                    </View>
                     {subtitulo && <Text style={styles.subtitulo}>{subtitulo}</Text>}
                 </View>
 
@@ -62,7 +68,13 @@ const styles = StyleSheet.create({
         flex: 1,
         gap: 2
     },
+    linhaTitulo:{
+        flexDirection: "row",
+        alignItems: "center",
+        gap: spacing.sm
+    },
     titulo:{
+        flexShrink: 1,
         fontFamily: fonts.semibold,
         fontSize: fontSizes.tituloCard,
         color: colors.black

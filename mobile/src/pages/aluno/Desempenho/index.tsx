@@ -13,6 +13,7 @@ import { Etapa, FiltroEtapa } from "../../../components/FiltroEtapa";
 
 import { api } from "../../../services/api";
 import { useBuscar } from "../../../lib/useBuscar";
+import { useMarcarVisita } from "../../../lib/useContadores";
 import { getErrorMessage } from "../../../lib/getErrorMessage";
 import { formatarData, formatarNota } from "../../../lib/formatacao";
 import { MASCOTES } from "../../../lib/mascotes";
@@ -75,6 +76,9 @@ function ListaFaixa({ conteudos, icone, cor, vazio }: { conteudos: MediaConteudo
 // Tela "Meu desempenho" (rotas A6, A7 e A9), na ordem do print do Figma
 // e com os blocos do site que não estão no print
 export default function Desempenho({ navigation }: AlunoScreenProps<"MeuDesempenho">){
+    // Abrir a tela zera a bolinha de notas novas da aba
+    useMarcarVisita("notas");
+
     const [etapa, setEtapa] = useState<Etapa>("");
 
     const buscar = useCallback(async (): Promise<Dados> => {

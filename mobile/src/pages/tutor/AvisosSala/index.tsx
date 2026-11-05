@@ -9,6 +9,7 @@ import { ErrorState } from "../../../components/ErrorState";
 
 import { api } from "../../../services/api";
 import { useBuscar } from "../../../lib/useBuscar";
+import { useMarcarVisita } from "../../../lib/useContadores";
 import { getErrorMessage, getErrorStatus } from "../../../lib/getErrorMessage";
 import { MASCOTES } from "../../../lib/mascotes";
 import { AvisoSala } from "../../../lib/types";
@@ -19,6 +20,9 @@ import { colors, fonts, fontSizes, spacing } from "../../../styles/theme";
 // No site ficam dentro da página Tutoria; aqui abrem pela sala na lista de tutorados
 export default function AvisosSala({ navigation, route }: TutorScreenProps<"AvisosSala">){
     const { id_sala, nome_sala } = route.params;
+
+    // Avisos exibidos: zera a bolinha de avisos desta sala (aba Tutoria e atalho "Avisos")
+    useMarcarVisita(`avisos:${id_sala}`);
 
     const buscar = useCallback(async () => {
         const avisos = (await api.get<AvisoSala[]>(`/salas/${id_sala}/avisos`)).data;

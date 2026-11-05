@@ -12,6 +12,7 @@ import { ErrorState } from "../../../components/ErrorState";
 
 import { api } from "../../../services/api";
 import { useBuscar } from "../../../lib/useBuscar";
+import { useContadores } from "../../../lib/useContadores";
 import { getErrorMessage } from "../../../lib/getErrorMessage";
 import { formatarData } from "../../../lib/formatacao";
 import { MASCOTES } from "../../../lib/mascotes";
@@ -32,6 +33,7 @@ export default function DetalheTutorado({ navigation, route }: TutorScreenProps<
     }, [id_tutoria])
 
     const { dados: tutoria, erro, carregando, atualizando, atualizar, tentarNovamente } = useBuscar(buscar);
+    const { chatPorTutoria, avisosPorSala } = useContadores();
 
     function conteudo(){
         if(carregando) return <Loader />;
@@ -77,7 +79,8 @@ export default function DetalheTutorado({ navigation, route }: TutorScreenProps<
                     <Text style={styles.texto}>{tutoria.meta_aprendizagem || "Sem meta definida"}</Text>
                 </Card>
 
-                <Button title="Abrir chat" onPress={() => navigation.navigate("ChatTutorado", { id_tutoria })} />
+                {/* Mensagens novas deste tutorado */}
+                <Button title="Abrir chat" contador={chatPorTutoria[id_tutoria]} onPress={() => navigation.navigate("ChatTutorado", { id_tutoria })} />
 
                 {ativa && (
                     <Button
@@ -88,7 +91,12 @@ export default function DetalheTutorado({ navigation, route }: TutorScreenProps<
                 )}
 
                 <Button title="Materiais da sala" variant="secundario" onPress={() => navigation.navigate("MateriaisSala", sala)} />
-                <Button title="Avisos da sala" variant="secundario" onPress={() => navigation.navigate("AvisosSala", sala)} />
+                <Button
+                title="Avisos da sala"
+                variant="secundario"
+                contador={avisosPorSala[sala.id_sala]}
+                onPress={() => navigation.navigate("AvisosSala", sala)}
+                />
             </>
         )
     }
