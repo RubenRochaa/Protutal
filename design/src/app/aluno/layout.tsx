@@ -5,6 +5,7 @@ import { getNomeServer, getPerfilServer } from '@/lib/cookieServer'
 import { getAutenticado } from '@/lib/apiServer'
 import { sessaoExpiradaNaPagina } from '@/lib/sessaoExpirada'
 import { MENU_ALUNO } from '@/lib/menus'
+import { ProvedorContadores } from '@/lib/useContadores'
 
 // Moldura de todas as telas do aluno: Header em cima e a página embaixo.
 // O middleware já barra quem não é aluno; conferimos de novo aqui por segurança.
@@ -26,13 +27,16 @@ export default async function AlunoLayout({ children }: { children: React.ReactN
 
     return (
         <AreaComRodape>
-            <Header
-            links={MENU_ALUNO}
-            inicio="/aluno"
-            nome={nome}
-            perfil={{ rotulo: "Aluno", trocarPara: ehTutor ? "/tutor" : undefined }}
-            />
-            {children}
+            {/* Contadores da área do aluno (tutorado); a área do tutor tem os próprios */}
+            <ProvedorContadores area="aluno">
+                <Header
+                links={MENU_ALUNO}
+                inicio="/aluno"
+                nome={nome}
+                perfil={{ rotulo: "Aluno", trocarPara: ehTutor ? "/tutor" : undefined }}
+                />
+                {children}
+            </ProvedorContadores>
         </AreaComRodape>
     )
 }

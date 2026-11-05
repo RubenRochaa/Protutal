@@ -7,13 +7,16 @@ import { getErrorMessage, getErrorStatus } from '@/lib/getErrorMessage'
 import { sessaoExpiradaNaPagina } from '@/lib/sessaoExpirada'
 import { ErroCarregamento } from '../professor/components/erroCarregamento'
 import { buscarTutorias } from './buscas'
+import { LinkMenu } from '@/lib/menus'
+import { ProvedorContadores } from '@/lib/useContadores'
 
 // Menu do tutor (estrutura dos prints), sem "Início": a logo leva para lá.
-// A volta para as telas de tutorado é o ícone de troca ao lado do selo "Tutor"
-const LINKS = [
-    { label: "Atividades", href: "/tutor/atividades" },
-    { label: "Tutoria", href: "/tutor/tutoria" },
-    { label: "Contestações", href: "/tutor/contestacoes" },
+// A volta para as telas de tutorado é o ícone de troca ao lado do selo "Tutor".
+// contador: bolinha de notificação (Tutoria soma o chat dos tutorados e os avisos das salas)
+const LINKS: LinkMenu[] = [
+    { label: "Atividades", href: "/tutor/atividades", contador: "atividades" },
+    { label: "Tutoria", href: "/tutor/tutoria", contador: "tutoria" },
+    { label: "Contestações", href: "/tutor/contestacoes", contador: "contestacoes" },
     { label: "Feedbacks", href: "/tutor/feedbacks" },
     { label: "Desempenho", href: "/tutor/desempenho" },
 ]
@@ -40,14 +43,16 @@ export default async function TutorLayout({ children }: { children: React.ReactN
 
     return (
         <AreaComRodape>
-            <Header links={LINKS} inicio="/tutor" nome={nome} perfil={{ rotulo: "Tutor", trocarPara: "/aluno" }} />
+            <ProvedorContadores area="tutor">
+                <Header links={LINKS} inicio="/tutor" nome={nome} perfil={{ rotulo: "Tutor", trocarPara: "/aluno" }} />
 
-            {"erro" in tutorias ? (
-                // API fora ou erro 500: não dá para saber se é tutor, então a página não abre
-                <main className={styles.conteudo}>
-                    <ErroCarregamento mensagem={getErrorMessage(tutorias.erro)} status={getErrorStatus(tutorias.erro)} />
-                </main>
-            ) : children}
+                {"erro" in tutorias ? (
+                    // API fora ou erro 500: não dá para saber se é tutor, então a página não abre
+                    <main className={styles.conteudo}>
+                        <ErroCarregamento mensagem={getErrorMessage(tutorias.erro)} status={getErrorStatus(tutorias.erro)} />
+                    </main>
+                ) : children}
+            </ProvedorContadores>
         </AreaComRodape>
     )
 }

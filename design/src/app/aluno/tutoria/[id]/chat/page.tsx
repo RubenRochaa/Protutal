@@ -4,6 +4,7 @@ import { Suspense } from 'react'
 import { ArrowLeft } from 'lucide-react'
 import { Loading } from '@/components/loading'
 import { PageBanner } from '@/components/pageBanner'
+import { MarcarVisita } from '@/components/contador'
 import { ChatTutoria } from './components/chatTutoria'
 
 interface Props {
@@ -18,6 +19,8 @@ export default async function ChatTutoriaPage({ params }: Props){
     return (
         <main>
             <PageBanner titulo="Chat com tutor" />
+            {/* Abrir o chat zera a bolinha de mensagens novas desta tutoria */}
+            <MarcarVisita tipo="chat" id={id} />
 
             <div className={styles.conteudo}>
                 <Link href={`/aluno/tutoria/${encodeURIComponent(id)}`} className={styles.voltar}>

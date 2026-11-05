@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { ChevronRight } from 'lucide-react'
 import { Card } from '@/components/card'
 import { EmptyState } from '@/components/emptyState'
+import { ContadorTutoria } from '@/components/contador'
 import { getErrorMessage } from '@/lib/getErrorMessage'
 import { sessaoExpiradaNaPagina } from '@/lib/sessaoExpirada'
 import { formatarData } from '@/lib/formatacao'
@@ -70,6 +71,10 @@ export async function ListaTutorias(){
                                 </p>
 
                                 <span className={styles.abrir}>
+                                    {/* Mensagens novas do tutor + avisos novos da sala */}
+                                    <span className={styles.contador}>
+                                        <ContadorTutoria idTutoria={tutoria.id_tutoria} tipo="total" />
+                                    </span>
                                     Ver tutoria
                                     <ChevronRight size={18} aria-hidden="true" />
                                 </span>

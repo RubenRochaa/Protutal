@@ -4,6 +4,7 @@ import { Suspense } from 'react'
 import { MessageCircle, Star } from 'lucide-react'
 import { Card } from '@/components/card'
 import { Loading } from '@/components/loading'
+import { ContadorTutoria, MarcarVisita } from '@/components/contador'
 import { getErrorMessage } from '@/lib/getErrorMessage'
 import { sessaoExpiradaNaPagina } from '@/lib/sessaoExpirada'
 import { formatarData } from '@/lib/formatacao'
@@ -43,6 +44,9 @@ export async function DetalheTutoria({ id }: Props){
 
     return (
         <>
+            {/* Os avisos da sala aparecem nesta tela: abrir o detalhe zera a bolinha de avisos */}
+            <MarcarVisita tipo="avisos" id={idSala} />
+
             <div className={styles.topo}>
                 <div className={styles.dados}>
                     <dl className={styles.dados}>
@@ -83,6 +87,7 @@ export async function DetalheTutoria({ id }: Props){
                             <Link href={`/aluno/tutoria/${tutoria.id_tutoria}/chat`} className={styles.botao}>
                                 <MessageCircle size={18} aria-hidden="true" />
                                 Abrir chat
+                                <ContadorTutoria idTutoria={tutoria.id_tutoria} tipo="chat" claro />
                             </Link>
                         </div>
                     </Card>

@@ -64,6 +64,16 @@
     font-weight: 600;
 }
 
+// Bolinha de notificação antes do "Ver tutoria"; sem contador o espaço some
+.contador{
+    display: flex;
+    margin-right: 6px;
+
+    &:empty{
+        display: none;
+    }
+}
+
 @media (max-width: 768px){
     .lista{
         grid-template-columns: minmax(0, 1fr);
