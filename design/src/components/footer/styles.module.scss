@@ -3,6 +3,7 @@
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    min-height: 100dvh;
 }
 
 // Header + página: cresce e empurra o rodapé para baixo nas páginas curtas
@@ -72,7 +73,7 @@
     }
 }
 
-@media (max-width: 375px){
+@media (max-width: 480px){
     .container{
         padding: 16px;
     }

@@ -4,6 +4,7 @@
     flex-direction: column;
     gap: 20px;
     max-height: 60vh;
+    max-height: 60dvh;
     min-height: 200px;
     padding: 20px;
     overflow-y: auto;
@@ -88,7 +89,7 @@
     }
 }
 
-@media (max-width: 375px){
+@media (max-width: 480px){
     .lista{
         padding: 12px;
         gap: 16px;

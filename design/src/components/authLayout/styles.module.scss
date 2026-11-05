@@ -12,6 +12,7 @@ $sobra-direita: 0.11;
 .container{
     display: flex;
     min-height: 100vh;
+    min-height: 100dvh;
 }
 
 // Logo e frase no centro da parte de cima; o padding de baixo reserva o espaço do mascote
@@ -185,7 +186,7 @@ $sobra-direita: 0.11;
     }
 }
 
-@media (max-width: 375px){
+@media (max-width: 480px){
     .painel{
         padding: 0 16px;
     }

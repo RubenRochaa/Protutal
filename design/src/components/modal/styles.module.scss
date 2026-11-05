@@ -3,6 +3,8 @@
     width: min(720px, 100% - 32px);
     max-width: none;
     max-height: 85vh;
+    max-height: 85dvh;
+    overflow-y: auto;
     // O padding fica na .janela: assim só o clique fora dela conta como clique no fundo
     padding: 0;
     border: 0;
@@ -61,7 +63,7 @@
     margin-top: 24px;
 }
 
-@media (max-width: 375px){
+@media (max-width: 480px){
     .janela{
         padding: 20px 16px 24px;
     }
