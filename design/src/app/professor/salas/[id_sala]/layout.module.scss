@@ -8,20 +8,12 @@
     padding: 24px 72px 48px;
 }
 
-// Barra + abas: mais próximas entre si do que do conteúdo da aba
-.topoSala{
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-}
-
 // Voltar à esquerda, série e ano ao lado e, à direita, o espaço das ações da sala
 .barra{
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    gap: 8px 24px;
-    min-height: 44px;
+    gap: 12px 24px;
 }
 
 .voltar{

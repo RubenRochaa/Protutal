@@ -8,10 +8,10 @@
     width: 100%;
     min-height: 160px;
     padding: 24px 16px;
-    // Área de envio tracejada em cinza-claro, sem sombra (fica dentro do card branco)
-    border: 2px dashed var(--gray-300);
-    border-radius: var(--radius-item);
-    background-color: var(--gray-100);
+    border: 2px dashed transparent;
+    border-radius: var(--radius-card);
+    background-color: var(--white);
+    box-shadow: var(--shadow-card);
     text-align: center;
     cursor: pointer;
     transition: border-color 0.2s;
