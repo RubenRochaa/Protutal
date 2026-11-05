@@ -1,7 +1,8 @@
 import React, { ReactNode } from "react";
-import { View, Text, StyleSheet, Modal, ScrollView, TouchableOpacity, KeyboardAvoidingView, Platform } from "react-native";
+import { View, Text, StyleSheet, Modal, TouchableOpacity } from "react-native";
 import { Feather } from "@expo/vector-icons";
 
+import { EvitarTeclado, RolagemTeclado } from "../EvitarTeclado";
 import { colors, fonts, fontSizes, radius, spacing } from "../../styles/theme";
 
 interface JanelaProps {
@@ -12,11 +13,11 @@ interface JanelaProps {
 }
 
 // Janela que sobe de baixo (o Modal do site), com título, botão de fechar e rolagem.
-// Mesma moldura do ModalResolverContestacao; o KeyboardAvoidingView mantém os campos visíveis
+// Mesma moldura do ModalResolverContestacao; o EvitarTeclado mantém os campos visíveis
 export function Janela({ visivel, titulo, onClose, children }: JanelaProps){
     return (
         <Modal visible={visivel} animationType="slide" transparent onRequestClose={onClose}>
-            <KeyboardAvoidingView style={styles.fundo} behavior={Platform.OS === "ios" ? "padding" : undefined}>
+            <EvitarTeclado style={styles.fundo}>
                 <View style={styles.janela}>
                     <View style={styles.cabecalho}>
                         <Text style={styles.titulo} accessibilityRole="header">{titulo}</Text>
@@ -25,11 +26,11 @@ export function Janela({ visivel, titulo, onClose, children }: JanelaProps){
                         </TouchableOpacity>
                     </View>
 
-                    <ScrollView contentContainerStyle={styles.conteudo} keyboardShouldPersistTaps="handled">
+                    <RolagemTeclado contentContainerStyle={styles.conteudo}>
                         {children}
-                    </ScrollView>
+                    </RolagemTeclado>
                 </View>
-            </KeyboardAvoidingView>
+            </EvitarTeclado>
         </Modal>
     )
 }

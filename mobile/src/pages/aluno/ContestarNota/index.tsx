@@ -1,7 +1,8 @@
 import React, { useContext, useState } from "react";
-import { View, Text, StyleSheet, ScrollView, KeyboardAvoidingView, Platform } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 
 import { Header } from "../../../components/Header";
+import { EvitarTeclado, RolagemTeclado } from "../../../components/EvitarTeclado";
 import { Card } from "../../../components/Card";
 import { Button } from "../../../components/Button";
 import { TextArea } from "../../../components/TextArea";
@@ -54,8 +55,8 @@ export default function ContestarNota({ navigation, route }: AlunoScreenProps<"C
         <View style={styles.container}>
             <Header title="Contestar nota" onBack={navigation.goBack} />
 
-            <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === "ios" ? "padding" : undefined}>
-                <ScrollView contentContainerStyle={styles.conteudo} keyboardShouldPersistTaps="handled">
+            <EvitarTeclado style={styles.container}>
+                <RolagemTeclado contentContainerStyle={styles.conteudo}>
                     <ResumoAtividade titulo={titulo} detalhe={detalhe} />
 
                     <Card>
@@ -79,8 +80,8 @@ export default function ContestarNota({ navigation, route }: AlunoScreenProps<"C
 
                     <Button title="Enviar contestação" titleLoading="Enviando..." loading={enviando} onPress={handleEnviar} />
                     <Button title="Cancelar" variant="secundario" onPress={navigation.goBack} disabled={enviando} />
-                </ScrollView>
-            </KeyboardAvoidingView>
+                </RolagemTeclado>
+            </EvitarTeclado>
         </View>
     )
 }

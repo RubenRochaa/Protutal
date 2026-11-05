@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useRef, useState } from "react";
+import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
 import {
     View,
     Text,
@@ -7,12 +7,12 @@ import {
     RefreshControl,
     TextInput,
     TouchableOpacity,
-    KeyboardAvoidingView,
-    Platform
+    Keyboard
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
 
 import { Header } from "../../../components/Header";
+import { EvitarTeclado } from "../../../components/EvitarTeclado";
 import { BalaoMensagem } from "../../../components/BalaoMensagem";
 import { ItemMaterial } from "../../../components/ItemMaterial";
 import { Badge } from "../../../components/Badge";
@@ -53,6 +53,13 @@ export default function ChatTutoria({ navigation, route }: AlunoScreenProps<"Cha
     const [texto, setTexto] = useState("");
     const [enviando, setEnviando] = useState(false);
     const listaRef = useRef<FlatList<MensagemTutoria>>(null);
+
+    // O teclado abriu e a lista encolheu: volta a mostrar a mensagem mais recente
+    useEffect(() => {
+        const assinatura = Keyboard.addListener("keyboardDidShow", () => listaRef.current?.scrollToEnd({ animated: true }));
+
+        return () => assinatura.remove();
+    }, [])
 
     const buscar = useCallback(async (): Promise<Dados> => {
         const tutorias = (await api.get<TutoriaAluno[]>("/alunos/me/tutorias")).data;
@@ -229,9 +236,9 @@ export default function ChatTutoria({ navigation, route }: AlunoScreenProps<"Cha
         <View style={styles.container}>
             <Header title="Chat com tutor" onBack={navigation.goBack} />
 
-            <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === "ios" ? "padding" : undefined}>
+            <EvitarTeclado style={styles.container}>
                 {conteudo()}
-            </KeyboardAvoidingView>
+            </EvitarTeclado>
         </View>
     )
 }

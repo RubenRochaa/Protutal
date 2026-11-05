@@ -1,7 +1,8 @@
 import React, { useContext, useState } from "react";
-import { View, Text, StyleSheet, Modal, ScrollView, TouchableOpacity, KeyboardAvoidingView, Platform } from "react-native";
+import { View, Text, StyleSheet, Modal, TouchableOpacity } from "react-native";
 import { Feather } from "@expo/vector-icons";
 
+import { EvitarTeclado, RolagemTeclado } from "../EvitarTeclado";
 import { Input } from "../Input";
 import { Button } from "../Button";
 import { TextArea } from "../TextArea";
@@ -101,7 +102,7 @@ export function ModalResolverContestacao({ contestacao, decisao, onClose, onReso
 
     return (
         <Modal visible={!!contestacao} animationType="slide" transparent onRequestClose={fechar}>
-            <KeyboardAvoidingView style={styles.fundo} behavior={Platform.OS === "ios" ? "padding" : undefined}>
+            <EvitarTeclado style={styles.fundo}>
                 <View style={styles.janela}>
                     <View style={styles.cabecalho}>
                         <Text style={styles.titulo} accessibilityRole="header">
@@ -113,7 +114,7 @@ export function ModalResolverContestacao({ contestacao, decisao, onClose, onReso
                     </View>
 
                     {contestacao && (
-                        <ScrollView contentContainerStyle={styles.conteudo} keyboardShouldPersistTaps="handled">
+                        <RolagemTeclado contentContainerStyle={styles.conteudo}>
                             {escolhaNaJanela && (
                                 <View style={styles.escolha}>
                                     <Text style={styles.legenda}>Decisão</Text>
@@ -163,10 +164,10 @@ export function ModalResolverContestacao({ contestacao, decisao, onClose, onReso
                             onPress={handleConfirmar}
                             />
                             <Button title="Cancelar" variant="secundario" onPress={fechar} disabled={enviando} />
-                        </ScrollView>
+                        </RolagemTeclado>
                     )}
                 </View>
-            </KeyboardAvoidingView>
+            </EvitarTeclado>
         </Modal>
     )
 }

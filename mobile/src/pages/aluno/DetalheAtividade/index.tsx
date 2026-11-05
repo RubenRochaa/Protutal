@@ -3,16 +3,14 @@ import {
     View,
     Text,
     StyleSheet,
-    ScrollView,
     RefreshControl,
-    KeyboardAvoidingView,
-    Platform,
     TouchableOpacity,
     Linking
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
 
 import { Header } from "../../../components/Header";
+import { EvitarTeclado, RolagemTeclado } from "../../../components/EvitarTeclado";
 import { Card } from "../../../components/Card";
 import { Badge } from "../../../components/Badge";
 import { Button } from "../../../components/Button";
@@ -194,17 +192,16 @@ export default function DetalheAtividade({ navigation, route }: AlunoScreenProps
         <View style={styles.container}>
             <Header title="Detalhe da atividade" onBack={navigation.goBack} />
 
-            <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === "ios" ? "padding" : undefined}>
-                <ScrollView
+            <EvitarTeclado style={styles.container}>
+                <RolagemTeclado
                 contentContainerStyle={styles.conteudo}
-                keyboardShouldPersistTaps="handled"
                 refreshControl={
                     <RefreshControl refreshing={atualizando} onRefresh={atualizar} colors={[colors.red700]} tintColor={colors.red700} />
                 }
                 >
                     {conteudo()}
-                </ScrollView>
-            </KeyboardAvoidingView>
+                </RolagemTeclado>
+            </EvitarTeclado>
         </View>
     )
 }

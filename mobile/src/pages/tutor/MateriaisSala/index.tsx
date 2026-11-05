@@ -1,7 +1,8 @@
-import React, { useCallback, useContext, useState } from "react";
-import { View, Text, StyleSheet, FlatList, RefreshControl, KeyboardAvoidingView, Platform } from "react-native";
+import React, { useCallback, useContext, useRef, useState } from "react";
+import { View, Text, StyleSheet, FlatList, RefreshControl } from "react-native";
 
 import { Header } from "../../../components/Header";
+import { EvitarTeclado, useRolarAteCampo } from "../../../components/EvitarTeclado";
 import { Card } from "../../../components/Card";
 import { Input } from "../../../components/Input";
 import { Button } from "../../../components/Button";
@@ -43,6 +44,11 @@ export default function MateriaisSala({ navigation, route }: TutorScreenProps<"M
     const [arquivo, setArquivo] = useState<ArquivoEscolhido | null>(null);
     const [erroArquivo, setErroArquivo] = useState<string | null>(null);
     const [enviando, setEnviando] = useState(false);
+
+    // O formulário fica no topo da lista: ela rola até o campo em foco quando o teclado abre
+    const listaRef = useRef<FlatList<MaterialSala>>(null);
+    const obterRolagem = useCallback(() => listaRef.current?.getScrollResponder(), []);
+    const rolagem = useRolarAteCampo(obterRolagem);
 
     const buscar = useCallback(async (): Promise<Dados> => {
         const [tutorias, materiais] = await Promise.all([
@@ -161,8 +167,10 @@ export default function MateriaisSala({ navigation, route }: TutorScreenProps<"M
         <View style={styles.container}>
             <Header title="Materiais da sala" onBack={navigation.goBack} />
 
-            <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === "ios" ? "padding" : undefined}>
+            <EvitarTeclado style={styles.container}>
                 <FlatList
+                {...rolagem}
+                ref={listaRef}
                 data={carregando ? [] : dados?.materiais ?? []}
                 keyExtractor={(item) => String(item.id_material)}
                 renderItem={({ item }) => <ItemMaterial material={item} detalhe={detalhe(item)} />}
@@ -178,9 +186,8 @@ export default function MateriaisSala({ navigation, route }: TutorScreenProps<"M
                 refreshControl={
                     <RefreshControl refreshing={atualizando} onRefresh={atualizar} colors={[colors.red700]} tintColor={colors.red700} />
                 }
-                keyboardShouldPersistTaps="handled"
                 />
-            </KeyboardAvoidingView>
+            </EvitarTeclado>
         </View>
     )
 }
