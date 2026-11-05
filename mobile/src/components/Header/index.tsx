@@ -2,6 +2,8 @@ import React, { useContext } from "react";
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 import { SeloPerfil } from "../SeloPerfil";
 import { AuthContext } from "../../contexts/AuthContext";
@@ -17,10 +19,13 @@ interface HeaderProps {
 }
 
 // Faixa vermelha das áreas logadas: logo, selo do perfil (com troca aluno/tutor),
-// sino (professor), "Sair" e, embaixo, o título da tela.
+// ajuda ("?"), sino (professor), "Sair" e, embaixo, o título da tela.
 export function Header({ title, onBack, onNotificacoes }: HeaderProps){
     const { user, ehTutor, area, trocarArea, signOut } = useContext(AuthContext);
     const insets = useSafeAreaInsets();
+    // A tela "Ajuda" existe em todas as pilhas logadas (professor, aluno e tutor) com o mesmo nome
+    const navigation = useNavigation<NativeStackNavigationProp<{ Ajuda: undefined }>>();
+    const route = useRoute();
 
     // Mesmo rótulo do selo do site: professor, ou aluno/tutor conforme a área aberta
     const rotulo = user.perfil === "professor" ? "Professor" : area === "tutor" ? "Tutor" : "Aluno";
@@ -38,6 +43,18 @@ export function Header({ title, onBack, onNotificacoes }: HeaderProps){
                 <View style={styles.acoes}>
                     {user.perfil && (
                         <SeloPerfil rotulo={rotulo} onTrocar={ehTutor ? trocarArea : undefined} />
+                    )}
+
+                    {/* Ajuda/FAQ: registrada em todas as pilhas logadas; some na própria tela de Ajuda */}
+                    {route.name !== "Ajuda" && (
+                        <TouchableOpacity
+                        onPress={() => navigation.navigate("Ajuda")}
+                        accessibilityRole="button"
+                        accessibilityLabel="Ajuda"
+                        hitSlop={8}
+                        >
+                            <Feather name="help-circle" size={22} color={colors.white} />
+                        </TouchableOpacity>
                     )}
 
                     {onNotificacoes && (

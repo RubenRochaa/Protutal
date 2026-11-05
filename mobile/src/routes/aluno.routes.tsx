@@ -13,6 +13,7 @@ import DetalheTutoria from "../pages/aluno/DetalheTutoria";
 import ConteudosAprendidos from "../pages/aluno/ConteudosAprendidos";
 import ChatTutoria from "../pages/aluno/ChatTutoria";
 import FeedbackTutor from "../pages/aluno/FeedbackTutor";
+import Ajuda from "../pages/Ajuda";
 import { tabOptions, tabScreenOptions } from "./tabOptions";
 
 // Telas da área do aluno. Cada aba tem a sua pilha; as telas usadas em mais de uma aba
@@ -35,6 +36,8 @@ export type AlunoStackParamsList = {
     ChatTutoria: { id_tutoria: number };
     ConteudosAprendidos: { id_sala: number; nome_sala: string };
     FeedbackTutor: { id_tutoria: number };
+    // Ícone "?" do Header
+    Ajuda: undefined;
 };
 
 // Abas na ordem do Figma, com os nomes do menu do site (MENU_ALUNO) mais "Início"
@@ -54,12 +57,13 @@ export type AlunoScreenProps<T extends keyof AlunoStackParamsList> = CompositeSc
 const Tab = createBottomTabNavigator<AlunoTabParamsList>();
 const Stack = createNativeStackNavigator<AlunoStackParamsList>();
 
-// Telas de atividade usadas por várias abas
+// Telas de atividade usadas por várias abas (e a Ajuda, aberta pelo "?" do Header em qualquer aba)
 function telasAtividade(){
     return (
         <>
             <Stack.Screen name="DetalheAtividade" component={DetalheAtividade} />
             <Stack.Screen name="ContestarNota" component={ContestarNota} />
+            <Stack.Screen name="Ajuda" component={Ajuda} />
         </>
     )
 }

@@ -15,6 +15,7 @@ import CorrigirAtividade from "../pages/tutor/CorrigirAtividade";
 import Contestacoes from "../pages/tutor/Contestacoes";
 import Feedbacks from "../pages/tutor/Feedbacks";
 import Desempenho from "../pages/tutor/Desempenho";
+import Ajuda from "../pages/Ajuda";
 import { tabOptions, tabScreenOptions } from "./tabOptions";
 
 // Telas da área do tutor (menu do site em design/src/app/tutor/layout.tsx).
@@ -35,6 +36,8 @@ export type TutorStackParamsList = {
     Contestacoes: undefined;
     FeedbacksRecebidos: undefined;
     DesempenhoTutor: undefined;
+    // Ícone "?" do Header
+    Ajuda: undefined;
 };
 
 // 5 abas: os itens do menu do site mais "Início"; Contestações fica fora da barra
@@ -62,6 +65,7 @@ function telasComuns(){
             <Stack.Screen name="CorrigirAtividade" component={CorrigirAtividade} />
             <Stack.Screen name="NovaAtividade" component={NovaAtividade} />
             <Stack.Screen name="Contestacoes" component={Contestacoes} />
+            <Stack.Screen name="Ajuda" component={Ajuda} />
         </>
     )
 }
@@ -101,6 +105,7 @@ function FeedbacksStack(){
     return (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen name="FeedbacksRecebidos" component={Feedbacks} />
+            <Stack.Screen name="Ajuda" component={Ajuda} />
         </Stack.Navigator>
     )
 }
@@ -109,6 +114,7 @@ function DesempenhoStack(){
     return (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen name="DesempenhoTutor" component={Desempenho} />
+            <Stack.Screen name="Ajuda" component={Ajuda} />
         </Stack.Navigator>
     )
 }

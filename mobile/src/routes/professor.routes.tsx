@@ -12,6 +12,7 @@ import TutoriaAnos from "../pages/professor/Tutoria";
 import HistoricoTutoria from "../pages/professor/HistoricoTutoria";
 import DesempenhoSalas from "../pages/professor/DesempenhoSalas";
 import Notificacoes from "../pages/professor/Notificacoes";
+import Ajuda from "../pages/Ajuda";
 import { SubAbaSala } from "../pages/professor/Sala/abas";
 import { StatusContestacao } from "../lib/types";
 import { tabOptions, tabScreenOptions } from "./tabOptions";
@@ -32,6 +33,8 @@ export type ProfessorStackParamsList = {
     Notificacoes: undefined;
     // id_sala: sala já escolhida
     ExportarNotas: { id_sala?: number } | undefined;
+    // Ícone "?" do Header
+    Ajuda: undefined;
 };
 
 // Mesmos itens do menu do professor no site, mais "Início" (no site é a logo)
@@ -60,6 +63,7 @@ function telasComuns(){
             <Stack.Screen name="DetalheAtividadeProfessor" component={DetalheAtividadeProfessor} />
             <Stack.Screen name="Notificacoes" component={Notificacoes} />
             <Stack.Screen name="ExportarNotas" component={ExportarNotas} />
+            <Stack.Screen name="Ajuda" component={Ajuda} />
         </>
     )
 }

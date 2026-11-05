@@ -10,9 +10,12 @@ import {
     Platform
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 import { LOGO_MODO_ESCURO, MASCOTES } from "../../lib/mascotes";
-import { colors, fonts, radius, shadows, spacing } from "../../styles/theme";
+import { AuthStackParamsList } from "../../routes/auth.routes";
+import { colors, fonts, fontSizes, radius, shadows, spacing } from "../../styles/theme";
 
 interface AuthLayoutProps {
     // sem aba (esqueci a senha): as duas abas aparecem sem destaque, como no site
@@ -26,6 +29,7 @@ interface AuthLayoutProps {
 // faixa vermelha com a logo, a frase e o mascote; embaixo, o cartão com as abas ENTRAR / CADASTRAR
 export function AuthLayout({ aba, onEntrar, onCadastrar, children }: AuthLayoutProps){
     const insets = useSafeAreaInsets();
+    const navigation = useNavigation<NativeStackNavigationProp<AuthStackParamsList>>();
 
     return (
         <KeyboardAvoidingView
@@ -69,6 +73,16 @@ export function AuthLayout({ aba, onEntrar, onCadastrar, children }: AuthLayoutP
                     </View>
 
                     {children}
+
+                    {/* Ajuda pública (seção "Geral" do FAQ): para quem não consegue entrar */}
+                    <TouchableOpacity
+                    style={styles.ajuda}
+                    onPress={() => navigation.navigate("Ajuda")}
+                    accessibilityRole="link"
+                    hitSlop={8}
+                    >
+                        <Text style={styles.textoAjuda}>Precisa de ajuda?</Text>
+                    </TouchableOpacity>
                 </View>
             </ScrollView>
         </KeyboardAvoidingView>
@@ -133,5 +147,13 @@ const styles = StyleSheet.create({
     },
     textoAbaAtiva:{
         color: colors.white
+    },
+    ajuda:{
+        alignSelf: "center"
+    },
+    textoAjuda:{
+        fontFamily: fonts.regular,
+        fontSize: fontSizes.selo,
+        color: colors.gray700
     }
 })
