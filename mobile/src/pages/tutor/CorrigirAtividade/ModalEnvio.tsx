@@ -14,7 +14,7 @@ import { EvitarTeclado, RolagemTeclado } from "../../../components/EvitarTeclado
 import { Input } from "../../../components/Input";
 import { Button } from "../../../components/Button";
 import { TextArea } from "../../../components/TextArea";
-import { ToastContext } from "../../../contexts/ToastContext";
+import { ToastContext, ToastHost } from "../../../contexts/ToastContext";
 
 import { api } from "../../../services/api";
 import { getErrorMessage } from "../../../lib/getErrorMessage";
@@ -210,6 +210,9 @@ export function ModalEnvio({ idAtividade, item, prazo, onClose, onNotaLancada }:
                     </RolagemTeclado>
                 </View>
             </EvitarTeclado>
+
+            {/* Avisos dentro da janela do Modal, para aparecerem por cima dela */}
+            <ToastHost />
         </Modal>
     )
 }

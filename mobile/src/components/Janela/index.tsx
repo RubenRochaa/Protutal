@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Modal, TouchableOpacity } from "react-native";
 import { Feather } from "@expo/vector-icons";
 
 import { EvitarTeclado, RolagemTeclado } from "../EvitarTeclado";
+import { ToastHost } from "../../contexts/ToastContext";
 import { colors, fonts, fontSizes, radius, spacing } from "../../styles/theme";
 
 interface JanelaProps {
@@ -31,6 +32,9 @@ export function Janela({ visivel, titulo, onClose, children }: JanelaProps){
                     </RolagemTeclado>
                 </View>
             </EvitarTeclado>
+
+            {/* Avisos dentro da janela do Modal, para aparecerem por cima dela */}
+            <ToastHost />
         </Modal>
     )
 }
