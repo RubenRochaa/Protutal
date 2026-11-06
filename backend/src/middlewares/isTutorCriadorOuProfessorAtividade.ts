@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import prismaClient from "../prisma";
 import { AppError } from "../errors/AppError";
+import { validarId } from "../helpers/validarId";
 import { isProfessorDonoSala, isTutorAtivo } from "./isTutorAtivoSala";
 
 // Deve ser usado sempre DEPOIS do isAuthenticated, que preenche req.user_id e req.user_email.
@@ -16,9 +17,7 @@ export async function isTutorCriadorOuProfessorAtividade(
     // o id da atividade vem da URL e precisa ser um inteiro positivo
     const id_atividade = Number(req.params.id);
 
-    if (!Number.isInteger(id_atividade) || id_atividade <= 0) {
-        throw new AppError("O id da atividade deve ser um número inteiro", 400);
-    }
+    validarId(id_atividade, "O id da atividade deve ser um número inteiro");
 
     // atividade -> tutor_sala -> sala, para saber o vínculo criador e o professor dono
     const atividade = await prismaClient.atividade.findUnique({

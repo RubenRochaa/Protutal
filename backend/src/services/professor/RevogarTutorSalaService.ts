@@ -1,5 +1,7 @@
 import prismaClient from "../../prisma";
 import { AppError } from "../../errors/AppError";
+import { MENSAGEM_SEM_PERMISSAO_SALA } from "../../helpers/buscarSalaDoProfessor";
+import { validarId } from "../../helpers/validarId";
 import { contarContestacoesPendentes } from "../../helpers/contarContestacoesPendentes";
 
 interface RevogarTutorSalaRequest {
@@ -13,9 +15,7 @@ class RevogarTutorSalaService {
     async execute({ id_tutor_sala, id_professor }: RevogarTutorSalaRequest) {
 
         // o id do vínculo vem da URL (/tutores-sala/:id/revogar) e precisa ser um inteiro positivo
-        if (!Number.isInteger(id_tutor_sala) || id_tutor_sala <= 0) {
-            throw new AppError("O id do tutor da sala deve ser um número inteiro", 400);
-        }
+        validarId(id_tutor_sala, "O id do tutor da sala deve ser um número inteiro");
 
         // a sala do vínculo diz quem é o professor dono
         const tutorSala = await prismaClient.tutor_sala.findUnique({
@@ -39,7 +39,7 @@ class RevogarTutorSalaService {
 
         // mesmo critério da listagem de tutorias da sala: só o professor dono da sala
         if (tutorSala.sala.id_professor !== id_professor) {
-            throw new AppError("Você não tem permissão para acessar esta sala", 403);
+            throw new AppError(MENSAGEM_SEM_PERMISSAO_SALA, 403);
         }
 
         // a revogação só preenche data_revogacao (o registro não é apagado)

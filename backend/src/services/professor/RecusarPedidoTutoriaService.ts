@@ -1,5 +1,7 @@
 import prismaClient from "../../prisma";
 import { AppError } from "../../errors/AppError";
+import { buscarSalaDoProfessor } from "../../helpers/buscarSalaDoProfessor";
+import { validarId } from "../../helpers/validarId";
 
 interface RecusarPedidoTutoriaRequest {
     id_pedido: number;
@@ -10,9 +12,7 @@ class RecusarPedidoTutoriaService {
     async execute({ id_pedido, id_professor }: RecusarPedidoTutoriaRequest) {
 
         // o id do pedido vem da URL (/pedidos-tutoria/:id/recusar) e precisa ser um inteiro positivo
-        if (!Number.isInteger(id_pedido) || id_pedido <= 0) {
-            throw new AppError("O id do pedido deve ser um número inteiro", 400);
-        }
+        validarId(id_pedido, "O id do pedido deve ser um número inteiro");
 
         const pedido = await prismaClient.pedido_tutoria.findUnique({
             where: {
@@ -35,24 +35,8 @@ class RecusarPedidoTutoriaService {
         }
 
         // a sala é a que o aluno escolheu no pedido
-        const sala = await prismaClient.sala.findUnique({
-            where: {
-                id_sala: pedido.id_sala
-            },
-            select: {
-                id_sala: true,
-                id_professor: true
-            }
-        });
-
-        if (!sala) {
-            throw new AppError("Sala não encontrada", 404);
-        }
-
         // o professor só pode recusar pedidos nas próprias salas
-        if (sala.id_professor !== id_professor) {
-            throw new AppError("Você não tem permissão para acessar esta sala", 403);
-        }
+        await buscarSalaDoProfessor(pedido.id_sala, id_professor);
 
         // o filtro status: "pendente" evita que dois professores decidam
         // o mesmo pedido ao mesmo tempo: o segundo não atualiza nenhuma linha

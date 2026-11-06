@@ -1,5 +1,6 @@
 import prismaClient from "../../prisma";
-import { AppError } from "../../errors/AppError";
+import { buscarSalaDoProfessor } from "../../helpers/buscarSalaDoProfessor";
+import { validarId } from "../../helpers/validarId";
 import { calcularDesempenhoTutor } from "../../helpers/calcularDesempenhoTutor";
 
 interface DesempenhoTutoresSalaRequest {
@@ -14,28 +15,10 @@ class DesempenhoTutoresSalaService {
     async execute({ id_sala, id_professor }: DesempenhoTutoresSalaRequest) {
 
         // o id da sala vem da URL (/salas/:id/desempenho-tutores) e precisa ser um inteiro positivo
-        if (!Number.isInteger(id_sala) || id_sala <= 0) {
-            throw new AppError("O id da sala deve ser um número inteiro", 400);
-        }
-
-        const sala = await prismaClient.sala.findUnique({
-            where: {
-                id_sala: id_sala
-            },
-            select: {
-                id_sala: true,
-                id_professor: true
-            }
-        });
-
-        if (!sala) {
-            throw new AppError("Sala não encontrada", 404);
-        }
+        validarId(id_sala, "O id da sala deve ser um número inteiro");
 
         // mesmo critério da P11/P14: só o professor dono da sala
-        if (sala.id_professor !== id_professor) {
-            throw new AppError("Você não tem permissão para acessar esta sala", 403);
-        }
+        await buscarSalaDoProfessor(id_sala, id_professor);
 
         // todos os vínculos de tutor da sala, inclusive os revogados (o histórico continua valendo);
         // do aluno sai só o nome (sem email, senha ou tokens)

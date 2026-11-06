@@ -1,5 +1,7 @@
 import prismaClient from "../../prisma";
 import { AppError } from "../../errors/AppError";
+import { MENSAGEM_SEM_PERMISSAO_SALA } from "../../helpers/buscarSalaDoProfessor";
+import { validarId } from "../../helpers/validarId";
 import { Prisma } from "../../generated/prisma";
 
 interface ListMateriaisSalaRequest {
@@ -13,9 +15,7 @@ class ListMateriaisSalaService {
 
         // a rota usa só o isAuthenticated: a permissão é conferida aqui,
         // porque o isTutorAtivoSala barraria o professor que não é dono e o aluno tutorado
-        if (!Number.isInteger(id_sala) || id_sala <= 0) {
-            throw new AppError("O id da sala deve ser um número inteiro", 400);
-        }
+        validarId(id_sala, "O id da sala deve ser um número inteiro");
 
         const sala = await prismaClient.sala.findUnique({
             where: {
@@ -32,7 +32,7 @@ class ListMateriaisSalaService {
 
         // sem email no token não dá para conferir (e o Prisma ignoraria o filtro email: undefined)
         if (!email) {
-            throw new AppError("Você não tem permissão para acessar esta sala", 403);
+            throw new AppError(MENSAGEM_SEM_PERMISSAO_SALA, 403);
         }
 
         // Professor e Aluno são tabelas separadas e os ids podem se repetir,
@@ -93,7 +93,7 @@ class ListMateriaisSalaService {
             });
 
             if (tutorSalas.length === 0) {
-                throw new AppError("Você não tem permissão para acessar esta sala", 403);
+                throw new AppError(MENSAGEM_SEM_PERMISSAO_SALA, 403);
             }
 
             // cada material pertence a um único Tutor_sala, então não há material repetido

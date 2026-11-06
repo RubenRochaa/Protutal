@@ -1,5 +1,6 @@
 import prismaClient from "../../prisma";
 import { AppError } from "../../errors/AppError";
+import { validarId } from "../../helpers/validarId";
 import { calcularStatusEntrega } from "../../helpers/calcularStatusEntrega";
 import { podeResponderAtividade } from "../../helpers/podeResponderAtividade";
 import { isTutorAtivo } from "../../middlewares/isTutorAtivoSala";
@@ -15,9 +16,7 @@ class DetailAtividadeService {
 
         // 1) o id da atividade vem da URL (já convertido com Number no controller):
         // "abc" vira NaN e "1.5" não é inteiro, então os dois caem aqui (400)
-        if (!Number.isInteger(id_atividade) || id_atividade <= 0) {
-            throw new AppError("O id da atividade deve ser um número inteiro", 400);
-        }
+        validarId(id_atividade, "O id da atividade deve ser um número inteiro");
 
         // uma única consulta traz os dados comuns (os mesmos da A1), os destinatários
         // e a resposta e a nota do usuário logado (se ele for tutor, essas listas vêm vazias).

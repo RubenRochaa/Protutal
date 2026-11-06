@@ -1,5 +1,7 @@
 import prismaClient from "../../prisma";
 import { AppError } from "../../errors/AppError";
+import { MENSAGEM_SEM_PERMISSAO_SALA } from "../../helpers/buscarSalaDoProfessor";
+import { validarIdObrigatorio } from "../../helpers/validarId";
 
 interface TutoriaRequest {
     id_tutor_sala: number;
@@ -12,14 +14,10 @@ class CreateTutoriaService {
     async execute({ id_tutor_sala, id_aluno, meta_aprendizagem, id_professor }: TutoriaRequest) {
 
         // id_tutor_sala é obrigatório: identifica o tutor e a sala da tutoria
-        if (id_tutor_sala === undefined || id_tutor_sala === null || !Number.isInteger(Number(id_tutor_sala)) || Number(id_tutor_sala) <= 0) {
-            throw new AppError("O campo id_tutor_sala é obrigatório e deve ser um número inteiro", 400);
-        }
+        validarIdObrigatorio(id_tutor_sala, "O campo id_tutor_sala é obrigatório e deve ser um número inteiro");
 
         // id_aluno é obrigatório: é o aluno que será tutorado
-        if (id_aluno === undefined || id_aluno === null || !Number.isInteger(Number(id_aluno)) || Number(id_aluno) <= 0) {
-            throw new AppError("O campo id_aluno é obrigatório e deve ser um número inteiro", 400);
-        }
+        validarIdObrigatorio(id_aluno, "O campo id_aluno é obrigatório e deve ser um número inteiro");
 
         // no schema a coluna é opcional, mas a regra da rota exige a meta
         if (typeof meta_aprendizagem !== "string" || meta_aprendizagem.trim() === "") {
@@ -58,7 +56,7 @@ class CreateTutoriaService {
 
         // o professor só pode criar tutorias nas próprias salas
         if (tutorSala.sala.id_professor !== id_professor) {
-            throw new AppError("Você não tem permissão para acessar esta sala", 403);
+            throw new AppError(MENSAGEM_SEM_PERMISSAO_SALA, 403);
         }
 
         const aluno = await prismaClient.aluno.findUnique({

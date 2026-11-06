@@ -1,6 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import prismaClient from "../prisma";
 import { AppError } from "../errors/AppError";
+import { MENSAGEM_SEM_PERMISSAO_SALA } from "../helpers/buscarSalaDoProfessor";
+import { validarId } from "../helpers/validarId";
 
 // Deve ser usado sempre DEPOIS do isAuthenticated, que preenche req.user_id e req.user_email.
 // Serve para rotas com o id da sala na URL (/salas/:id/...).
@@ -14,9 +16,7 @@ export async function isTutorAtivoSala(
     // o id da sala vem da URL e precisa ser um inteiro positivo
     const id_sala = Number(req.params.id);
 
-    if (!Number.isInteger(id_sala) || id_sala <= 0) {
-        throw new AppError("O id da sala deve ser um número inteiro", 400);
-    }
+    validarId(id_sala, "O id da sala deve ser um número inteiro");
 
     const sala = await prismaClient.sala.findUnique({
         where: {
@@ -34,7 +34,7 @@ export async function isTutorAtivoSala(
 
     // sem email no token não dá para conferir (e o Prisma ignoraria o filtro email: undefined)
     if (!req.user_email) {
-        throw new AppError("Você não tem permissão para acessar esta sala", 403);
+        throw new AppError(MENSAGEM_SEM_PERMISSAO_SALA, 403);
     }
 
     const id_usuario = Number(req.user_id);
@@ -49,7 +49,7 @@ export async function isTutorAtivoSala(
         return next();
     }
 
-    throw new AppError("Você não tem permissão para acessar esta sala", 403);
+    throw new AppError(MENSAGEM_SEM_PERMISSAO_SALA, 403);
 }
 
 // As duas funções abaixo também são usadas por outros middlewares

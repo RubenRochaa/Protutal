@@ -1,5 +1,6 @@
 import prismaClient from "../../prisma";
 import { AppError } from "../../errors/AppError";
+import { validarId } from "../../helpers/validarId";
 import { calcularStatusEntrega } from "../../helpers/calcularStatusEntrega";
 
 interface ListRespostasAtividadeRequest {
@@ -12,9 +13,7 @@ class ListRespostasAtividadeService {
         // a permissão (professor dono ou tutor criador ativo) e a existência da atividade
         // já foram conferidas no middleware isTutorCriadorOuProfessorAtividade;
         // a validação do id fica aqui também para o service não depender da rota
-        if (!Number.isInteger(id_atividade) || id_atividade <= 0) {
-            throw new AppError("O id da atividade deve ser um número inteiro", 400);
-        }
+        validarId(id_atividade, "O id da atividade deve ser um número inteiro");
 
         // uma única consulta traz a atividade, todos os destinatários e,
         // para cada aluno, a resposta e a nota DESTA atividade.

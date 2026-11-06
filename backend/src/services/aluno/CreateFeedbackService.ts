@@ -1,17 +1,12 @@
-import path from "path";
 import prismaClient from "../../prisma";
 import { Prisma } from "../../generated/prisma";
 import { AppError } from "../../errors/AppError";
+import { validarArquivoDocumento } from "../../helpers/validarArquivo";
+import { validarFaixaNota } from "../../helpers/validarNota";
 import { UploadedFile } from "express-fileupload";
 import { buscarParticipanteTutoria } from "../../helpers/buscarParticipanteTutoria";
 
 import { v2 as cloudinary, UploadApiResponse } from "cloudinary";
-
-// mesmos formatos aceitos para material de apoio (conferidos pela extensão)
-const EXTENSOES_ACEITAS = [".pdf", ".doc", ".docx", ".xls", ".xlsx", ".csv"];
-
-// 10 MB, igual ao material de apoio; o limite global de 50 MB do server.ts continua valendo
-const TAMANHO_MAXIMO = 10 * 1024 * 1024;
 
 interface FeedbackRequest {
     id_tutoria: number;
@@ -63,14 +58,7 @@ class CreateFeedbackService {
             throw new AppError("O campo nota é obrigatório e deve ser um número", 400);
         }
 
-        if (notaFeedback < 0 || notaFeedback > 10) {
-            throw new AppError("A nota deve estar entre 0 e 10", 400);
-        }
-
-        // a coluna é Decimal(4,2): com mais casas o banco arredondaria sem avisar
-        if (Number(notaFeedback.toFixed(2)) !== notaFeedback) {
-            throw new AppError("A nota deve ter no máximo 2 casas decimais", 400);
-        }
+        validarFaixaNota(notaFeedback, "A nota");
 
         // 7) comentario é opcional, mas se vier não pode ser vazio nem só espaços
         let comentarioFeedback: string | null = null;
@@ -89,20 +77,7 @@ class CreateFeedbackService {
             throw new AppError("O arquivo da rubrica é obrigatório (campo file)", 400);
         }
 
-        if (Array.isArray(file)) {
-            throw new AppError("Envie apenas um arquivo no campo file", 400);
-        }
-
-        // ".PDF" e ".pdf" valem igual
-        const extensao = path.extname(file.name).toLowerCase();
-
-        if (!EXTENSOES_ACEITAS.includes(extensao)) {
-            throw new AppError("Formato não aceito. Envie um arquivo .pdf, .doc, .docx, .xls, .xlsx ou .csv", 400);
-        }
-
-        if (file.size > TAMANHO_MAXIMO) {
-            throw new AppError("O arquivo deve ter no máximo 10 MB", 400);
-        }
+        validarArquivoDocumento(file);
 
         // 9) um feedback por etapa em cada tutoria
         // (usa a chave composta gerada pelo @@unique([id_tutoria, etapa]) de Feedback)

@@ -1,5 +1,7 @@
 import prismaClient from "../../prisma";
 import { AppError } from "../../errors/AppError";
+import { validarFaixaNota } from "../../helpers/validarNota";
+import { validarId } from "../../helpers/validarId";
 import { StatusContestacao } from "../../generated/prisma";
 
 interface ResolverContestacaoRequest {
@@ -17,9 +19,7 @@ class ResolverContestacaoService {
         // 1) validação do id da URL e do corpo (400), antes de qualquer consulta ao banco
 
         // o id vem da URL (já convertido com Number no controller): "abc" vira NaN e "1.5" não é inteiro
-        if (!Number.isInteger(id_contestacao) || id_contestacao <= 0) {
-            throw new AppError("O id da contestação deve ser um número inteiro", 400);
-        }
+        validarId(id_contestacao, "O id da contestação deve ser um número inteiro");
 
         // status: os valores vêm do enum StatusContestacao do client gerado, tirando "pendente"
         // (resolver é justamente sair de pendente)
@@ -41,15 +41,7 @@ class ResolverContestacaoService {
                 throw new AppError("O campo valor é obrigatório quando a contestação é aceita e deve ser um número", 400);
             }
 
-            // o banco também tem um CHECK de 0 a 10
-            if (valor < 0 || valor > 10) {
-                throw new AppError("O valor deve estar entre 0 e 10", 400);
-            }
-
-            // a coluna é Decimal(4,2): com mais casas o banco arredondaria sem avisar
-            if (Number(valor.toFixed(2)) !== valor) {
-                throw new AppError("O valor deve ter no máximo 2 casas decimais", 400);
-            }
+            validarFaixaNota(valor, "O valor");
         } else if (valor !== undefined) {
             // recusada: a nota fica como está, então valor não pode vir (nem null)
             throw new AppError("O campo valor só pode ser enviado quando a contestação é aceita", 400);

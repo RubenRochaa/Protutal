@@ -1,6 +1,8 @@
 import prismaClient from "../../prisma";
 import { Prisma } from "../../generated/prisma";
 import { AppError } from "../../errors/AppError";
+import { validarFaixaNota } from "../../helpers/validarNota";
+import { validarId } from "../../helpers/validarId";
 import { isTutorAtivo } from "../../middlewares/isTutorAtivoSala";
 
 interface NotaRequest {
@@ -18,9 +20,7 @@ class CreateNotaService {
         // 1) validação do id da URL e do corpo (400), antes de qualquer consulta ao banco
 
         // o id da atividade vem da URL (já convertido com Number no controller)
-        if (!Number.isInteger(id_atividade) || id_atividade <= 0) {
-            throw new AppError("O id da atividade deve ser um número inteiro", 400);
-        }
+        validarId(id_atividade, "O id da atividade deve ser um número inteiro");
 
         // id_aluno é obrigatório: é o aluno que recebe a nota
         if (
@@ -38,15 +38,7 @@ class CreateNotaService {
             throw new AppError("O campo valor é obrigatório e deve ser um número", 400);
         }
 
-        // o banco também tem um CHECK de 0 a 10
-        if (valor < 0 || valor > 10) {
-            throw new AppError("O valor deve estar entre 0 e 10", 400);
-        }
-
-        // a coluna é Decimal(4,2): com mais casas o banco arredondaria sem avisar
-        if (Number(valor.toFixed(2)) !== valor) {
-            throw new AppError("O valor deve ter no máximo 2 casas decimais", 400);
-        }
+        validarFaixaNota(valor, "O valor");
 
         // comentario é opcional, mas se vier precisa ser texto
         if (comentario !== undefined && comentario !== null && typeof comentario !== "string") {

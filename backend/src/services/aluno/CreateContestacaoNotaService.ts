@@ -1,5 +1,6 @@
 import prismaClient from "../../prisma";
 import { AppError } from "../../errors/AppError";
+import { validarId } from "../../helpers/validarId";
 
 interface ContestacaoNotaRequest {
     id_nota: number;
@@ -14,9 +15,7 @@ class CreateContestacaoNotaService {
 
         // o id da nota vem da URL (já convertido com Number no controller):
         // "abc" vira NaN e "1.5" não é inteiro, então os dois caem aqui
-        if (!Number.isInteger(id_nota) || id_nota <= 0) {
-            throw new AppError("O id da nota deve ser um número inteiro", 400);
-        }
+        validarId(id_nota, "O id da nota deve ser um número inteiro");
 
         // comentario é obrigatório: é o motivo da contestação
         if (typeof comentario !== "string" || comentario.trim() === "") {

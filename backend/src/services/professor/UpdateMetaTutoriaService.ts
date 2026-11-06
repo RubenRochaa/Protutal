@@ -1,5 +1,7 @@
 import prismaClient from "../../prisma";
 import { AppError } from "../../errors/AppError";
+import { MENSAGEM_SEM_PERMISSAO_SALA } from "../../helpers/buscarSalaDoProfessor";
+import { validarId } from "../../helpers/validarId";
 
 interface UpdateMetaTutoriaRequest {
     id_tutoria: number;
@@ -13,9 +15,7 @@ class UpdateMetaTutoriaService {
     async execute({ id_tutoria, id_professor, meta_aprendizagem }: UpdateMetaTutoriaRequest) {
 
         // o id da tutoria vem da URL (/tutorias/:id/meta) e precisa ser um inteiro positivo
-        if (!Number.isInteger(id_tutoria) || id_tutoria <= 0) {
-            throw new AppError("O id da tutoria deve ser um número inteiro", 400);
-        }
+        validarId(id_tutoria, "O id da tutoria deve ser um número inteiro");
 
         // a sala da tutoria é descoberta pelo caminho Tutoria -> Tutor_sala -> Sala
         const tutoria = await prismaClient.tutoria.findUnique({
@@ -43,7 +43,7 @@ class UpdateMetaTutoriaService {
 
         // mesmo critério da listagem de tutorias da sala: só o professor dono da sala
         if (tutoria.tutor_sala.sala.id_professor !== id_professor) {
-            throw new AppError("Você não tem permissão para acessar esta sala", 403);
+            throw new AppError(MENSAGEM_SEM_PERMISSAO_SALA, 403);
         }
 
         // meta é obrigatória; a coluna é TEXT, então não há tamanho máximo no schema

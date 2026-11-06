@@ -1,5 +1,7 @@
 import prismaClient from "../../prisma";
 import { AppError } from "../../errors/AppError";
+import { MENSAGEM_SEM_PERMISSAO_SALA } from "../../helpers/buscarSalaDoProfessor";
+import { validarId } from "../../helpers/validarId";
 
 interface ListAvaliacoesTutorRequest {
     id_tutor_sala: number;
@@ -10,9 +12,7 @@ class ListAvaliacoesTutorService {
     async execute({ id_tutor_sala, id_professor }: ListAvaliacoesTutorRequest) {
 
         // o id do vínculo vem da URL (/tutores-sala/:id/avaliacoes) e precisa ser um inteiro positivo
-        if (!Number.isInteger(id_tutor_sala) || id_tutor_sala <= 0) {
-            throw new AppError("O id do tutor da sala deve ser um número inteiro", 400);
-        }
+        validarId(id_tutor_sala, "O id do tutor da sala deve ser um número inteiro");
 
         // o vínculo existe (404); select explícito: e-mail, senha e tokens do aluno nunca saem na resposta
         const tutorSala = await prismaClient.tutor_sala.findUnique({
@@ -48,7 +48,7 @@ class ListAvaliacoesTutorService {
         // mesmo critério da avaliação (P9): só o professor dono da sala (403).
         // não filtramos data_revogacao: tutor revogado também tem o histórico listado
         if (tutorSala.sala.id_professor !== id_professor) {
-            throw new AppError("Você não tem permissão para acessar esta sala", 403);
+            throw new AppError(MENSAGEM_SEM_PERMISSAO_SALA, 403);
         }
 
         // total e média calculados no banco; sem avaliação, _avg.nota volta null
