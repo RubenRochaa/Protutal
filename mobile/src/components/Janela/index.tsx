@@ -34,7 +34,7 @@ export function Janela({ visivel, titulo, onClose, children }: JanelaProps){
             </EvitarTeclado>
 
             {/* Avisos dentro da janela do Modal, para aparecerem por cima dela */}
-            <ToastHost />
+            <ToastHost ativo={visivel} />
         </Modal>
     )
 }
