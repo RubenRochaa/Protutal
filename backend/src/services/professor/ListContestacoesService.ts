@@ -1,5 +1,6 @@
 import prismaClient from "../../prisma";
 import { AppError } from "../../errors/AppError";
+import { validarId } from "../../helpers/validarId";
 import { Prisma, StatusContestacao } from "../../generated/prisma";
 
 interface ListContestacoesRequest {
@@ -23,8 +24,8 @@ class ListContestacoesService {
         // ?id_sala= é opcional, mas se vier precisa ser inteiro positivo
         const idSala = id_sala === undefined ? undefined : Number(id_sala);
 
-        if (idSala !== undefined && (!Number.isInteger(idSala) || idSala <= 0)) {
-            throw new AppError("O id da sala deve ser um número inteiro", 400);
+        if (idSala !== undefined) {
+            validarId(idSala, "O id da sala deve ser um número inteiro");
         }
 
         // a rota usa só o isAuthenticated (atende professor e tutor), então a permissão é conferida aqui,

@@ -1,6 +1,7 @@
 import prismaClient from "../../prisma";
 import { hash } from "bcryptjs"
 import { AppError } from "../../errors/AppError";
+import { validarDadosCadastro } from "../../helpers/validarCadastro";
 import { enviarEmailConfirmacao, gerarTokenConfirmacao } from "../../helpers/enviarEmailConfirmacao";
 
 interface AlunoRequest {
@@ -12,33 +13,7 @@ interface AlunoRequest {
 class CreateAlunoService {
     async execute({ nome, email, senha }: AlunoRequest) {
 
-        // os três campos precisam ser texto não vazio (número, array ou objeto quebrariam
-        // o email.split mais abaixo e virariam erro 500)
-        if (
-            typeof nome !== "string" || nome.trim() === "" ||
-            typeof email !== "string" || email.trim() === "" ||
-            typeof senha !== "string" || senha === ""
-        ) {
-            throw new AppError("Nome, email e senha são obrigatórios", 400);
-        }
-
-        const emailValido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-
-        if (!emailValido) {
-            throw new AppError("Email em formato inválido", 400);
-        }
-
-        // Domínios aceitos vêm da variável de ambiente, separados por vírgula
-        const dominiosPermitidos = (process.env.DOMINIOS_PERMITIDOS_ALUNO || "")
-            .split(",")
-            .map((dominio) => dominio.trim().toLowerCase())
-            .filter((dominio) => dominio !== "");
-
-        const dominioEmail = email.split("@")[1].toLowerCase();
-
-        if (!dominiosPermitidos.includes(dominioEmail)) {
-            throw new AppError("Domínio de email não permitido", 400);
-        }
+        validarDadosCadastro({ nome, email, senha }, "DOMINIOS_PERMITIDOS_ALUNO");
 
         const alunoAlreadyExists = await prismaClient.aluno.findFirst({
             where: {

@@ -1,5 +1,7 @@
 import prismaClient from "../../prisma";
 import { AppError } from "../../errors/AppError";
+import { MENSAGEM_SEM_PERMISSAO_SALA } from "../../helpers/buscarSalaDoProfessor";
+import { validarId } from "../../helpers/validarId";
 
 interface ReabrirTutoriaRequest {
     id_tutoria: number;
@@ -12,9 +14,7 @@ class ReabrirTutoriaService {
     async execute({ id_tutoria, id_professor }: ReabrirTutoriaRequest) {
 
         // o id da tutoria vem da URL (/tutorias/:id/reabrir) e precisa ser um inteiro positivo
-        if (!Number.isInteger(id_tutoria) || id_tutoria <= 0) {
-            throw new AppError("O id da tutoria deve ser um número inteiro", 400);
-        }
+        validarId(id_tutoria, "O id da tutoria deve ser um número inteiro");
 
         // a sala da tutoria é descoberta pelo caminho Tutoria -> Tutor_sala -> Sala;
         // data_revogacao diz se o tutor ainda está ativo e ano_letivo limita a reabertura ao ano atual
@@ -47,7 +47,7 @@ class ReabrirTutoriaService {
 
         // mesmo critério da finalização: só o professor dono da sala
         if (tutoria.tutor_sala.sala.id_professor !== id_professor) {
-            throw new AppError("Você não tem permissão para acessar esta sala", 403);
+            throw new AppError(MENSAGEM_SEM_PERMISSAO_SALA, 403);
         }
 
         if (tutoria.status !== "finalizada") {

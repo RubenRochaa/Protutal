@@ -1,5 +1,6 @@
 import prismaClient from "../../prisma";
 import { AppError } from "../../errors/AppError";
+import { validarIdObrigatorio } from "../../helpers/validarId";
 import { IMPEDIMENTOS_PEDIDO_TUTORIA, buscarImpedimentosPorSala } from "../../helpers/verificarPedidoTutoria";
 
 interface PedidoTutoriaRequest {
@@ -11,9 +12,7 @@ class CreatePedidoTutoriaService {
     async execute({ id_aluno, id_sala }: PedidoTutoriaRequest) {
 
         // id_sala é obrigatório: o pedido é analisado pelo professor da sala escolhida
-        if (id_sala === undefined || id_sala === null || !Number.isInteger(Number(id_sala)) || Number(id_sala) <= 0) {
-            throw new AppError("O campo id_sala é obrigatório e deve ser um número inteiro", 400);
-        }
+        validarIdObrigatorio(id_sala, "O campo id_sala é obrigatório e deve ser um número inteiro");
 
         const idSala = Number(id_sala);
 

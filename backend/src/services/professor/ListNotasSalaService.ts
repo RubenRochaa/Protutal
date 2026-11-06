@@ -1,5 +1,7 @@
 import prismaClient from "../../prisma";
-import { AppError } from "../../errors/AppError";
+import { parseEtapaOpcional } from "../../helpers/validarEtapa";
+import { buscarSalaDoProfessor } from "../../helpers/buscarSalaDoProfessor";
+import { validarId } from "../../helpers/validarId";
 import { parseIdOpcional } from "../../helpers/parseIdOpcional";
 
 interface ListNotasSalaRequest {
@@ -17,44 +19,18 @@ class ListNotasSalaService {
     async execute({ id_sala, id_professor, etapa, id_conteudo, id_aluno, id_tutor_sala }: ListNotasSalaRequest) {
 
         // o id da sala vem da URL (/salas/:id/notas) e precisa ser um inteiro positivo
-        if (!Number.isInteger(id_sala) || id_sala <= 0) {
-            throw new AppError("O id da sala deve ser um número inteiro", 400);
-        }
+        validarId(id_sala, "O id da sala deve ser um número inteiro");
 
         // filtros opcionais da query string: se vierem, precisam ser válidos
         // (conferidos antes de buscar a sala, para o 400 vir antes do 404 e do 403)
-        let etapaFiltro: number | undefined;
-
-        if (etapa !== undefined) {
-            etapaFiltro = Number(etapa);
-
-            if (![1, 2, 3].includes(etapaFiltro)) {
-                throw new AppError("A etapa deve ser 1, 2 ou 3", 400);
-            }
-        }
+        const etapaFiltro = parseEtapaOpcional(etapa);
 
         const idConteudoFiltro = parseIdOpcional(id_conteudo, "O id do conteúdo deve ser um número inteiro");
         const idAlunoFiltro = parseIdOpcional(id_aluno, "O id do aluno deve ser um número inteiro");
         const idTutorSalaFiltro = parseIdOpcional(id_tutor_sala, "O id do tutor da sala deve ser um número inteiro");
 
-        const sala = await prismaClient.sala.findUnique({
-            where: {
-                id_sala: id_sala
-            },
-            select: {
-                id_sala: true,
-                id_professor: true
-            }
-        });
-
-        if (!sala) {
-            throw new AppError("Sala não encontrada", 404);
-        }
-
         // o professor só pode ver as notas das próprias salas (RN07)
-        if (sala.id_professor !== id_professor) {
-            throw new AppError("Você não tem permissão para acessar esta sala", 403);
-        }
+        await buscarSalaDoProfessor(id_sala, id_professor);
 
         // notas lançadas nas atividades desta sala (Nota -> Atividade -> Tutor_sala -> Sala);
         // a consulta parte de Nota, então aluno sem nota não aparece.

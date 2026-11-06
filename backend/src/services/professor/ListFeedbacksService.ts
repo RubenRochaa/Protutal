@@ -1,5 +1,6 @@
 import prismaClient from "../../prisma";
 import { AppError } from "../../errors/AppError";
+import { parseEtapaOpcional } from "../../helpers/validarEtapa";
 import { Prisma } from "../../generated/prisma";
 import { parseIdOpcional } from "../../helpers/parseIdOpcional";
 
@@ -18,15 +19,7 @@ class ListFeedbacksService {
 
         // filtros opcionais da query string: se vierem, precisam ser válidos
         // (conferidos antes da permissão, como na rota de contestações)
-        let etapaFiltro: number | undefined;
-
-        if (etapa !== undefined) {
-            etapaFiltro = Number(etapa);
-
-            if (![1, 2, 3].includes(etapaFiltro)) {
-                throw new AppError("A etapa deve ser 1, 2 ou 3", 400);
-            }
-        }
+        const etapaFiltro = parseEtapaOpcional(etapa);
 
         const anoFiltro = parseIdOpcional(ano, "O ano deve ser um número inteiro");
         const idAlunoFiltro = parseIdOpcional(id_aluno, "O id do aluno deve ser um número inteiro");
