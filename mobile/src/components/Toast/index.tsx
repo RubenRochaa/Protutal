@@ -12,7 +12,8 @@ interface ToastProps {
     onClose: () => void;
 }
 
-// Aviso que aparece embaixo da tela, no lugar do toast (sonner) do site.
+// Aviso que aparece no topo da tela, no lugar do toast (sonner) do site.
+// A posição e a animação ficam no ToastHost (contexts/ToastContext).
 // Verde para sucesso, vermelho para erro, com botão de fechar.
 export function Toast({ type, message, onClose }: ToastProps){
     const sucesso = type === "sucesso";

@@ -7,7 +7,7 @@ import { Input } from "../Input";
 import { Button } from "../Button";
 import { TextArea } from "../TextArea";
 import { AbasSegmentadas } from "../AbasSegmentadas";
-import { ToastContext } from "../../contexts/ToastContext";
+import { ToastContext, ToastHost } from "../../contexts/ToastContext";
 
 import { api } from "../../services/api";
 import { getErrorMessage } from "../../lib/getErrorMessage";
@@ -168,6 +168,9 @@ export function ModalResolverContestacao({ contestacao, decisao, onClose, onReso
                     )}
                 </View>
             </EvitarTeclado>
+
+            {/* Avisos dentro da janela do Modal, para aparecerem por cima dela */}
+            <ToastHost />
         </Modal>
     )
 }
