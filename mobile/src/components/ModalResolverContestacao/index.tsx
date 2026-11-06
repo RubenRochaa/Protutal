@@ -170,7 +170,7 @@ export function ModalResolverContestacao({ contestacao, decisao, onClose, onReso
             </EvitarTeclado>
 
             {/* Avisos dentro da janela do Modal, para aparecerem por cima dela */}
-            <ToastHost />
+            <ToastHost ativo={!!contestacao} />
         </Modal>
     )
 }

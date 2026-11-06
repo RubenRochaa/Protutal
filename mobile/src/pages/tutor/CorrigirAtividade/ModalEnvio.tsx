@@ -212,7 +212,7 @@ export function ModalEnvio({ idAtividade, item, prazo, onClose, onNotaLancada }:
             </EvitarTeclado>
 
             {/* Avisos dentro da janela do Modal, para aparecerem por cima dela */}
-            <ToastHost />
+            <ToastHost ativo={!!item} />
         </Modal>
     )
 }
