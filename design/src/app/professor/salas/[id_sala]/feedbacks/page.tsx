@@ -95,7 +95,7 @@ export default async function FeedbacksSalaPage({ params, searchParams }: Props)
                                     {f.comentario && <span className={lista.texto}>{f.comentario}</span>}
                                     <span className={lista.etiquetas}>
                                         <Etiqueta>{f.etapa}ª etapa</Etiqueta>
-                                        <a href={f.rubrica_file} target="_blank" rel="noopener noreferrer" className={styles.rubrica}>
+                                        <a href={f.rubrica_file} target="_blank" rel="noopener noreferrer" className={`${styles.rubrica} link-texto`}>
                                             <Download size={14} aria-hidden="true" />
                                             Baixar rubrica
                                         </a>

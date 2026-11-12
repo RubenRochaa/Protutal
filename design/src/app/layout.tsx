@@ -1,7 +1,9 @@
 import type { Metadata, Viewport } from "next";
 import { Poppins } from "next/font/google"
 import "./globals.scss";
-import { Toaster } from "sonner";
+import { ProvedorAcessibilidade } from "@/lib/acessibilidade";
+import { SCRIPT_ACESSIBILIDADE } from "@/lib/acessibilidadeConfig";
+import { ToasterTema } from "@/components/acessibilidade/toasterTema";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -27,16 +29,20 @@ export default function RootLayout({
 }: Readonly <{
   children: React.ReactNode;
 }>) {
+  // suppressHydrationWarning: o script do <head> coloca data-tema, data-daltonico e data-fonte
+  // no <html> antes do React carregar, e eles não existem no HTML do servidor
   return (
-    <html lang="pt-BR" className={poppins.variable}>
+    <html lang="pt-BR" className={poppins.variable} suppressHydrationWarning>
+      <head>
+        {/* Acessibilidade: aplica as escolhas salvas antes da página aparecer (sem piscar o tema) */}
+        <script dangerouslySetInnerHTML={{ __html: SCRIPT_ACESSIBILIDADE }} />
+      </head>
       <body>
-        <Toaster
-        position="bottom-right"
-        richColors
-        closeButton
-        />
+        <ProvedorAcessibilidade>
+          <ToasterTema />
           {children}
-        </body>
+        </ProvedorAcessibilidade>
+      </body>
     </html>
   );
 }

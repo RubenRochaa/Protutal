@@ -74,7 +74,7 @@ export function FormLogin({ cadastroConcluido = false, sessaoExpirada = false }:
             />
 
             {/* Leva para outra tela (pedido do link de redefinição, rota O5), por isso é Link */}
-            <Link href="/esqueci-senha" className={styles.esqueceu}>
+            <Link href="/esqueci-senha" className={`${styles.esqueceu} link-texto`}>
                 Esqueceu sua senha?
             </Link>
 
@@ -94,7 +94,7 @@ export function FormLogin({ cadastroConcluido = false, sessaoExpirada = false }:
             <Button name="ENTRAR" nameCarregando="Entrando..." />
 
             <p className={styles.rodape}>
-                Ainda não tem conta? <Link href="/cadastro" className={styles.link}>Cadastre-se</Link>
+                Ainda não tem conta? <Link href="/cadastro" className={`${styles.link} link-texto`}>Cadastre-se</Link>
             </p>
         </form>
     )

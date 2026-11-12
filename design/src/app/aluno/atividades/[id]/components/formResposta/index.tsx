@@ -1,6 +1,7 @@
 "use client"
 
 import styles from './styles.module.scss'
+import { CircleAlert } from 'lucide-react'
 import { useActionState, useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { Card } from '@/components/card'
@@ -55,7 +56,7 @@ export function FormResposta({ idAtividade, vencida }: Props){
                 <div className={styles.campo}>
                     <FileUpload required />
 
-                    {erroArquivo && <p className={styles.erro} role="alert">{erroArquivo}</p>}
+                    {erroArquivo && <p className={styles.erro} role="alert"><CircleAlert className="icone-daltonico" aria-hidden="true" />{erroArquivo}</p>}
                 </div>
 
                 <div className={styles.campo}>

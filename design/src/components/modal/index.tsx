@@ -54,7 +54,7 @@ export function Modal({ aberto, onFechar, titulo, children, acoes }: Props){
                     <h2 id={tituloId} className={styles.titulo}>{titulo}</h2>
 
                     <button type="button" className={styles.fechar} onClick={onFechar} aria-label="Fechar">
-                        <X size={24} />
+                        <X size={24} aria-hidden="true" />
                     </button>
                 </div>
 

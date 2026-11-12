@@ -4,6 +4,7 @@ import { Check, CircleAlert } from 'lucide-react'
 import { ListItem } from '@/components/listItem'
 import { formatarData } from '@/lib/formatacao'
 import { AtividadeAluno } from '@/lib/types'
+import { IconeStatus } from '@/lib/iconesStatus'
 
 interface Props {
     atividade: AtividadeAluno;
@@ -43,8 +44,8 @@ export function ItemAtividade({ atividade }: Props){
                     </p>
                 )}
 
-                {comAtraso && <span className={styles.selo}>Entregue com atraso</span>}
-                {encerrada && <span className={styles.selo}>Encerrada</span>}
+                {comAtraso && <span className={styles.selo}><IconeStatus texto="Entregue com atraso" />Entregue com atraso</span>}
+                {encerrada && <span className={styles.selo}><IconeStatus texto="Encerrada" />Encerrada</span>}
             </ListItem>
         </Link>
     )

@@ -3,7 +3,7 @@
 import styles from './styles.module.scss'
 import { useActionState, useCallback, useEffect, useState } from 'react'
 import { toast } from 'sonner'
-import { MessageSquareWarning } from 'lucide-react'
+import { MessageSquareWarning, CircleAlert } from 'lucide-react'
 import { Modal } from '@/components/modal'
 import { Button } from '@/components/button'
 import { handleContestarNota } from '../../actions'
@@ -74,7 +74,7 @@ function FormContestacao({ idNota, idAtividade, tituloAtividade, onFechar }: For
                 className={styles.textarea}
                 required
                 />
-                {erro && <p className={styles.erro} role="alert">{erro}</p>}
+                {erro && <p className={styles.erro} role="alert"><CircleAlert className="icone-daltonico" aria-hidden="true" />{erro}</p>}
             </div>
 
             <div className={styles.botoes}>

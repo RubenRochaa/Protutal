@@ -14,7 +14,7 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
-    height: 44px;
+    min-height: 44px;
     padding: 0 20px;
     border-radius: var(--radius-input);
     font-weight: 500;
@@ -28,11 +28,11 @@
 
 .confirmar{
     border: 0;
-    background-color: var(--red-700);
-    color: var(--white);
+    background-color: var(--destaque);
+    color: var(--texto-sobre-destaque);
 
     &:hover:not(:disabled){
-        background-color: var(--red-900);
+        background-color: var(--destaque-hover);
     }
 }
 

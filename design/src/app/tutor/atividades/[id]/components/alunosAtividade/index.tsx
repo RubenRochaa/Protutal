@@ -139,7 +139,7 @@ export function AlunosAtividade({ idAtividade, alunos, prazoVencido, prazo }: Pr
                                 <div>
                                     <dt>Arquivo</dt>
                                     <dd>
-                                        <a href={selecionado.resposta.conteudo_file} target="_blank" rel="noopener noreferrer" className={styles.download}>
+                                        <a href={selecionado.resposta.conteudo_file} target="_blank" rel="noopener noreferrer" className={`${styles.download} link-texto`}>
                                             <Download size={18} aria-hidden="true" />
                                             Abrir arquivo
                                         </a>

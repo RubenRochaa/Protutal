@@ -57,7 +57,7 @@ export async function UltimaCorrecao({ idSala, tutor }: Props){
                     <span className={styles.rotulo}>Nota:</span> {formatarNota(ultima.valor)}
                 </p>
 
-                <Link href={`/aluno/atividades/${ultima.atividade.id_atividade}`} className={styles.link}>
+                <Link href={`/aluno/atividades/${ultima.atividade.id_atividade}`} className={`${styles.link} link-texto`}>
                     Ver atividade
                     <ChevronRight size={18} aria-hidden="true" />
                 </Link>
