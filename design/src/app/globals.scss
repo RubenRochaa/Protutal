@@ -138,6 +138,14 @@ html [data-sonner-toaster][data-sonner-theme="light"] {
   --error-text: #C00000;
 }
 
+// Host do layout escondido enquanto há modal aberto (o toast aparece no host de dentro do modal).
+// Fica montado: visibility (e não display) mantém o tamanho e o tempo do toast
+.toaster-oculto,
+.toaster-oculto * {
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
 html[data-daltonico="true"] [data-sonner-toaster][data-sonner-theme="light"] {
   --success-bg: #E3F0FF;
   --success-border: #9CC8F5;
