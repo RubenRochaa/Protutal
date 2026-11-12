@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import {
     View,
     Text,
@@ -9,7 +9,8 @@ import {
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
 
-import { colors, fonts, radius, spacing } from "../../styles/theme";
+import { useTema, type TemaAtual } from "../../lib/useTema";
+import { fonts, radius, spacing } from "../../styles/theme";
 
 // Cada opção tem um valor (o que vai para a API) e o texto mostrado
 export type OptionProps = {
@@ -30,6 +31,9 @@ const { width: WIDTH, height: HEIGHT } = Dimensions.get("window")
 // Lista de opções para usar dentro de um <Modal transparent>, no padrão do exemplo.
 // Tocar fora da lista fecha o modal.
 export function ModalPicker({ options, handleCloseModal, selectedItem, selectedValue }: ModalPickerProps){
+    const temaAtual = useTema();
+    const styles = useMemo(() => makeStyles(temaAtual), [temaAtual]);
+    const { colors } = temaAtual;
 
     function onPressItem(item: OptionProps){
         selectedItem(item);
@@ -67,12 +71,12 @@ export function ModalPicker({ options, handleCloseModal, selectedItem, selectedV
     )
 }
 
-const styles = StyleSheet.create({
+const makeStyles = ({ colors, fs }: TemaAtual) => StyleSheet.create({
     container:{
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: "rgba(0, 0, 0, 0.4)"
+        backgroundColor: colors.overlay
     },
     content:{
         width: WIDTH - 40,
@@ -95,7 +99,7 @@ const styles = StyleSheet.create({
         flex: 1,
         marginVertical: spacing.lg,
         fontFamily: fonts.medium,
-        fontSize: 15,
+        fontSize: fs(15),
         color: colors.black
     },
     itemSelecionado:{

@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { View, Text, StyleSheet } from "react-native";
 
 import { iniciais } from "../../lib/formatacao";
-import { colors, fonts } from "../../styles/theme";
+import { useTema, type TemaAtual } from "../../lib/useTema";
+import { fonts } from "../../styles/theme";
 
 interface AvatarProps {
     nome: string;
@@ -11,6 +12,8 @@ interface AvatarProps {
 
 // Círculo com as iniciais do nome, como o AvatarIniciais do site (a API não tem foto)
 export function Avatar({ nome, tamanho = "normal" }: AvatarProps){
+    const temaAtual = useTema();
+    const styles = useMemo(() => makeStyles(temaAtual), [temaAtual]);
     const grande = tamanho === "grande";
 
     return (
@@ -24,14 +27,14 @@ export function Avatar({ nome, tamanho = "normal" }: AvatarProps){
     )
 }
 
-const styles = StyleSheet.create({
+const makeStyles = ({ colors, fs }: TemaAtual) => StyleSheet.create({
     circulo:{
         width: 40,
         height: 40,
         borderRadius: 20,
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: colors.red700
+        backgroundColor: colors.destaque
     },
     grande:{
         width: 64,
@@ -40,10 +43,10 @@ const styles = StyleSheet.create({
     },
     texto:{
         fontFamily: fonts.semibold,
-        fontSize: 15,
-        color: colors.white
+        fontSize: fs(15),
+        color: colors.textoSobreDestaque
     },
     textoGrande:{
-        fontSize: 22
+        fontSize: fs(22)
     }
 })

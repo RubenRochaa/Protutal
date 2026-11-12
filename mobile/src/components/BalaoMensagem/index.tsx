@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { View, Text, StyleSheet } from "react-native";
 
 import { Badge } from "../Badge";
 import { Avatar } from "../Avatar";
 import { formatarDataHora } from "../../lib/formatacao";
 import { MensagemTutoria } from "../../lib/types";
-import { colors, fonts, fontSizes, radius, spacing } from "../../styles/theme";
+import { useTema, type TemaAtual } from "../../lib/useTema";
+import { fonts, radius, spacing } from "../../styles/theme";
 
 interface BalaoMensagemProps {
     mensagem: MensagemTutoria;
@@ -16,6 +17,8 @@ interface BalaoMensagemProps {
 // Mensagem do chat da tutoria (usada no chat do aluno e no do tutor).
 // Comunicado (mensagem com assunto) ganha a etiqueta e o assunto em destaque
 export function BalaoMensagem({ mensagem, meuTipo }: BalaoMensagemProps){
+    const temaAtual = useTema();
+    const styles = useMemo(() => makeStyles(temaAtual), [temaAtual]);
     const minha = mensagem.remetente.tipo === meuTipo;
 
     return (
@@ -41,7 +44,7 @@ export function BalaoMensagem({ mensagem, meuTipo }: BalaoMensagemProps){
     )
 }
 
-const styles = StyleSheet.create({
+const makeStyles = ({ colors, fontSizes, fs }: TemaAtual) => StyleSheet.create({
     linha:{
         flexDirection: "row",
         alignItems: "flex-end",
@@ -75,7 +78,7 @@ const styles = StyleSheet.create({
         borderBottomLeftRadius: spacing.xs
     },
     bolhaMinha:{
-        backgroundColor: colors.red700,
+        backgroundColor: colors.destaque,
         borderBottomRightRadius: spacing.xs
     },
     comunicado:{
@@ -87,21 +90,21 @@ const styles = StyleSheet.create({
     },
     assunto:{
         fontFamily: fonts.semibold,
-        fontSize: 15,
+        fontSize: fs(15),
         color: colors.black
     },
     texto:{
         fontFamily: fonts.regular,
-        fontSize: 15,
+        fontSize: fs(15),
         color: colors.black
     },
     textoMinha:{
-        color: colors.white
+        color: colors.textoSobreDestaque
     },
     hora:{
         alignSelf: "flex-end",
         fontFamily: fonts.regular,
-        fontSize: 11,
+        fontSize: fs(11),
         color: colors.gray700
     },
     horaMinha:{

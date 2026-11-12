@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useMemo } from "react";
 import { View, Text, StyleSheet } from "react-native";
 
 import { Janela } from "../Janela";
@@ -11,7 +11,8 @@ import { ToastContext } from "../../contexts/ToastContext";
 import { api } from "../../services/api";
 import { useAcao } from "../../lib/useAcao";
 import { Sala } from "../../lib/types";
-import { colors, fonts, spacing } from "../../styles/theme";
+import { useTema, type TemaAtual } from "../../lib/useTema";
+import { fonts, spacing } from "../../styles/theme";
 
 // Mesmo limite do back-end (P3)
 const MAX_TITULO = 150;
@@ -30,6 +31,8 @@ interface ModalAvisoProps {
 // (POST /salas/:id/avisos). O aviso vai para todos os alunos da sala; a API exige
 // pelo menos uma tutoria ativa na sala
 export function ModalAviso({ visivel, onClose, idSala, salas, onEnviado }: ModalAvisoProps){
+    const temaAtual = useTema();
+    const styles = useMemo(() => makeStyles(temaAtual), [temaAtual]);
     const { executando, executar } = useAcao();
     const { showToast } = useContext(ToastContext);
 
@@ -113,10 +116,10 @@ export function ModalAviso({ visivel, onClose, idSala, salas, onEnviado }: Modal
     )
 }
 
-const styles = StyleSheet.create({
+const makeStyles = ({ colors, fs }: TemaAtual) => StyleSheet.create({
     ajuda:{
         fontFamily: fonts.regular,
-        fontSize: 13,
+        fontSize: fs(13),
         color: colors.gray700
     },
     acoes:{

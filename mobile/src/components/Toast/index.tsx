@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Feather } from "@expo/vector-icons";
 
-import { colors, fonts, radius, shadows, spacing } from "../../styles/theme";
+import { useTema, type TemaAtual } from "../../lib/useTema";
+import { fonts, radius, shadows, spacing } from "../../styles/theme";
 
 export type ToastType = "sucesso" | "erro";
 
@@ -16,6 +17,9 @@ interface ToastProps {
 // A posição e a animação ficam no ToastHost (contexts/ToastContext).
 // Verde para sucesso, vermelho para erro, com botão de fechar.
 export function Toast({ type, message, onClose }: ToastProps){
+    const temaAtual = useTema();
+    const styles = useMemo(() => makeStyles(temaAtual), [temaAtual]);
+    const { colors } = temaAtual;
     const sucesso = type === "sucesso";
 
     return (
@@ -27,19 +31,19 @@ export function Toast({ type, message, onClose }: ToastProps){
             <Feather
             name={sucesso ? "check-circle" : "alert-circle"}
             size={20}
-            color={sucesso ? colors.green500 : colors.red700}
+            color={sucesso ? colors.toast.sucessoTexto : colors.toast.erroTexto}
             />
 
             <Text style={styles.texto}>{message}</Text>
 
-            <TouchableOpacity onPress={onClose} accessibilityLabel="Fechar aviso" hitSlop={10}>
+            <TouchableOpacity onPress={onClose} accessibilityRole="button" accessibilityLabel="Fechar aviso" hitSlop={12}>
                 <Feather name="x" size={18} color={colors.gray700} />
             </TouchableOpacity>
         </View>
     )
 }
 
-const styles = StyleSheet.create({
+const makeStyles = ({ colors, fs }: TemaAtual) => StyleSheet.create({
     container:{
         flexDirection: "row",
         alignItems: "center",
@@ -51,17 +55,17 @@ const styles = StyleSheet.create({
         ...shadows.card
     },
     sucesso:{
-        borderColor: colors.green500,
-        backgroundColor: "#ECFDF3"
+        borderColor: colors.toast.sucessoBorda,
+        backgroundColor: colors.toast.sucessoFundo
     },
     erro:{
-        borderColor: colors.red700,
-        backgroundColor: "#FFF0F0"
+        borderColor: colors.toast.erroBorda,
+        backgroundColor: colors.toast.erroFundo
     },
     texto:{
         flex: 1,
         fontFamily: fonts.medium,
-        fontSize: 14,
+        fontSize: fs(14),
         color: colors.black
     }
 })

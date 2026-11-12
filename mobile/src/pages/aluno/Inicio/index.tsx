@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useMemo } from "react";
 import { View, Text, Image, StyleSheet, ScrollView, RefreshControl, TouchableOpacity } from "react-native";
 import { Feather } from "@expo/vector-icons";
 
@@ -15,7 +15,8 @@ import { formatarData } from "../../../lib/formatacao";
 import { MASCOTES } from "../../../lib/mascotes";
 import { AtividadeAluno, ContestacaoAluno, DesempenhoAluno, TutoriaAluno } from "../../../lib/types";
 import { AlunoScreenProps } from "../../../routes/aluno.routes";
-import { colors, fonts, fontSizes, radius, spacing } from "../../../styles/theme";
+import { useTema, type TemaAtual } from "../../../lib/useTema";
+import { fonts, radius, spacing } from "../../../styles/theme";
 
 // O card "Atividades pendentes" do site mostra só as primeiras (a API já ordena pelo prazo)
 const LIMITE_PENDENTES = 5;
@@ -34,6 +35,9 @@ const MSG_FALHA = "Não foi possível carregar.";
 // Minha tutoria (A3 ativas), Atividades pendentes (A1), Minhas notas e evolução (A6)
 // e Minhas contestações (A9), no lugar do card "Avaliações com Justificativa" do Figma
 export default function Inicio({ navigation }: AlunoScreenProps<"PainelAluno">){
+    const temaAtual = useTema();
+    const styles = useMemo(() => makeStyles(temaAtual), [temaAtual]);
+    const { colors } = temaAtual;
     const buscar = useCallback(async (): Promise<Dados> => {
         // Cada card busca a própria rota: se uma falhar, os outros continuam
         const [tutorias, pendentes, desempenho, contestacoes] = await Promise.all([
@@ -151,10 +155,10 @@ export default function Inicio({ navigation }: AlunoScreenProps<"PainelAluno">){
     )
 }
 
-const styles = StyleSheet.create({
+const makeStyles = ({ colors, fontSizes, fs }: TemaAtual) => StyleSheet.create({
     container:{
         flex: 1,
-        backgroundColor: colors.white
+        backgroundColor: colors.fundoPagina
     },
     conteudo:{
         flexGrow: 1,
@@ -177,11 +181,11 @@ const styles = StyleSheet.create({
         flex: 1,
         fontFamily: fonts.semibold,
         fontSize: fontSizes.destaque,
-        color: colors.white
+        color: colors.textoSobreDestaque
     },
     linha:{
         fontFamily: fonts.regular,
-        fontSize: 14,
+        fontSize: fs(14),
         color: colors.black
     },
     itemPendente:{
@@ -197,12 +201,12 @@ const styles = StyleSheet.create({
     textoPendente:{
         flex: 1,
         fontFamily: fonts.medium,
-        fontSize: 14,
+        fontSize: fs(14),
         color: colors.black
     },
     prazo:{
         fontFamily: fonts.regular,
-        fontSize: 12,
+        fontSize: fs(12),
         color: colors.gray700
     }
 })

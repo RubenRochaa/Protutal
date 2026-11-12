@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode, useMemo } from "react";
 import {
     View,
     Text,
@@ -11,9 +11,11 @@ import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 import { EvitarTeclado, RolagemTeclado } from "../EvitarTeclado";
+import { BotaoAcessibilidade } from "../Acessibilidade";
 import { LOGO_MODO_ESCURO, MASCOTES } from "../../lib/mascotes";
 import { AuthStackParamsList } from "../../routes/auth.routes";
-import { colors, fonts, fontSizes, radius, shadows, spacing } from "../../styles/theme";
+import { useTema, type TemaAtual } from "../../lib/useTema";
+import { fonts, radius, shadows, spacing } from "../../styles/theme";
 
 interface AuthLayoutProps {
     // sem aba (esqueci a senha): as duas abas aparecem sem destaque, como no site
@@ -26,6 +28,8 @@ interface AuthLayoutProps {
 // Moldura das telas de login, cadastro e esqueci a senha, igual ao AuthLayout do site:
 // faixa vermelha com a logo, a frase e o mascote; embaixo, o cartão com as abas ENTRAR / CADASTRAR
 export function AuthLayout({ aba, onEntrar, onCadastrar, children }: AuthLayoutProps){
+    const temaAtual = useTema();
+    const styles = useMemo(() => makeStyles(temaAtual), [temaAtual]);
     const insets = useSafeAreaInsets();
     const navigation = useNavigation<NativeStackNavigationProp<AuthStackParamsList>>();
 
@@ -33,6 +37,11 @@ export function AuthLayout({ aba, onEntrar, onCadastrar, children }: AuthLayoutP
         <EvitarTeclado style={styles.container}>
             <RolagemTeclado contentContainerStyle={[styles.scroll, { paddingBottom: insets.bottom + spacing.xxl }]}>
                 <View style={[styles.painel, { paddingTop: insets.top + spacing.xl }]}>
+                    {/* Telas públicas: o botão fica no canto da faixa vermelha */}
+                    <View style={[styles.botaoAcessibilidade, { top: insets.top + spacing.sm }]}>
+                        <BotaoAcessibilidade />
+                    </View>
+
                     <Image
                     source={LOGO_MODO_ESCURO}
                     style={styles.logo}
@@ -81,19 +90,24 @@ export function AuthLayout({ aba, onEntrar, onCadastrar, children }: AuthLayoutP
     )
 }
 
-const styles = StyleSheet.create({
+const makeStyles = ({ daltonico, colors, fontSizes, fs }: TemaAtual) => StyleSheet.create({
     container:{
         flex: 1,
-        backgroundColor: colors.white
+        backgroundColor: colors.fundoPagina
     },
     scroll:{
         flexGrow: 1
     },
     painel:{
         alignItems: "center",
-        backgroundColor: colors.red700,
+        backgroundColor: colors.destaque,
         paddingHorizontal: spacing.xl,
         paddingBottom: 48
+    },
+    botaoAcessibilidade:{
+        position: "absolute",
+        right: spacing.lg,
+        zIndex: 1
     },
     logo:{
         width: 220,
@@ -101,8 +115,8 @@ const styles = StyleSheet.create({
     },
     frase:{
         fontFamily: fonts.medium,
-        fontSize: 15,
-        color: colors.white
+        fontSize: fs(15),
+        color: colors.textoSobreDestaque
     },
     mascote:{
         width: 120,
@@ -130,20 +144,21 @@ const styles = StyleSheet.create({
         backgroundColor: colors.gray300
     },
     abaAtiva:{
-        backgroundColor: colors.red700
+        backgroundColor: colors.destaque
     },
     textoAba:{
         fontFamily: fonts.semibold,
-        fontSize: 14,
+        fontSize: fs(14),
         color: colors.gray700
     },
     textoAbaAtiva:{
-        color: colors.white
+        color: colors.textoSobreDestaque
     },
     ajuda:{
         alignSelf: "center"
     },
     textoAjuda:{
+        textDecorationLine: daltonico ? "underline" : "none",
         fontFamily: fonts.regular,
         fontSize: fontSizes.selo,
         color: colors.gray700

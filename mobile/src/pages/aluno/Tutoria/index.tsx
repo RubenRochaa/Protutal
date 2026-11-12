@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useMemo } from "react";
 import { View, Text, StyleSheet, SectionList, RefreshControl, TouchableOpacity, SectionListData } from "react-native";
 import { Feather } from "@expo/vector-icons";
 
@@ -18,7 +18,8 @@ import { getErrorMessage } from "../../../lib/getErrorMessage";
 import { formatarData } from "../../../lib/formatacao";
 import { SalaAluno, TutoriaAluno } from "../../../lib/types";
 import { AlunoScreenProps } from "../../../routes/aluno.routes";
-import { colors, fonts, fontSizes, radius, shadows, spacing } from "../../../styles/theme";
+import { useTema, type TemaAtual } from "../../../lib/useTema";
+import { fonts, radius, shadows, spacing } from "../../../styles/theme";
 
 type Item = { tipo: "sala"; sala: SalaAluno } | { tipo: "tutoria"; tutoria: TutoriaAluno };
 
@@ -32,6 +33,9 @@ interface Secao {
 // Tela "Tutoria" do aluno: "Quero ser tutor" (GET /alunos/me/salas e A13)
 // e, abaixo, "Minhas tutorias" (rota A3), como no site
 export default function Tutoria({ navigation }: AlunoScreenProps<"MinhaTutoria">){
+    const temaAtual = useTema();
+    const styles = useMemo(() => makeStyles(temaAtual), [temaAtual]);
+    const { colors } = temaAtual;
     const buscar = useCallback(async () => {
         const [salas, tutorias] = await Promise.all([
             api.get<SalaAluno[]>("/alunos/me/salas").then((r) => r.data),
@@ -161,10 +165,10 @@ export default function Tutoria({ navigation }: AlunoScreenProps<"MinhaTutoria">
     )
 }
 
-const styles = StyleSheet.create({
+const makeStyles = ({ colors, fontSizes, fs }: TemaAtual) => StyleSheet.create({
     container:{
         flex: 1,
-        backgroundColor: colors.white
+        backgroundColor: colors.fundoPagina
     },
     centro:{
         flex: 1,
@@ -199,7 +203,7 @@ const styles = StyleSheet.create({
     textoExplicacao:{
         flex: 1,
         fontFamily: fonts.regular,
-        fontSize: 14,
+        fontSize: fs(14),
         color: colors.gray700
     },
     card:{
@@ -235,7 +239,7 @@ const styles = StyleSheet.create({
     },
     meta:{
         fontFamily: fonts.regular,
-        fontSize: 14,
+        fontSize: fs(14),
         color: colors.black
     },
     abrir:{
@@ -250,7 +254,7 @@ const styles = StyleSheet.create({
     },
     textoAbrir:{
         fontFamily: fonts.medium,
-        fontSize: 14,
+        fontSize: fs(14),
         color: colors.red700
     }
 })

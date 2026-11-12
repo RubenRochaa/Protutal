@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { View, Text, StyleSheet } from "react-native";
 
-import { colors, fonts, radius } from "../../styles/theme";
+import { useTema, type TemaAtual } from "../../lib/useTema";
+import { fonts, radius } from "../../styles/theme";
 
 interface ContadorProps {
     valor?: number;
@@ -23,6 +24,8 @@ export function descricaoContador(valor: number){
 
 // Bolinha vermelha com número, igual ao Contador do site. Com 0 (ou sem valor) não aparece
 export function Contador({ valor, canto = false, claro = false }: ContadorProps){
+    const temaAtual = useTema();
+    const styles = useMemo(() => makeStyles(temaAtual), [temaAtual]);
     if(!valor || valor <= 0) return null;
 
     return (
@@ -37,15 +40,15 @@ export function Contador({ valor, canto = false, claro = false }: ContadorProps)
     )
 }
 
-const styles = StyleSheet.create({
+const makeStyles = ({ colors, fs }: TemaAtual) => StyleSheet.create({
     contador:{
         minWidth: 18,
-        height: 18,
+        minHeight: 18,
         paddingHorizontal: 5,
         borderRadius: radius.pill,
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: colors.red700
+        backgroundColor: colors.destaque
     },
     // Em cima do ícone: o contorno separa a bolinha do traço do ícone
     canto:{
@@ -60,9 +63,9 @@ const styles = StyleSheet.create({
     },
     texto:{
         fontFamily: fonts.bold,
-        fontSize: 10,
-        lineHeight: 13,
-        color: colors.white,
+        fontSize: fs(10),
+        lineHeight: fs(13),
+        color: colors.textoSobreDestaque,
         includeFontPadding: false
     },
     textoClaro:{

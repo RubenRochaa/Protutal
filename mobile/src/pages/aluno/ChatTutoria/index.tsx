@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
+import React, { useCallback, useContext, useEffect, useRef, useState, useMemo } from "react";
 import {
     View,
     Text,
@@ -31,7 +31,8 @@ import { formatarData } from "../../../lib/formatacao";
 import { MASCOTES } from "../../../lib/mascotes";
 import { MaterialSala, MensagemTutoria, TutoriaAluno } from "../../../lib/types";
 import { AlunoScreenProps } from "../../../routes/aluno.routes";
-import { colors, fonts, fontSizes, radius, spacing } from "../../../styles/theme";
+import { useTema, type TemaAtual } from "../../../lib/useTema";
+import { fonts, radius, spacing } from "../../../styles/theme";
 
 type Aba = "duvidas" | "materiais";
 
@@ -47,6 +48,9 @@ interface Dados {
 // o chat individual com o tutor (rotas O2 e O1) e os materiais de apoio da sala (rota A5).
 // Não há tempo real: as mensagens novas chegam com "Atualizar" ou puxando a lista
 export default function ChatTutoria({ navigation, route }: AlunoScreenProps<"ChatTutoria">){
+    const temaAtual = useTema();
+    const styles = useMemo(() => makeStyles(temaAtual), [temaAtual]);
+    const { colors } = temaAtual;
     const { id_tutoria } = route.params;
 
     // Chat em foco zera a bolinha de mensagens novas desta tutoria (e continua zerada enquanto estiver aberto)
@@ -205,8 +209,9 @@ export default function ChatTutoria({ navigation, route }: AlunoScreenProps<"Cha
                                 disabled={enviando}
                                 accessibilityRole="button"
                                 accessibilityLabel="Enviar mensagem"
+                                hitSlop={6}
                                 >
-                                    {enviando ? <Loader size="pequeno" variant="branco" /> : <Feather name="send" size={20} color={colors.white} />}
+                                    {enviando ? <Loader size="pequeno" variant="branco" /> : <Feather name="send" size={20} color={colors.textoSobreDestaque} />}
                                 </TouchableOpacity>
                             </View>
                         ) : (
@@ -248,10 +253,10 @@ export default function ChatTutoria({ navigation, route }: AlunoScreenProps<"Cha
     )
 }
 
-const styles = StyleSheet.create({
+const makeStyles = ({ colors, fontSizes, fs }: TemaAtual) => StyleSheet.create({
     container:{
         flex: 1,
-        backgroundColor: colors.white
+        backgroundColor: colors.fundoPagina
     },
     centro:{
         flex: 1,
@@ -313,7 +318,7 @@ const styles = StyleSheet.create({
         borderColor: colors.borderInput,
         borderRadius: radius.item,
         fontFamily: fonts.regular,
-        fontSize: 15,
+        fontSize: fs(15),
         color: colors.black
     },
     botaoEnviar:{
@@ -322,7 +327,7 @@ const styles = StyleSheet.create({
         borderRadius: 22,
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: colors.red700
+        backgroundColor: colors.destaque
     },
     desabilitado:{
         opacity: 0.6
@@ -332,7 +337,7 @@ const styles = StyleSheet.create({
         borderTopWidth: 1,
         borderTopColor: colors.gray300,
         fontFamily: fonts.medium,
-        fontSize: 14,
+        fontSize: fs(14),
         color: colors.gray700,
         textAlign: "center"
     },

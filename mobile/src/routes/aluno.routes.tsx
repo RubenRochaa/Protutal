@@ -15,7 +15,7 @@ import ChatTutoria from "../pages/aluno/ChatTutoria";
 import FeedbackTutor from "../pages/aluno/FeedbackTutor";
 import Ajuda from "../pages/Ajuda";
 import { ProvedorContadores, useContadores } from "../lib/useContadores";
-import { badgeAba, tabOptions, tabScreenOptions } from "./tabOptions";
+import { useTabOpcoes } from "./tabOptions";
 
 // Telas da área do aluno. Cada aba tem a sua pilha; as telas usadas em mais de uma aba
 // (ex.: Detalhe da atividade) são registradas em cada pilha, para o "voltar" voltar para onde o aluno estava
@@ -112,6 +112,7 @@ function DesempenhoStack(){
 // Abas com a bolinha de notificação (mesmos contadores do menu do aluno no site)
 function AbasAluno() {
     const { menu } = useContadores();
+    const { tabScreenOptions, tabOptions, badgeAba } = useTabOpcoes();
 
     return(
         // popToTopOnBlur: ao trocar de aba, a pilha da aba que ficou para trás volta para a primeira tela.

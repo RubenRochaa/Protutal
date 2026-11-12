@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useMemo } from "react";
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -12,7 +12,8 @@ import { getErrorMessage } from "../../lib/getErrorMessage";
 import { MASCOTES } from "../../lib/mascotes";
 import { validarEmailRecuperacao } from "../../lib/validacao";
 import { AuthStackParamsList } from "../../routes/auth.routes";
-import { colors, fonts, radius, spacing } from "../../styles/theme";
+import { useTema, type TemaAtual } from "../../lib/useTema";
+import { fonts, radius, spacing } from "../../styles/theme";
 
 // Depois de um envio, o botão fica bloqueado esse tempo (mesmo valor do site)
 const ESPERA_REENVIO_S = 60
@@ -20,6 +21,8 @@ const ESPERA_REENVIO_S = 60
 // Pedido do link de redefinição de senha (rota O5).
 // O link do e-mail abre a página /redefinir-senha do SITE: a nova senha é criada lá.
 export default function ForgotPassword(){
+    const temaAtual = useTema();
+    const styles = useMemo(() => makeStyles(temaAtual), [temaAtual]);
     const navigation = useNavigation<NativeStackNavigationProp<AuthStackParamsList>>();
     const { showToast } = useContext(ToastContext);
 
@@ -114,7 +117,7 @@ export default function ForgotPassword(){
     )
 }
 
-const styles = StyleSheet.create({
+const makeStyles = ({ daltonico, colors, fs }: TemaAtual) => StyleSheet.create({
     form:{
         gap: spacing.lg
     },
@@ -123,12 +126,12 @@ const styles = StyleSheet.create({
     },
     titulo:{
         fontFamily: fonts.semibold,
-        fontSize: 18,
+        fontSize: fs(18),
         color: colors.red700
     },
     texto:{
         fontFamily: fonts.regular,
-        fontSize: 14,
+        fontSize: fs(14),
         color: colors.gray700
     },
     aviso:{
@@ -148,12 +151,13 @@ const styles = StyleSheet.create({
     textoAviso:{
         flex: 1,
         fontFamily: fonts.medium,
-        fontSize: 14,
+        fontSize: fs(14),
         color: colors.black
     },
     link:{
+        textDecorationLine: daltonico ? "underline" : "none",
         fontFamily: fonts.semibold,
-        fontSize: 14,
+        fontSize: fs(14),
         color: colors.red700
     },
     rodape:{
@@ -164,7 +168,7 @@ const styles = StyleSheet.create({
     },
     textoRodape:{
         fontFamily: fonts.regular,
-        fontSize: 14,
+        fontSize: fs(14),
         color: colors.gray700
     }
 })

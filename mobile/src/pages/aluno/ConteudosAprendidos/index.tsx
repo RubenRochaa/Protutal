@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useMemo } from "react";
 import { View, Text, StyleSheet, SectionList, RefreshControl } from "react-native";
 import { Feather } from "@expo/vector-icons";
 
@@ -15,7 +15,8 @@ import { formatarNota } from "../../../lib/formatacao";
 import { MASCOTES } from "../../../lib/mascotes";
 import { ConteudosDominados, MediaConteudo } from "../../../lib/types";
 import { AlunoScreenProps } from "../../../routes/aluno.routes";
-import { colors, fonts, fontSizes, radius, shadows, spacing } from "../../../styles/theme";
+import { useTema, type TemaAtual } from "../../../lib/useTema";
+import { fonts, radius, shadows, spacing } from "../../../styles/theme";
 
 interface Secao {
     titulo: string;
@@ -27,6 +28,9 @@ interface Secao {
 // A faixa vem pronta da API (tabela Faixa_desempenho). Sem "5 de 12": o aluno não tem rota
 // com o total de conteúdos da sala
 export default function ConteudosAprendidos({ navigation, route }: AlunoScreenProps<"ConteudosAprendidos">){
+    const temaAtual = useTema();
+    const styles = useMemo(() => makeStyles(temaAtual), [temaAtual]);
+    const { colors, daltonico } = temaAtual;
     const { id_sala, nome_sala } = route.params;
 
     const buscar = useCallback(async () => {
@@ -65,7 +69,7 @@ export default function ConteudosAprendidos({ navigation, route }: AlunoScreenPr
             ListHeaderComponent={
                 <View style={styles.resumo}>
                     <View style={styles.iconeResumo}>
-                        <Feather name="globe" size={26} color={colors.white} />
+                        <Feather name="globe" size={26} color={colors.textoSobreDestaque} />
                     </View>
 
                     <View style={styles.dados}>
@@ -91,9 +95,16 @@ export default function ConteudosAprendidos({ navigation, route }: AlunoScreenPr
                     <Feather
                     name={section.faixa === "dominado" ? "check-circle" : "alert-circle"}
                     size={24}
-                    color={section.faixa === "dominado" ? colors.green500 : colors.red700}
+                    color={section.faixa === "dominado" ? colors.sucessoIcone : colors.red700}
                     />
                     <Text style={styles.nome}>{item.nome}</Text>
+                    {/* Modo daltônico: a faixa também aparece escrita, com ícone */}
+                    {daltonico && (
+                        <Badge
+                        label={section.faixa === "dominado" ? "Dominado" : "Com dificuldade"}
+                        variant={section.faixa === "dominado" ? "sucesso" : "destaque"}
+                        />
+                    )}
                     <Text style={styles.media}>Média {formatarNota(item.media)}</Text>
                 </View>
             )}
@@ -109,10 +120,10 @@ export default function ConteudosAprendidos({ navigation, route }: AlunoScreenPr
     )
 }
 
-const styles = StyleSheet.create({
+const makeStyles = ({ colors, fontSizes, fs }: TemaAtual) => StyleSheet.create({
     container:{
         flex: 1,
-        backgroundColor: colors.white
+        backgroundColor: colors.fundoPagina
     },
     lista:{
         flexGrow: 1,
@@ -136,7 +147,7 @@ const styles = StyleSheet.create({
         borderRadius: 26,
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: colors.red700
+        backgroundColor: colors.destaque
     },
     dados:{
         flex: 1
@@ -169,17 +180,17 @@ const styles = StyleSheet.create({
     nome:{
         flex: 1,
         fontFamily: fonts.semibold,
-        fontSize: 15,
+        fontSize: fs(15),
         color: colors.black
     },
     media:{
         fontFamily: fonts.medium,
-        fontSize: 14,
+        fontSize: fs(14),
         color: colors.gray700
     },
     textoSecundario:{
         fontFamily: fonts.regular,
-        fontSize: 13,
+        fontSize: fs(13),
         color: colors.gray700
     },
     separador:{

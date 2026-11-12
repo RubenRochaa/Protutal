@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useMemo } from "react";
 import { View, StyleSheet, FlatList, RefreshControl } from "react-native";
 
 import { Header } from "../../../components/Header";
@@ -15,7 +15,8 @@ import { getErrorMessage } from "../../../lib/getErrorMessage";
 import { MASCOTES } from "../../../lib/mascotes";
 import { AtividadeAluno } from "../../../lib/types";
 import { AlunoScreenProps } from "../../../routes/aluno.routes";
-import { colors, spacing } from "../../../styles/theme";
+import { useTema, type TemaAtual } from "../../../lib/useTema";
+import { spacing } from "../../../styles/theme";
 
 type Aba = "pendentes" | "realizadas";
 
@@ -29,6 +30,9 @@ function prazo(atividade: AtividadeAluno){
 // Tela "Minhas atividades" (rota A1 - GET /alunos/me/atividades).
 // Busca uma vez e separa nas abas Pendentes e Realizadas, com a mesma ordem do site
 export default function Atividades({ navigation }: AlunoScreenProps<"ListaAtividades">){
+    const temaAtual = useTema();
+    const styles = useMemo(() => makeStyles(temaAtual), [temaAtual]);
+    const { colors } = temaAtual;
     const [etapa, setEtapa] = useState<Etapa>("");
     const [aba, setAba] = useState<Aba>("pendentes");
 
@@ -99,10 +103,10 @@ export default function Atividades({ navigation }: AlunoScreenProps<"ListaAtivid
     )
 }
 
-const styles = StyleSheet.create({
+const makeStyles = ({ colors }: TemaAtual) => StyleSheet.create({
     container:{
         flex: 1,
-        backgroundColor: colors.white
+        backgroundColor: colors.fundoPagina
     },
     lista:{
         flexGrow: 1,
