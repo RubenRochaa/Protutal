@@ -18,7 +18,7 @@ Toda a documentação viva, requisitos, regras de negócio e o nosso log diário
 | Camada | Tecnologia | Responsabilidade |
 | :--- | :--- | :--- |
 | `Backend` | Node.js, Express e TypeScript  | API, regras de negócio e autenticação |
-| `Frontend` | Next.js, React e TypeScript | Painel administrativo e interface web |
+| `Frontend` | Next.js, React e TypeScript | Interface web para alunos, tutores e professores |
 | `Aplicativo mobile` | React Native, Expo e TypeScript | Operação e acompanhamento pelo celular |
 | `Banco de dados` | PostgreSQL e Prisma ORM | Persistência e relacionamento dos dados |
 
@@ -26,14 +26,13 @@ Toda a documentação viva, requisitos, regras de negócio e o nosso log diário
 
 ## 📂 Guia de Pastas deste Repositório
 
-Quando as etapas do Notion forem aprovadas pelo professor, as versões finais virão para cá:
-
-| Pasta | Descrição | O que vai entrar aqui? |
+| Pasta | Descrição | O que tem aqui? |
 | :--- | :--- | :--- |
-| `docs/requisitos/` | Definições do sistema | Exportações (.md ou .csv) das tabelas de Requisitos do Notion. |
-| `docs/arquitetura/` | Engenharia e Fluxos | Diagramas de Banco de Dados, Fluxogramas (Mermaid) e ADRs. |
-| `design/` | Interface (UI/UX) | Esboços das telas, wireframes e links do Figma. |
-| `src/` | Código-Fonte | O código real da aplicação (Backend e Frontend). |
+| `backend/` | API (Node.js + Express + TypeScript) | Código no padrão MVC em `src/` (controllers, services, routes, middlewares, helpers), testes Jest em `src/__tests__/` e schema/migrations do Prisma em `prisma/`. |
+| `design/` | Frontend web (Next.js + React) | Código da interface em `src/` e `components/`, referências de tela exportadas do Figma em `figma/` e o guia de design `CLAUDE_DESIGN.md`. |
+| `mobile/` | Aplicativo mobile (React Native + Expo) | Código do app em `src/` e assets. |
+| `docs/` | Documentação técnica | Guia de contribuição (`CONTRIBUTING.md`), mapa de rotas da API (`rotas_do_sistema.md`) e coleções do Insomnia para testes em `collections/`. |
+| `.ai/` | Agentes de IA | Instruções dos agentes usados no desenvolvimento (orquestrador, PO, dev, tester, reviewer etc.) e o `UI_PROTOCOL.md`. |
 
 ## 👥 A Equipe Protutal
 Estamos empolgados em desenvolver esta solução! Conheça os integrantes do grupo:
