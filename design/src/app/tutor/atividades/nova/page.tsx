@@ -31,7 +31,7 @@ export default async function NovaAtividadePage({ searchParams }: Props){
             <PageBanner titulo="Criar atividades" />
 
             <div className={pagina.conteudo}>
-                <Link href="/tutor/atividades" className={lista.voltar}>
+                <Link href="/tutor/atividades" className={`${lista.voltar} link-texto`}>
                     <ArrowLeft size={20} aria-hidden="true" /> Voltar para Atividades
                 </Link>
 

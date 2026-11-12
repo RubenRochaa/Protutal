@@ -73,7 +73,7 @@ export function FormCadastro(){
             <Button name="Enviar" nameCarregando="Enviando..." />
 
             <p className={styles.rodape}>
-                Tem conta? <Link href="/" className={styles.link}>Faça o login</Link>
+                Tem conta? <Link href="/" className={`${styles.link} link-texto`}>Faça o login</Link>
             </p>
         </form>
     )

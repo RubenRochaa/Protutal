@@ -28,7 +28,7 @@ export default async function AtividadeDetalhePage({ params }: Props){
     if("erro" in resultado) sessaoExpiradaNaPagina(resultado.erro)
 
     const voltar = (
-        <Link href={`/professor/salas/${id_sala}/atividades`} className={lista.voltar}>
+        <Link href={`/professor/salas/${id_sala}/atividades`} className={`${lista.voltar} link-texto`}>
             <ArrowLeft size={18} aria-hidden="true" /> Voltar para Atividades
         </Link>
     )

@@ -48,10 +48,10 @@ export function GraficoEtapas({ etapas }: Props){
             role="img"
             aria-label={`Média por etapa. ${descricao}`}
             >
-                {/* Linhas de referência: notas 0, 5 e 10 */}
+                {/* Linhas de referência: notas 0, 5 e 10 (no modo daltônico, a do 5 fica tracejada e as outras pontilhadas) */}
                 {[0, 5, 10].map((nota) => (
                     <g key={nota}>
-                        <line x1={24} x2={LARGURA - 8} y1={posicaoY(nota)} y2={posicaoY(nota)} className={styles.guia} />
+                        <line x1={24} x2={LARGURA - 8} y1={posicaoY(nota)} y2={posicaoY(nota)} className={nota === 5 ? `${styles.guia} ${styles.guiaMeio}` : styles.guia} />
                         <text x={18} y={posicaoY(nota) + 4} className={styles.escala}>{nota}</text>
                     </g>
                 ))}
@@ -68,13 +68,15 @@ export function GraficoEtapas({ etapas }: Props){
                         {p.y !== null && p.media !== null && (
                             <>
                                 <circle cx={p.x} cy={p.y} r={5} className={styles.ponto} />
+                                {/* Modo daltônico: o ponto vira um losango maior (marcador que não depende da cor) */}
+                                <path d={`M ${p.x} ${p.y - 7} L ${p.x + 7} ${p.y} L ${p.x} ${p.y + 7} L ${p.x - 7} ${p.y} Z`} className={styles.losango} />
                                 <text x={p.x} y={p.y - 12} className={styles.valor}>{formatarMedia(p.media)}</text>
                             </>
                         )}
 
                         <text x={p.x} y={BASE + 20} className={styles.rotulo}>{p.etapa}ª etapa</text>
                         {p.media === null && (
-                            <text x={p.x} y={BASE + 34} className={styles.semNota}>sem nota</text>
+                            <text x={p.x} y={BASE + 20} dy="1.4em" className={styles.semNota}>sem nota</text>
                         )}
                     </g>
                 ))}

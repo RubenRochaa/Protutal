@@ -1,6 +1,7 @@
 "use client"
 
 import styles from './styles.module.scss'
+import { CircleAlert } from 'lucide-react'
 import { useActionState, useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
@@ -98,7 +99,7 @@ export function FormFeedback({ idTutoria, tutor }: Props){
                         aria-invalid={erros.etapa ? true : undefined}
                         required
                         />
-                        {erros.etapa && <p className={styles.erro} role="alert">{erros.etapa}</p>}
+                        {erros.etapa && <p className={styles.erro} role="alert"><CircleAlert className="icone-daltonico" aria-hidden="true" />{erros.etapa}</p>}
                     </div>
 
                     <div className={styles.campo}>
@@ -111,7 +112,7 @@ export function FormFeedback({ idTutoria, tutor }: Props){
                         aria-invalid={erros.nota ? true : undefined}
                         required
                         />
-                        {erros.nota && <p className={styles.erro} role="alert">{erros.nota}</p>}
+                        {erros.nota && <p className={styles.erro} role="alert"><CircleAlert className="icone-daltonico" aria-hidden="true" />{erros.nota}</p>}
                     </div>
                 </div>
 
@@ -130,7 +131,7 @@ export function FormFeedback({ idTutoria, tutor }: Props){
                 <div className={styles.campo}>
                     <p className={styles.label}>Rubrica</p>
                     <FileUpload required />
-                    {erros.file && <p className={styles.erro} role="alert">{erros.file}</p>}
+                    {erros.file && <p className={styles.erro} role="alert"><CircleAlert className="icone-daltonico" aria-hidden="true" />{erros.file}</p>}
                 </div>
 
                 <Button name="Enviar avaliação" nameCarregando="Enviando..." />

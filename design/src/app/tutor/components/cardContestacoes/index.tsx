@@ -26,7 +26,7 @@ export async function CardContestacoes(){
     }
 
     return (
-        <Card titulo={TITULO} acao={<Link href="/tutor/contestacoes" className={pagina.verTodas}>Ver todas</Link>}>
+        <Card titulo={TITULO} acao={<Link href="/tutor/contestacoes" className={`${pagina.verTodas} link-texto`}>Ver todas</Link>}>
             {resultado.dados.length === 0 ? (
                 <EmptyState mensagem="Nenhuma contestação pendente." imagem={null} />
             ) : (

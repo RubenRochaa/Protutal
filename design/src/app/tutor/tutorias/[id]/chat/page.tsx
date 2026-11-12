@@ -28,7 +28,7 @@ export default async function ChatTutorPage({ params, searchParams }: Props){
             <MarcarVisita tipo="chat" id={id} />
 
             <div className={pagina.conteudo}>
-                <Link href="/tutor/tutoria" className={lista.voltar}>
+                <Link href="/tutor/tutoria" className={`${lista.voltar} link-texto`}>
                     <ArrowLeft size={20} aria-hidden="true" />
                     Voltar para a tutoria
                 </Link>

@@ -16,7 +16,7 @@ const LIMITE = 5
 
 // Leva para a tela "Minhas atividades", com a lista completa
 function VerTodas(){
-    return <Link href="/aluno/atividades" className={styles.verTodas}>Ver todas</Link>
+    return <Link href="/aluno/atividades" className={`${styles.verTodas} link-texto`}>Ver todas</Link>
 }
 
 // Card "Atividades pendentes": atividades sem resposta do aluno (rota A1)

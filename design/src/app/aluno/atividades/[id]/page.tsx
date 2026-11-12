@@ -20,7 +20,7 @@ export default async function DetalheAtividadePage({ params }: Props){
             <PageBanner titulo="Detalhe da atividade" />
 
             <div className={styles.conteudo}>
-                <Link href="/aluno/atividades" className={styles.voltar}>
+                <Link href="/aluno/atividades" className={`${styles.voltar} link-texto`}>
                     <ArrowLeft size={20} aria-hidden="true" />
                     Voltar para Minhas atividades
                 </Link>

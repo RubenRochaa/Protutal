@@ -103,7 +103,7 @@ export function RespostasAlunos({ alunos }: Props){
                         <div>
                             <dt>Arquivo enviado</dt>
                             <dd>
-                                <a href={aberto.resposta.conteudo_file} target="_blank" rel="noopener noreferrer" className={styles.download}>
+                                <a href={aberto.resposta.conteudo_file} target="_blank" rel="noopener noreferrer" className={`${styles.download} link-texto`}>
                                     <Download size={18} aria-hidden="true" />
                                     Baixar arquivo
                                 </a>

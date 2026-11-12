@@ -89,7 +89,7 @@ export async function MateriaisSala(){
                                             href={material.arquivo}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className={styles.download}
+                                            className={`${styles.download} link-texto`}
                                             aria-label={`Abrir arquivo do material ${material.titulo}`}
                                             >
                                                 <Download size={22} aria-hidden="true" />

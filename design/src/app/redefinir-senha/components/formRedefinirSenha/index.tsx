@@ -59,7 +59,7 @@ export function FormRedefinirSenha({ token }: Props){
                 <Link href="/esqueci-senha" className={styles.botaoLink}>Pedir um novo link</Link>
 
                 <p className={styles.rodape}>
-                    <Link href="/" className={styles.link}>Voltar para o login</Link>
+                    <Link href="/" className={`${styles.link} link-texto`}>Voltar para o login</Link>
                 </p>
             </div>
         )
@@ -95,7 +95,7 @@ export function FormRedefinirSenha({ token }: Props){
             <Button name="Salvar nova senha" nameCarregando="Salvando..." />
 
             <p className={styles.rodape}>
-                <Link href="/" className={styles.link}>Voltar para o login</Link>
+                <Link href="/" className={`${styles.link} link-texto`}>Voltar para o login</Link>
             </p>
         </form>
     )

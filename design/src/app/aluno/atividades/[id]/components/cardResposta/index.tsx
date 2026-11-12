@@ -2,6 +2,7 @@ import styles from './styles.module.scss'
 import { ExternalLink } from 'lucide-react'
 import { Card } from '@/components/card'
 import { formatarDataHora } from '@/lib/formatacao'
+import { IconeStatus } from '@/lib/iconesStatus'
 import { AtividadeDetalheAluno, StatusAtividadeAluno } from '@/lib/types'
 
 interface Props {
@@ -19,6 +20,7 @@ export function CardResposta({ resposta, status }: Props){
                 <span className={styles.envio}>Enviada em {formatarDataHora(resposta.data_envio)}</span>
 
                 <span className={comAtraso ? `${styles.selo} ${styles.seloAtraso}` : styles.selo}>
+                    <IconeStatus texto={comAtraso ? "Entregue com atraso" : "Entregue"} />
                     {comAtraso ? "Entregue com atraso" : "Entregue"}
                 </span>
             </div>

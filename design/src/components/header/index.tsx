@@ -3,7 +3,7 @@
 import styles from './styles.module.scss'
 import Link from 'next/link'
 import Image from 'next/image'
-import { useState } from 'react'
+import { useId, useRef, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import { useFormStatus } from 'react-dom'
 import { Loader } from '../loader'
@@ -15,6 +15,7 @@ import { Avatar } from '../avatar'
 import { Etiqueta } from '../etiqueta'
 import { Contador, descricaoContador } from '../contador'
 import { handleLogout } from './actions'
+import { IconeAcessibilidade, PainelAcessibilidade, ROTULO_ACESSIBILIDADE } from '../acessibilidade'
 
 interface Props {
     links: LinkMenu[];
@@ -63,6 +64,13 @@ function BotaoSair(){
 export function Header({ links, inicio, nome, perfil }: Props){
     const pathname = usePathname();
     const [menuAberto, setMenuAberto] = useState(false);
+    // Painel de Acessibilidade: abre pelo ícone da barra (computador e tablet)
+    // ou pelo primeiro item do menu (celular)
+    const [acessibilidadeAberta, setAcessibilidadeAberta] = useState(false);
+    const botaoAcessibilidadeRef = useRef<HTMLButtonElement>(null);
+    const itemAcessibilidadeRef = useRef<HTMLButtonElement>(null);
+    const [gatilhosAcessibilidade] = useState(() => [botaoAcessibilidadeRef, itemAcessibilidadeRef]);
+    const painelId = useId();
     const ativo = hrefAtivo(links, pathname);
     const tituloTroca = perfil?.trocarPara === "/tutor" ? "Ir para a área do tutor" : "Ir para a área do aluno";
 
@@ -80,13 +88,21 @@ export function Header({ links, inicio, nome, perfil }: Props){
         <header className={styles.header}>
             <div className={styles.conteudo}>
                 <Link href={inicio} className={styles.logo} aria-label="Protutal - página inicial">
+                    {/* Duas versões da logo: o CSS mostra a do tema ativo (claro ou escuro) */}
                     <Image
                     src="/img/logo.png"
                     alt="Protutal"
                     width={424}
                     height={62}
                     priority
-                    className={styles.logoImagem}
+                    className={`${styles.logoImagem} ${styles.logoClara}`}
+                    />
+                    <Image
+                    src="/img/logo_modoEscuro.png"
+                    alt="Protutal"
+                    width={890}
+                    height={280}
+                    className={`${styles.logoImagem} ${styles.logoEscura}`}
                     />
                 </Link>
 
@@ -94,6 +110,19 @@ export function Header({ links, inicio, nome, perfil }: Props){
                 id="menu-principal"
                 className={menuAberto ? `${styles.nav} ${styles.navAberto}` : styles.nav}
                 >
+                    {/* Celular (até 480 px): Acessibilidade é o primeiro item do menu; fecha o menu e abre o painel */}
+                    <button
+                    ref={itemAcessibilidadeRef}
+                    type="button"
+                    className={styles.acessibilidadeMenu}
+                    onClick={() => { setMenuAberto(false); setAcessibilidadeAberta(true); }}
+                    aria-expanded={acessibilidadeAberta}
+                    aria-controls={painelId}
+                    >
+                        <IconeAcessibilidade aria-hidden="true" />
+                        {ROTULO_ACESSIBILIDADE}
+                    </button>
+
                     {menu.map((link) => link.emBreve ? (
                         <span key={link.href} className={styles.linkEmBreve} aria-disabled="true">
                             {link.label}
@@ -119,6 +148,20 @@ export function Header({ links, inicio, nome, perfil }: Props){
                 </nav>
 
                 <div className={styles.acoes}>
+                    {/* Computador e tablet: ícone de Acessibilidade ao lado do sino */}
+                    <button
+                    ref={botaoAcessibilidadeRef}
+                    type="button"
+                    className={`${styles.atalho} ${styles.acessibilidadeBarra}`}
+                    onClick={() => setAcessibilidadeAberta(!acessibilidadeAberta)}
+                    aria-expanded={acessibilidadeAberta}
+                    aria-controls={painelId}
+                    aria-label={ROTULO_ACESSIBILIDADE}
+                    title={ROTULO_ACESSIBILIDADE}
+                    >
+                        <IconeAcessibilidade aria-hidden="true" />
+                    </button>
+
                     {/* Só o ícone aparece; o label vira o nome lido pelo leitor de tela e a dica do mouse */}
                     {atalhos.map((link) => {
                         const Icone = ICONES[link.icone!]
@@ -175,16 +218,24 @@ export function Header({ links, inicio, nome, perfil }: Props){
                     <button
                     type="button"
                     className={styles.botaoMenu}
-                    onClick={() => setMenuAberto(!menuAberto)}
+                    onClick={() => { setMenuAberto(!menuAberto); setAcessibilidadeAberta(false); }}
                     aria-expanded={menuAberto}
                     aria-controls="menu-principal"
                     aria-label={menuAberto ? "Fechar menu" : totalMenu > 0 ? `Abrir menu (${descricaoContador(totalMenu)})` : "Abrir menu"}
                     >
-                        {menuAberto ? <X size={26} /> : <Menu size={26} />}
+                        {menuAberto ? <X size={26} aria-hidden="true" /> : <Menu size={26} aria-hidden="true" />}
                         {!menuAberto && <Contador valor={totalMenu} canto />}
                     </button>
                 </div>
             </div>
+
+            <PainelAcessibilidade
+            id={painelId}
+            aberto={acessibilidadeAberta}
+            onFechar={() => setAcessibilidadeAberta(false)}
+            gatilhos={gatilhosAcessibilidade}
+            className={styles.painelAcessibilidade}
+            />
         </header>
     )
 }

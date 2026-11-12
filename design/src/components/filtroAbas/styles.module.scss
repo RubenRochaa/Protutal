@@ -5,7 +5,7 @@
 }
 
 .opcao, .ativo{
-    height: 40px;
+    min-height: 40px;
     padding: 0 18px;
     border-radius: var(--radius-pill);
     font-weight: 500;
@@ -27,9 +27,9 @@
 }
 
 .ativo{
-    border: 1px solid var(--red-700);
-    background-color: var(--red-700);
-    color: var(--white);
+    border: 1px solid var(--destaque);
+    background-color: var(--destaque);
+    color: var(--texto-sobre-destaque);
 }
 
 @media (max-width: 480px){

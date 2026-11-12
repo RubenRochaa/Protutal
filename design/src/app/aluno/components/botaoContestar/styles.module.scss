@@ -78,7 +78,7 @@
 }
 
 .cancelar{
-    height: 44px;
+    min-height: 44px;
     padding: 0 24px;
     border: 1px solid var(--gray-500);
     border-radius: var(--radius-input);
@@ -92,7 +92,7 @@
 }
 
 .enviar{
-    width: 220px;
+    min-width: 220px;
 }
 
 @media (max-width: 480px){

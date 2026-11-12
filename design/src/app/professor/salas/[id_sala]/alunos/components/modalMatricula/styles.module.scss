@@ -32,7 +32,7 @@
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    height: 36px;
+    min-height: 36px;
     padding: 0 14px;
     border-radius: var(--radius-input);
     font-weight: 500;
@@ -42,12 +42,12 @@
 
 .botao{
     border: 0;
-    background-color: var(--red-700);
-    color: var(--white);
+    background-color: var(--destaque);
+    color: var(--texto-sobre-destaque);
     transition: background-color 0.2s;
 
     &:hover:not(:disabled){
-        background-color: var(--red-900);
+        background-color: var(--destaque-hover);
     }
 
     &:disabled{
