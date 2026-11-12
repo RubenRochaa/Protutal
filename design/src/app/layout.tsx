@@ -3,7 +3,7 @@ import { Poppins } from "next/font/google"
 import "./globals.scss";
 import { ProvedorAcessibilidade } from "@/lib/acessibilidade";
 import { SCRIPT_ACESSIBILIDADE } from "@/lib/acessibilidadeConfig";
-import { ToasterTema } from "@/components/acessibilidade/toasterTema";
+import { ToasterTema, ProvedorToast } from "@/components/acessibilidade/toasterTema";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -39,8 +39,10 @@ export default function RootLayout({
       </head>
       <body>
         <ProvedorAcessibilidade>
-          <ToasterTema />
-          {children}
+          <ProvedorToast>
+            <ToasterTema />
+            {children}
+          </ProvedorToast>
         </ProvedorAcessibilidade>
       </body>
     </html>
