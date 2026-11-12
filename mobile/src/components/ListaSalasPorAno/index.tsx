@@ -1,9 +1,10 @@
-import React, { ReactElement, ReactNode } from "react";
+import React, { ReactElement, ReactNode, useMemo } from "react";
 import { View, Text, StyleSheet, SectionList, RefreshControl } from "react-native";
 
 import { ItemLista } from "../ItemLista";
 import { Sala } from "../../lib/types";
-import { colors, fonts, fontSizes, spacing } from "../../styles/theme";
+import { useTema, type TemaAtual } from "../../lib/useTema";
+import { fonts, spacing } from "../../styles/theme";
 
 interface ListaSalasPorAnoProps {
     salas: Sala[];
@@ -19,6 +20,9 @@ interface ListaSalasPorAnoProps {
 // Salas agrupadas por ano letivo, do mais novo para o mais antigo (site: professor/components/salasPorAno).
 // A P20 não tem filtro de ano: o agrupamento é feito no celular. Usado no Histórico e no Desempenho
 export function ListaSalasPorAno({ salas, onAbrir, topo, vazio, atualizando, onAtualizar }: ListaSalasPorAnoProps){
+    const temaAtual = useTema();
+    const styles = useMemo(() => makeStyles(temaAtual), [temaAtual]);
+    const { colors } = temaAtual;
     const anos = [...new Set(salas.map((s) => s.ano_letivo))].sort((a, b) => b - a);
     const secoes = anos.map((ano) => ({ ano, data: salas.filter((s) => s.ano_letivo === ano) }));
 
@@ -42,7 +46,7 @@ export function ListaSalasPorAno({ salas, onAbrir, topo, vazio, atualizando, onA
     )
 }
 
-const styles = StyleSheet.create({
+const makeStyles = ({ colors, fontSizes }: TemaAtual) => StyleSheet.create({
     lista:{
         flexGrow: 1,
         padding: spacing.lg

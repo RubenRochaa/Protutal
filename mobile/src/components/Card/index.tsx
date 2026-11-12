@@ -1,7 +1,8 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode, useMemo } from "react";
 import { View, Text, StyleSheet, ViewStyle, StyleProp, TouchableOpacity } from "react-native";
 
-import { colors, fonts, fontSizes, radius, shadows, spacing } from "../../styles/theme";
+import { useTema, type TemaAtual } from "../../lib/useTema";
+import { fonts, radius, shadows, spacing } from "../../styles/theme";
 
 interface CardProps {
     title?: string;
@@ -16,6 +17,8 @@ interface CardProps {
 
 // Card do site: borda cinza, raio 12, sombra leve e título vermelho com linha embaixo
 export function Card({ title, action, children, style }: CardProps){
+    const temaAtual = useTema();
+    const styles = useMemo(() => makeStyles(temaAtual), [temaAtual]);
     return (
         <View style={[styles.card, style]}>
             {(title || action) && (
@@ -35,7 +38,7 @@ export function Card({ title, action, children, style }: CardProps){
     )
 }
 
-const styles = StyleSheet.create({
+const makeStyles = ({ colors, fontSizes }: TemaAtual) => StyleSheet.create({
     card:{
         gap: spacing.md,
         paddingTop: spacing.lg,

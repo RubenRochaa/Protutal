@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Modal } from "react-native";
 import { Feather } from "@expo/vector-icons";
 
 import { ModalPicker, OptionProps } from "../ModalPicker";
-import { colors, fonts, fontSizes, radius, sizes, spacing } from "../../styles/theme";
+import { MensagemErro } from "../MensagemErro";
+import { useTema, type TemaAtual } from "../../lib/useTema";
+import { fonts, radius, sizes, spacing } from "../../styles/theme";
 
 interface SelectProps {
     label: string;
@@ -18,6 +20,9 @@ interface SelectProps {
 
 // Campo de escolha (select do site): mostra o valor escolhido e abre a lista no ModalPicker
 export function Select({ label, options, value, onChange, placeholder = "Selecione", disabled, erro }: SelectProps){
+    const temaAtual = useTema();
+    const styles = useMemo(() => makeStyles(temaAtual), [temaAtual]);
+    const { colors } = temaAtual;
     const [aberto, setAberto] = useState(false);
     const rotulo = options.find((opcao) => String(opcao.value) === value)?.label;
 
@@ -36,7 +41,7 @@ export function Select({ label, options, value, onChange, placeholder = "Selecio
                 <Feather name="chevron-down" size={18} color={colors.gray700} />
             </TouchableOpacity>
 
-            {erro && <Text style={styles.erro} accessibilityRole="alert">{erro}</Text>}
+            {erro && <MensagemErro mensagem={erro} />}
 
             <Modal transparent visible={aberto} animationType="fade" onRequestClose={() => setAberto(false)}>
                 <ModalPicker
@@ -50,7 +55,7 @@ export function Select({ label, options, value, onChange, placeholder = "Selecio
     )
 }
 
-const styles = StyleSheet.create({
+const makeStyles = ({ daltonico, colors, fontSizes, fs }: TemaAtual) => StyleSheet.create({
     campo:{
         gap: spacing.xs
     },
@@ -64,7 +69,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "space-between",
         gap: spacing.sm,
-        height: sizes.input,
+        minHeight: sizes.input,
         paddingHorizontal: spacing.md,
         borderWidth: 1,
         borderColor: colors.borderInput,
@@ -72,7 +77,8 @@ const styles = StyleSheet.create({
         backgroundColor: colors.white
     },
     caixaErro:{
-        borderColor: colors.red700
+        borderColor: colors.red700,
+        borderWidth: daltonico ? 2 : 1
     },
     desabilitado:{
         opacity: 0.6
@@ -80,15 +86,10 @@ const styles = StyleSheet.create({
     valor:{
         flex: 1,
         fontFamily: fonts.regular,
-        fontSize: 15,
+        fontSize: fs(15),
         color: colors.black
     },
     placeholder:{
         color: colors.gray500
-    },
-    erro:{
-        fontFamily: fonts.regular,
-        fontSize: 13,
-        color: colors.red700
     }
 })

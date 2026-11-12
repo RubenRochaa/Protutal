@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useState } from "react";
+import React, { useCallback, useContext, useState, useMemo } from "react";
 import {
     View,
     Text,
@@ -27,7 +27,9 @@ import { getErrorMessage } from "../../../lib/getErrorMessage";
 import { MASCOTES } from "../../../lib/mascotes";
 import { TutoriaAluno } from "../../../lib/types";
 import { AlunoScreenProps } from "../../../routes/aluno.routes";
-import { colors, fonts, fontSizes, radius, sizes, spacing } from "../../../styles/theme";
+import { MensagemErro } from "../../../components/MensagemErro";
+import { useTema, type TemaAtual } from "../../../lib/useTema";
+import { fonts, radius, sizes, spacing } from "../../../styles/theme";
 
 const ETAPAS: OptionProps[] = [
     { value: "1", label: "1ª etapa" },
@@ -46,6 +48,9 @@ const TITULO = "Avaliar meu tutor";
 // segue o formulário do site (etapa, nota, comentário opcional e rubrica obrigatória).
 // Só a tutoria ativa mostra o formulário; um feedback por etapa (a API avisa com 409)
 export default function FeedbackTutor({ navigation, route }: AlunoScreenProps<"FeedbackTutor">){
+    const temaAtual = useTema();
+    const styles = useMemo(() => makeStyles(temaAtual), [temaAtual]);
+    const { colors } = temaAtual;
     const { id_tutoria } = route.params;
     const { showToast } = useContext(ToastContext);
 
@@ -156,7 +161,7 @@ export default function FeedbackTutor({ navigation, route }: AlunoScreenProps<"F
                         <Text style={[styles.valorSelect, !rotuloEtapa && styles.placeholder]}>{rotuloEtapa ?? "Escolha a etapa"}</Text>
                         <Feather name="chevron-down" size={18} color={colors.gray700} />
                     </TouchableOpacity>
-                    {erros.etapa && <Text style={styles.erro}>{erros.etapa}</Text>}
+                    {erros.etapa && <MensagemErro mensagem={erros.etapa} />}
                 </View>
 
                 <View style={styles.bloco}>
@@ -168,7 +173,7 @@ export default function FeedbackTutor({ navigation, route }: AlunoScreenProps<"F
                     onChangeText={(valor) => { setNota(valor); setErros((atual) => ({ ...atual, nota: undefined })); }}
                     editable={!enviando}
                     />
-                    {erros.nota && <Text style={styles.erro}>{erros.nota}</Text>}
+                    {erros.nota && <MensagemErro mensagem={erros.nota} />}
                 </View>
 
                 <TextArea
@@ -216,10 +221,10 @@ export default function FeedbackTutor({ navigation, route }: AlunoScreenProps<"F
     )
 }
 
-const styles = StyleSheet.create({
+const makeStyles = ({ colors, fontSizes, fs }: TemaAtual) => StyleSheet.create({
     container:{
         flex: 1,
-        backgroundColor: colors.white
+        backgroundColor: colors.fundoPagina
     },
     conteudo:{
         flexGrow: 1,
@@ -231,7 +236,7 @@ const styles = StyleSheet.create({
     },
     explicacao:{
         fontFamily: fonts.regular,
-        fontSize: 14,
+        fontSize: fs(14),
         color: colors.gray700
     },
     label:{
@@ -255,15 +260,10 @@ const styles = StyleSheet.create({
     },
     valorSelect:{
         fontFamily: fonts.regular,
-        fontSize: 15,
+        fontSize: fs(15),
         color: colors.black
     },
     placeholder:{
         color: colors.gray500
-    },
-    erro:{
-        fontFamily: fonts.regular,
-        fontSize: 13,
-        color: colors.red700
     }
 })

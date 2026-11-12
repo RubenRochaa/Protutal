@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useMemo } from "react";
 import { View, Text, Image, StyleSheet } from "react-native";
 
 import { Button } from "../Button";
@@ -6,7 +6,8 @@ import { api } from "../../services/api";
 import { ToastContext } from "../../contexts/ToastContext";
 import { getErrorMessage } from "../../lib/getErrorMessage";
 import { MASCOTES } from "../../lib/mascotes";
-import { colors, fonts, radius, spacing } from "../../styles/theme";
+import { useTema, type TemaAtual } from "../../lib/useTema";
+import { fonts, radius, spacing } from "../../styles/theme";
 
 // Mesmo intervalo do back-end (ReenviarConfirmacaoEmailService): antes de 2 minutos
 // ele ignora o pedido, então o botão fica bloqueado esse tempo
@@ -21,6 +22,8 @@ interface AvisoConfirmacaoProps {
 
 // Aviso do login com o botão de reenviar o link de confirmação (rota O4).
 export function AvisoConfirmacao({ texto, textoBotao, email }: AvisoConfirmacaoProps){
+    const temaAtual = useTema();
+    const styles = useMemo(() => makeStyles(temaAtual), [temaAtual]);
     const { showToast } = useContext(ToastContext);
 
     const [enviando, setEnviando] = useState(false);
@@ -78,7 +81,7 @@ export function AvisoConfirmacao({ texto, textoBotao, email }: AvisoConfirmacaoP
     )
 }
 
-const styles = StyleSheet.create({
+const makeStyles = ({ colors, fs }: TemaAtual) => StyleSheet.create({
     aviso:{
         flexDirection: "row",
         alignItems: "center",
@@ -99,7 +102,7 @@ const styles = StyleSheet.create({
     },
     texto:{
         fontFamily: fonts.medium,
-        fontSize: 14,
+        fontSize: fs(14),
         color: colors.black
     }
 })

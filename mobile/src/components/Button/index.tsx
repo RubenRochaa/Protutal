@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Text, StyleSheet, Pressable, PressableProps } from "react-native";
 
 import { Loader } from "../Loader";
 import { Contador } from "../Contador";
-import { colors, fonts, radius, sizes, spacing } from "../../styles/theme";
+import { useTema, type TemaAtual } from "../../lib/useTema";
+import { fonts, radius, sizes, spacing } from "../../styles/theme";
 
 interface ButtonProps extends Omit<PressableProps, "children"> {
     title: string;
@@ -18,6 +19,8 @@ interface ButtonProps extends Omit<PressableProps, "children"> {
 
 // Botão do Protutal: mesmo tamanho, raio e cores do botão do site
 export function Button({ title, titleLoading, loading = false, variant = "primario", disabled, style, contador, ...rest }: ButtonProps){
+    const temaAtual = useTema();
+    const styles = useMemo(() => makeStyles(temaAtual), [temaAtual]);
     const primario = variant === "primario";
     const desabilitado = !!disabled || loading;
 
@@ -47,22 +50,22 @@ export function Button({ title, titleLoading, loading = false, variant = "primar
     )
 }
 
-const styles = StyleSheet.create({
+const makeStyles = ({ colors, fs }: TemaAtual) => StyleSheet.create({
     button:{
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "center",
         gap: spacing.sm,
         width: "100%",
-        height: sizes.botao,
+        minHeight: sizes.botao,
         borderRadius: radius.input,
         paddingHorizontal: spacing.lg
     },
     primario:{
-        backgroundColor: colors.red700
+        backgroundColor: colors.destaque
     },
     primarioPressionado:{
-        backgroundColor: colors.red900
+        backgroundColor: colors.destaqueHover
     },
     secundario:{
         backgroundColor: colors.white,
@@ -77,8 +80,8 @@ const styles = StyleSheet.create({
     },
     texto:{
         fontFamily: fonts.medium,
-        fontSize: 16,
-        color: colors.white
+        fontSize: fs(16),
+        color: colors.textoSobreDestaque
     },
     textoSecundario:{
         color: colors.red700

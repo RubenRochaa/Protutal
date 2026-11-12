@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useMemo } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { useNavigation, useRoute, RouteProp } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -12,9 +12,12 @@ import { ToastContext } from "../../contexts/ToastContext";
 import { getErrorMessage, getErrorStatus } from "../../lib/getErrorMessage";
 import { validarLogin } from "../../lib/validacao";
 import { AuthStackParamsList } from "../../routes/auth.routes";
-import { colors, fonts, spacing } from "../../styles/theme";
+import { useTema, type TemaAtual } from "../../lib/useTema";
+import { fonts, spacing } from "../../styles/theme";
 
 export default function SignIn(){
+    const temaAtual = useTema();
+    const styles = useMemo(() => makeStyles(temaAtual), [temaAtual]);
     const navigation = useNavigation<NativeStackNavigationProp<AuthStackParamsList>>();
     const route = useRoute<RouteProp<AuthStackParamsList, "SignIn">>();
 
@@ -127,7 +130,7 @@ export default function SignIn(){
     )
 }
 
-const styles = StyleSheet.create({
+const makeStyles = ({ daltonico, colors, fs }: TemaAtual) => StyleSheet.create({
     form:{
         gap: spacing.lg
     },
@@ -136,8 +139,9 @@ const styles = StyleSheet.create({
         marginTop: -spacing.sm
     },
     link:{
+        textDecorationLine: daltonico ? "underline" : "none",
         fontFamily: fonts.semibold,
-        fontSize: 14,
+        fontSize: fs(14),
         color: colors.red700
     },
     rodape:{
@@ -148,7 +152,7 @@ const styles = StyleSheet.create({
     },
     textoRodape:{
         fontFamily: fonts.regular,
-        fontSize: 14,
+        fontSize: fs(14),
         color: colors.gray700
     }
 })

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useMemo } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -11,7 +11,8 @@ import { api } from "../../services/api";
 import { getErrorMessage } from "../../lib/getErrorMessage";
 import { perfilPeloEmail, validarCadastro } from "../../lib/validacao";
 import { AuthStackParamsList } from "../../routes/auth.routes";
-import { colors, fonts, spacing } from "../../styles/theme";
+import { useTema, type TemaAtual } from "../../lib/useTema";
+import { fonts, spacing } from "../../styles/theme";
 
 // Mesmas rotas do site (design/src/app/cadastro/actions.ts).
 // Não há escolha de perfil: o domínio do e-mail diz se é professor ou aluno.
@@ -22,6 +23,8 @@ const ROTA_CADASTRO = {
 }
 
 export default function SignUp(){
+    const temaAtual = useTema();
+    const styles = useMemo(() => makeStyles(temaAtual), [temaAtual]);
     const navigation = useNavigation<NativeStackNavigationProp<AuthStackParamsList>>();
     const { showToast } = useContext(ToastContext);
 
@@ -115,13 +118,14 @@ export default function SignUp(){
     )
 }
 
-const styles = StyleSheet.create({
+const makeStyles = ({ daltonico, colors, fs }: TemaAtual) => StyleSheet.create({
     form:{
         gap: spacing.lg
     },
     link:{
+        textDecorationLine: daltonico ? "underline" : "none",
         fontFamily: fonts.semibold,
-        fontSize: 14,
+        fontSize: fs(14),
         color: colors.red700
     },
     rodape:{
@@ -132,7 +136,7 @@ const styles = StyleSheet.create({
     },
     textoRodape:{
         fontFamily: fonts.regular,
-        fontSize: 14,
+        fontSize: fs(14),
         color: colors.gray700
     }
 })

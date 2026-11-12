@@ -1,9 +1,10 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useMemo } from "react";
 import { View, Text, StyleSheet, ScrollView, RefreshControl, TouchableOpacity } from "react-native";
 import { Feather } from "@expo/vector-icons";
 
 import { Header } from "../../../components/Header";
 import { Card } from "../../../components/Card";
+import Svg, { Defs, Pattern, Rect } from "react-native-svg";
 import { Badge } from "../../../components/Badge";
 import { Loader } from "../../../components/Loader";
 import { EmptyState } from "../../../components/EmptyState";
@@ -26,7 +27,8 @@ import {
     StatusContestacao
 } from "../../../lib/types";
 import { AlunoScreenProps } from "../../../routes/aluno.routes";
-import { colors, fonts, fontSizes, radius, spacing } from "../../../styles/theme";
+import { useTema, type TemaAtual } from "../../../lib/useTema";
+import { fonts, radius, spacing } from "../../../styles/theme";
 
 // Status da contestação -> texto e cor do selo (mesmos textos do site)
 export const SELO_CONTESTACAO: Record<StatusContestacao, { texto: string; variant: "neutro" | "sucesso" | "destaque" }> = {
@@ -57,7 +59,10 @@ function mensagemSemNotas(etapa: Etapa){
 }
 
 // Lista de conteúdos de uma faixa ("Conteúdos que já domino" / "Conteúdos a treinar")
-function ListaFaixa({ conteudos, icone, cor, vazio }: { conteudos: MediaConteudo[]; icone: "check-circle" | "alert-circle"; cor: string; vazio: string }){
+function ListaFaixa({ conteudos, icone, cor, vazio, rotulo, variant }: { conteudos: MediaConteudo[]; icone: "check-circle" | "alert-circle"; cor: string; vazio: string; rotulo: string; variant: "sucesso" | "destaque" }){
+    const temaAtual = useTema();
+    const styles = useMemo(() => makeStyles(temaAtual), [temaAtual]);
+    const { daltonico } = temaAtual;
     if(conteudos.length === 0) return <Text style={styles.textoSecundario}>{vazio}</Text>;
 
     return (
@@ -66,6 +71,8 @@ function ListaFaixa({ conteudos, icone, cor, vazio }: { conteudos: MediaConteudo
                 <View key={conteudo.id_conteudo} style={styles.linhaConteudo}>
                     <Feather name={icone} size={18} color={cor} />
                     <Text style={styles.nomeConteudo}>{conteudo.nome}</Text>
+                    {/* Modo daltônico: a faixa também aparece escrita, com ícone */}
+                    {daltonico && <Badge label={rotulo} variant={variant} />}
                     <Text style={styles.mediaConteudo}>{formatarNota(conteudo.media)}</Text>
                 </View>
             ))}
@@ -76,6 +83,9 @@ function ListaFaixa({ conteudos, icone, cor, vazio }: { conteudos: MediaConteudo
 // Tela "Meu desempenho" (rotas A6, A7 e A9), na ordem do print do Figma
 // e com os blocos do site que não estão no print
 export default function Desempenho({ navigation }: AlunoScreenProps<"MeuDesempenho">){
+    const temaAtual = useTema();
+    const styles = useMemo(() => makeStyles(temaAtual), [temaAtual]);
+    const { colors } = temaAtual;
     // Abrir a tela zera a bolinha de notas novas da aba
     useMarcarVisita("notas");
 
@@ -199,11 +209,11 @@ export default function Desempenho({ navigation }: AlunoScreenProps<"MeuDesempen
                         )}
 
                         <Card title="Conteúdos que já domino" style={styles.cardDominado}>
-                            <ListaFaixa conteudos={conteudos.dominado ?? []} icone="check-circle" cor={colors.green500} vazio="Nenhum conteúdo dominado ainda." />
+                            <ListaFaixa conteudos={conteudos.dominado ?? []} icone="check-circle" cor={colors.sucessoIcone} vazio="Nenhum conteúdo dominado ainda." rotulo="Dominado" variant="sucesso" />
                         </Card>
 
                         <Card title="Conteúdos a treinar" style={styles.cardTreinar}>
-                            <ListaFaixa conteudos={conteudos.com_dificuldade ?? []} icone="alert-circle" cor={colors.red700} vazio="Nenhum conteúdo com dificuldade." />
+                            <ListaFaixa conteudos={conteudos.com_dificuldade ?? []} icone="alert-circle" cor={colors.red700} vazio="Nenhum conteúdo com dificuldade." rotulo="Com dificuldade" variant="destaque" />
                         </Card>
                     </>
                 )}
@@ -230,7 +240,19 @@ export default function Desempenho({ navigation }: AlunoScreenProps<"MeuDesempen
                                         faixa === "com_dificuldade" && styles.barraBaixa,
                                         { width: `${Math.min(Math.max(item.media, 0), 10) * 10}%` }
                                     ]}
-                                    />
+                                    >
+                                        {/* Modo daltônico: barra de dificuldade listrada, além da cor */}
+                                        {faixa === "com_dificuldade" && temaAtual.daltonico && (
+                                            <Svg width="100%" height="100%">
+                                                <Defs>
+                                                    <Pattern id="listras" patternUnits="userSpaceOnUse" width={7} height={7} patternTransform="rotate(-45)">
+                                                        <Rect width={3} height={7} fill={colors.textoSobreDestaque} />
+                                                    </Pattern>
+                                                </Defs>
+                                                <Rect width="100%" height="100%" fill="url(#listras)" />
+                                            </Svg>
+                                        )}
+                                    </View>
                                 </View>
                             </View>
                         )
@@ -290,10 +312,10 @@ export default function Desempenho({ navigation }: AlunoScreenProps<"MeuDesempen
     )
 }
 
-const styles = StyleSheet.create({
+const makeStyles = ({ daltonico, colors, fontSizes, fs }: TemaAtual) => StyleSheet.create({
     container:{
         flex: 1,
-        backgroundColor: colors.white
+        backgroundColor: colors.fundoPagina
     },
     conteudo:{
         flexGrow: 1,
@@ -302,7 +324,7 @@ const styles = StyleSheet.create({
     },
     media:{
         fontFamily: fonts.bold,
-        fontSize: 44,
+        fontSize: fs(44),
         color: colors.black
     },
     numeros:{
@@ -328,12 +350,12 @@ const styles = StyleSheet.create({
         borderRadius: radius.item,
         backgroundColor: colors.gray100,
         fontFamily: fonts.regular,
-        fontSize: 13,
+        fontSize: fs(13),
         color: colors.gray700
     },
     cardDominado:{
         borderLeftWidth: 4,
-        borderLeftColor: colors.green500
+        borderLeftColor: colors.sucessoIcone
     },
     cardTreinar:{
         borderLeftWidth: 4,
@@ -347,12 +369,12 @@ const styles = StyleSheet.create({
     nomeConteudo:{
         flex: 1,
         fontFamily: fonts.medium,
-        fontSize: 15,
+        fontSize: fs(15),
         color: colors.black
     },
     mediaConteudo:{
         fontFamily: fonts.semibold,
-        fontSize: 15,
+        fontSize: fs(15),
         color: colors.black
     },
     itemConteudo:{
@@ -367,10 +389,10 @@ const styles = StyleSheet.create({
     barra:{
         height: "100%",
         borderRadius: radius.pill,
-        backgroundColor: colors.green500
+        backgroundColor: colors.sucessoIcone
     },
     barraBaixa:{
-        backgroundColor: colors.red700
+        backgroundColor: colors.destaque
     },
     item:{
         gap: spacing.xs,
@@ -380,7 +402,7 @@ const styles = StyleSheet.create({
     },
     tituloItem:{
         fontFamily: fonts.semibold,
-        fontSize: 15,
+        fontSize: fs(15),
         color: colors.black
     },
     linhaNota:{
@@ -393,8 +415,9 @@ const styles = StyleSheet.create({
         gap: 2
     },
     tituloLink:{
+        textDecorationLine: daltonico ? "underline" : "none",
         fontFamily: fonts.semibold,
-        fontSize: 15,
+        fontSize: fs(15),
         color: colors.red700
     },
     valorNota:{
@@ -411,17 +434,17 @@ const styles = StyleSheet.create({
     },
     textoContestar:{
         fontFamily: fonts.medium,
-        fontSize: 14,
+        fontSize: fs(14),
         color: colors.red700
     },
     texto:{
         fontFamily: fonts.regular,
-        fontSize: 14,
+        fontSize: fs(14),
         color: colors.black
     },
     textoSecundario:{
         fontFamily: fonts.regular,
-        fontSize: 13,
+        fontSize: fs(13),
         color: colors.gray700
     }
 })

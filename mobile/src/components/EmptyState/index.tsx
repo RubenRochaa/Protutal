@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { View, Text, Image, StyleSheet, ImageSourcePropType } from "react-native";
 
 import { MASCOTES } from "../../lib/mascotes";
-import { colors, fonts, spacing } from "../../styles/theme";
+import { useTema, type TemaAtual } from "../../lib/useTema";
+import { fonts, spacing } from "../../styles/theme";
 
 interface EmptyStateProps {
     title: string;
@@ -13,6 +14,8 @@ interface EmptyStateProps {
 
 // Lista ou área sem dados: mascote do Protutal com uma mensagem
 export function EmptyState({ title, description, image = MASCOTES.areasVazias }: EmptyStateProps){
+    const temaAtual = useTema();
+    const styles = useMemo(() => makeStyles(temaAtual), [temaAtual]);
     return (
         <View style={styles.container}>
             <Image source={image} style={styles.mascote} resizeMode="contain" accessibilityIgnoresInvertColors />
@@ -23,7 +26,7 @@ export function EmptyState({ title, description, image = MASCOTES.areasVazias }:
     )
 }
 
-const styles = StyleSheet.create({
+const makeStyles = ({ colors, fs }: TemaAtual) => StyleSheet.create({
     container:{
         alignItems: "center",
         gap: spacing.sm,
@@ -36,13 +39,13 @@ const styles = StyleSheet.create({
     },
     titulo:{
         fontFamily: fonts.semibold,
-        fontSize: 16,
+        fontSize: fs(16),
         color: colors.black,
         textAlign: "center"
     },
     descricao:{
         fontFamily: fonts.regular,
-        fontSize: 14,
+        fontSize: fs(14),
         color: colors.gray700,
         textAlign: "center"
     }
