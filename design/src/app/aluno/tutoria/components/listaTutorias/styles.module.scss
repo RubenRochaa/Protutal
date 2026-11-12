@@ -1,0 +1,91 @@
+.lista{
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+    list-style: none;
+}
+
+// Linha com borda fina, inteira clicável
+.item{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    height: 100%;
+    padding: 16px 20px;
+    border: 1px solid var(--gray-300);
+    border-radius: var(--radius-item);
+    background-color: var(--white);
+    transition: transform 0.2s;
+
+    &:hover{
+        transform: translateY(-2px);
+    }
+}
+
+.topo{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.quem{
+    flex: 1;
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.tutor{
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+.sala,
+.datas{
+    color: var(--gray-700);
+    font-size: 0.9rem;
+}
+
+.rotulo{
+    color: var(--red-700);
+    font-weight: 500;
+}
+
+.meta{
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+}
+
+.abrir{
+    display: flex;
+    align-items: center;
+    align-self: flex-end;
+    margin-top: auto;
+    color: var(--red-700);
+    font-weight: 600;
+}
+
+// Bolinha de notificação antes do "Ver tutoria"; sem contador o espaço some
+.contador{
+    display: flex;
+    margin-right: 6px;
+
+    &:empty{
+        display: none;
+    }
+}
+
+@media (max-width: 768px){
+    .lista{
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+@media (max-width: 480px){
+    .item{
+        padding: 14px 12px;
+    }
+
+    .tutor{
+        font-size: 1rem;
+    }
+}

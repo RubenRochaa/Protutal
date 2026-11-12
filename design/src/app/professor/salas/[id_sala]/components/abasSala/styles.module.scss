@@ -1,13 +1,18 @@
-// Abas lado a lado com uma linha embaixo; no celular, rolam na horizontal
+// Linha 1 (abas principais) e linha 2 (sub-abas) bem próximas uma da outra
+.navegacao{
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+// Abas principais lado a lado com uma linha embaixo
 .abas{
     display: flex;
     gap: 8px;
-    overflow-x: auto;
     border-bottom: 2px solid var(--gray-300);
 }
 
 .aba, .abaAtiva{
-    flex-shrink: 0;
     margin-bottom: -2px;
     padding: 10px 16px;
     border-bottom: 3px solid transparent;
@@ -28,9 +33,60 @@
     color: var(--red-700);
 }
 
-@media (max-width: 375px){
+// Sub-abas em pílulas menores; no celular, rolam na horizontal
+.subabas{
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 2px;
+}
+
+.subaba, .subabaAtiva{
+    flex-shrink: 0;
+    padding: 6px 14px;
+    border: 1px solid var(--gray-300);
+    border-radius: var(--radius-pill);
+    font-size: var(--fonte-subaba);
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.subaba{
+    color: var(--gray-700);
+
+    &:hover{
+        border-color: var(--red-700);
+        color: var(--red-700);
+    }
+}
+
+.subabaAtiva{
+    border-color: var(--red-700);
+    background-color: var(--red-700);
+    color: var(--white);
+}
+
+// Tablet: as 5 abas dividem a largura, sem rolagem
+@media (max-width: 768px){
+    .abas{
+        gap: 0;
+    }
+
     .aba, .abaAtiva{
-        padding: 8px 12px;
-        font-size: 0.95rem;
+        flex: 1 1 auto;
+        padding: 10px 8px;
+        text-align: center;
+    }
+}
+
+// Celular: fonte e padding menores para as 5 abas caberem no celular (360 px)
+@media (max-width: 480px){
+    .aba, .abaAtiva{
+        padding: 8px 4px;
+        font-size: var(--fonte-aba-sm);
+    }
+
+    .subaba, .subabaAtiva{
+        padding: 5px 12px;
     }
 }

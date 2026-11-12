@@ -1,5 +1,7 @@
 import prismaClient from "../../prisma";
 import { AppError } from "../../errors/AppError";
+import { buscarSalaDoProfessor } from "../../helpers/buscarSalaDoProfessor";
+import { validarId } from "../../helpers/validarId";
 import { StatusTutoria } from "../../generated/prisma";
 
 interface ListTutoriasSalaRequest {
@@ -12,9 +14,7 @@ class ListTutoriasSalaService {
     async execute({ id_sala, id_professor, status }: ListTutoriasSalaRequest) {
 
         // o id da sala vem da URL (/salas/:id/tutorias) e precisa ser um inteiro positivo
-        if (!Number.isInteger(id_sala) || id_sala <= 0) {
-            throw new AppError("O id da sala deve ser um número inteiro", 400);
-        }
+        validarId(id_sala, "O id da sala deve ser um número inteiro");
 
         // ?status= é opcional, mas se vier precisa ser um dos valores do enum StatusTutoria
         // (a lista vem do client gerado pelo Prisma, então acompanha o schema)
@@ -24,24 +24,8 @@ class ListTutoriasSalaService {
             throw new AppError(`O status deve ser ${statusValidos.join(" ou ")}`, 400);
         }
 
-        const sala = await prismaClient.sala.findUnique({
-            where: {
-                id_sala: id_sala
-            },
-            select: {
-                id_sala: true,
-                id_professor: true
-            }
-        });
-
-        if (!sala) {
-            throw new AppError("Sala não encontrada", 404);
-        }
-
         // o professor só pode ver as tutorias das próprias salas
-        if (sala.id_professor !== id_professor) {
-            throw new AppError("Você não tem permissão para acessar esta sala", 403);
-        }
+        await buscarSalaDoProfessor(id_sala, id_professor);
 
         // tutorias cujo vínculo Tutor_sala é desta sala (Tutoria -> Tutor_sala -> Sala);
         // sem filtro, status fica undefined e o Prisma ignora o campo (traz todas);

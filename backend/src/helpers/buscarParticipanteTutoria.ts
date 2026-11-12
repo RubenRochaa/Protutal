@@ -1,5 +1,6 @@
 import prismaClient from "../prisma";
 import { AppError } from "../errors/AppError";
+import { validarId } from "./validarId";
 
 // papel do aluno logado dentro da tutoria
 type PapelTutoria = "tutor" | "tutorado";
@@ -10,9 +11,7 @@ type PapelTutoria = "tutor" | "tutorado";
 async function buscarParticipanteTutoria(id_tutoria: number, id_aluno: number) {
 
     // o id da tutoria vem da URL (/tutorias/:id/mensagens) e precisa ser um inteiro positivo
-    if (!Number.isInteger(id_tutoria) || id_tutoria <= 0) {
-        throw new AppError("O id da tutoria deve ser um número inteiro", 400);
-    }
+    validarId(id_tutoria, "O id da tutoria deve ser um número inteiro");
 
     // o tutor é descoberto pelo caminho Tutoria -> Tutor_sala -> Tutor -> Aluno.
     // data_revogacao vem junto para quem precisar conferir se o vínculo do tutor está ativo

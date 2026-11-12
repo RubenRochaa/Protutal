@@ -1,0 +1,41 @@
+// p15: quatro cartões em grade 2 x 2 no desktop; um por linha no celular
+.grade{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+}
+
+.cartao{
+    justify-content: center;
+    min-height: 140px;
+}
+
+// Série em vermelho à esquerda, itens brancos à direita
+.linha{
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.serie{
+    flex-shrink: 0;
+    color: var(--red-700);
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+.itens{
+    flex: 1;
+    min-width: 0;
+}
+
+@media (max-width: 768px){
+    .grade{
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .serie{
+        font-size: 1.6rem;
+    }
+}

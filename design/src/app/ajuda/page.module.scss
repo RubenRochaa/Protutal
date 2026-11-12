@@ -1,0 +1,100 @@
+// Mesmas medidas das outras telas internas (ex.: "Meu desempenho")
+.conteudo{
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 32px 72px 48px;
+}
+
+// Só para quem não está logado: volta para a tela de login
+.voltar{
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: -16px;
+    color: var(--red-700);
+    font-weight: 500;
+
+    &:hover{
+        text-decoration: underline;
+    }
+}
+
+.lista{
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+// Cada pergunta é uma caixa branca dentro do card cinza
+.item{
+    border: 1px solid var(--border-input);
+    border-radius: var(--radius-input);
+    background-color: var(--white);
+}
+
+.pergunta{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px 16px;
+    color: var(--red-700);
+    font-weight: 600;
+    cursor: pointer;
+    // Esconde o triângulo padrão do navegador: no lugar fica a seta do lucide
+    list-style: none;
+
+    &::-webkit-details-marker{
+        display: none;
+    }
+
+    &:hover{
+        color: var(--red-900);
+    }
+}
+
+.seta{
+    flex-shrink: 0;
+    transition: transform 0.2s;
+}
+
+.item[open] .seta{
+    transform: rotate(180deg);
+}
+
+.item[open] .pergunta{
+    border-bottom: 1px solid var(--gray-300);
+}
+
+.resposta{
+    padding: 14px 16px 16px;
+    color: var(--gray-700);
+    line-height: 1.5;
+}
+
+@media (max-width: 768px){
+    .conteudo{
+        padding: 24px 24px 40px;
+    }
+}
+
+@media (max-width: 480px){
+    .conteudo{
+        gap: 24px;
+        padding: 20px 16px 32px;
+    }
+
+    .pergunta{
+        padding: 12px;
+        font-size: 0.95rem;
+    }
+
+    .resposta{
+        padding: 12px 12px 14px;
+        font-size: 0.95rem;
+    }
+}

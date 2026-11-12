@@ -2,7 +2,7 @@ import styles from './page.module.scss'
 import { Suspense } from 'react'
 import { Loading } from '@/components/loading'
 import { PageBanner } from '@/components/pageBanner'
-import { FiltroEtapa } from './components/filtroEtapa'
+import { FiltroEtapa } from '../components/filtroEtapa'
 import { ColunasAtividades } from './components/colunasAtividades'
 
 const ETAPAS_VALIDAS = ["1", "2", "3"]
@@ -26,7 +26,7 @@ export default async function AtividadesAlunoPage({ searchParams }: Props){
 
             <div className={styles.conteudo}>
                 <div className={styles.filtro}>
-                    <FiltroEtapa etapa={etapa} />
+                    <FiltroEtapa etapa={etapa} caminho="/aluno/atividades" />
                 </div>
 
                 {/* key: ao trocar a etapa, o Suspense mostra o Loading de novo enquanto busca */}

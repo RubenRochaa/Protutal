@@ -1,6 +1,8 @@
 import prismaClient from "../../prisma";
 import { Prisma } from "../../generated/prisma";
 import { AppError } from "../../errors/AppError";
+import { validarArquivoUnico } from "../../helpers/validarArquivo";
+import { validarId } from "../../helpers/validarId";
 import { UploadedFile } from "express-fileupload";
 
 import { v2 as cloudinary, UploadApiResponse } from "cloudinary";
@@ -19,9 +21,7 @@ class CreateRespostaService {
         // "abc" vira NaN e "1.5" não é inteiro, então os dois caem aqui
         const idAtividade = id_atividade;
 
-        if (!Number.isInteger(idAtividade) || idAtividade <= 0) {
-            throw new AppError("O id da atividade deve ser um número inteiro", 400);
-        }
+        validarId(idAtividade, "O id da atividade deve ser um número inteiro");
 
         // o arquivo é obrigatório e deve vir em um único campo "file"
         // (se o mesmo campo vier repetido, o express-fileupload entrega um array)
@@ -29,9 +29,7 @@ class CreateRespostaService {
             throw new AppError("O arquivo da resposta é obrigatório (campo file)", 400);
         }
 
-        if (Array.isArray(file)) {
-            throw new AppError("Envie apenas um arquivo no campo file", 400);
-        }
+        validarArquivoUnico(file);
 
         // texto é opcional, mas se vier precisa ser texto
         if (texto !== undefined && texto !== null && typeof texto !== "string") {

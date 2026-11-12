@@ -1,0 +1,30 @@
+.dados{
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+
+    dt{
+        color: var(--gray-700);
+        font-size: 0.85rem;
+    }
+
+    dd{
+        font-weight: 500;
+        overflow-wrap: anywhere;
+    }
+}
+
+.download{
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--red-700);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.nota{
+    font-size: 1.3rem;
+    font-weight: 600;
+}

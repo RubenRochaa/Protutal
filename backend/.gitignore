@@ -3,3 +3,6 @@ node_modules
 .env
 
 /src/generated/prisma
+
+# relatório gerado pelo npm run test:coverage
+/coverage

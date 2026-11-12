@@ -1,0 +1,60 @@
+// Direto no card (sem caixa própria): o tutor em cima e a correção embaixo
+.quadro{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow-wrap: anywhere;
+}
+
+.tutor{
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.nome{
+    font-size: 1.2rem;
+}
+
+.atividade{
+    font-size: 1.05rem;
+    font-weight: 600;
+}
+
+.data{
+    color: var(--gray-700);
+    font-size: 0.85rem;
+}
+
+.comentario{
+    font-size: 1.1rem;
+    line-height: 1.6;
+    white-space: pre-line;
+}
+
+.nota{
+    font-size: 1.2rem;
+}
+
+.rotulo{
+    color: var(--red-700);
+}
+
+.link{
+    display: flex;
+    align-items: center;
+    align-self: flex-end;
+    color: var(--red-700);
+    font-weight: 600;
+
+    &:hover{
+        text-decoration: underline;
+        text-underline-offset: 3px;
+    }
+}
+
+@media (max-width: 480px){
+    .comentario{
+        font-size: 1rem;
+    }
+}

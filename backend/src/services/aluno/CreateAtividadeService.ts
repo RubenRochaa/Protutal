@@ -1,5 +1,6 @@
 import prismaClient from "../../prisma";
 import { AppError } from "../../errors/AppError";
+import { validarIdObrigatorio } from "../../helpers/validarId";
 import { TipoAtividade } from "../../generated/prisma";
 
 interface AtividadeRequest {
@@ -17,13 +18,9 @@ class CreateAtividadeService {
     async execute({ id_aluno, id_tutoria, id_conteudo, titulo, descricao, tipo, etapa, prazo }: AtividadeRequest) {
 
         // id_tutoria é obrigatório: identifica o aluno tutorado que vai receber a atividade
-        if (id_tutoria === undefined || id_tutoria === null || !Number.isInteger(Number(id_tutoria)) || Number(id_tutoria) <= 0) {
-            throw new AppError("O campo id_tutoria é obrigatório e deve ser um número inteiro", 400);
-        }
+        validarIdObrigatorio(id_tutoria, "O campo id_tutoria é obrigatório e deve ser um número inteiro");
 
-        if (id_conteudo === undefined || id_conteudo === null || !Number.isInteger(Number(id_conteudo)) || Number(id_conteudo) <= 0) {
-            throw new AppError("O campo id_conteudo é obrigatório e deve ser um número inteiro", 400);
-        }
+        validarIdObrigatorio(id_conteudo, "O campo id_conteudo é obrigatório e deve ser um número inteiro");
 
         // titulo é obrigatório e a coluna aceita no máximo 150 caracteres
         if (typeof titulo !== "string" || titulo.trim() === "") {

@@ -1,5 +1,6 @@
 import prismaClient from "../../prisma";
 import { AppError } from "../../errors/AppError";
+import { parseEtapaOpcional } from "../../helpers/validarEtapa";
 import { calcularStatusEntrega, STATUS_ENTREGA, StatusEntrega } from "../../helpers/calcularStatusEntrega";
 import { podeResponderAtividade } from "../../helpers/podeResponderAtividade";
 
@@ -13,15 +14,7 @@ class ListAtividadesAlunoService {
     async execute({ id_aluno, status, etapa }: ListAtividadesAlunoRequest) {
 
         // filtros opcionais da query string: se vierem, precisam ser válidos
-        let etapaFiltro: number | undefined;
-
-        if (etapa !== undefined) {
-            etapaFiltro = Number(etapa);
-
-            if (![1, 2, 3].includes(etapaFiltro)) {
-                throw new AppError("A etapa deve ser 1, 2 ou 3", 400);
-            }
-        }
+        const etapaFiltro = parseEtapaOpcional(etapa);
 
         if (status !== undefined && !STATUS_ENTREGA.includes(status as StatusEntrega)) {
             throw new AppError("O status deve ser pendente, entregue ou entregue_com_atraso", 400);

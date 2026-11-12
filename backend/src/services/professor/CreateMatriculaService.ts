@@ -1,6 +1,8 @@
 import prismaClient from "../../prisma";
 import { Prisma } from "../../generated/prisma";
 import { AppError } from "../../errors/AppError";
+import { MENSAGEM_SEM_PERMISSAO_SALA } from "../../helpers/buscarSalaDoProfessor";
+import { validarId, validarIdObrigatorio } from "../../helpers/validarId";
 
 interface MatriculaRequest {
     id_sala: number;
@@ -12,9 +14,7 @@ class CreateMatriculaService {
     async execute({ id_sala, id_aluno, id_professor }: MatriculaRequest) {
 
         // o id da sala vem da URL (/salas/:id/matriculas) e precisa ser um inteiro positivo
-        if (!Number.isInteger(id_sala) || id_sala <= 0) {
-            throw new AppError("O id da sala deve ser um número inteiro", 400);
-        }
+        validarId(id_sala, "O id da sala deve ser um número inteiro");
 
         const sala = await prismaClient.sala.findUnique({
             where: {
@@ -33,13 +33,11 @@ class CreateMatriculaService {
 
         // o professor só pode matricular alunos nas próprias salas
         if (sala.id_professor !== id_professor) {
-            throw new AppError("Você não tem permissão para acessar esta sala", 403);
+            throw new AppError(MENSAGEM_SEM_PERMISSAO_SALA, 403);
         }
 
         // id_aluno é obrigatório e precisa ser um número inteiro
-        if (id_aluno === undefined || id_aluno === null || !Number.isInteger(Number(id_aluno)) || Number(id_aluno) <= 0) {
-            throw new AppError("O campo id_aluno é obrigatório e deve ser um número inteiro", 400);
-        }
+        validarIdObrigatorio(id_aluno, "O campo id_aluno é obrigatório e deve ser um número inteiro");
 
         const idAluno = Number(id_aluno);
 

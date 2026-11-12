@@ -1,15 +1,10 @@
-import path from "path";
 import prismaClient from "../../prisma";
 import { AppError } from "../../errors/AppError";
+import { validarArquivoDocumento } from "../../helpers/validarArquivo";
+import { MENSAGEM_SEM_PERMISSAO_SALA } from "../../helpers/buscarSalaDoProfessor";
 import { UploadedFile } from "express-fileupload";
 
 import { v2 as cloudinary, UploadApiResponse } from "cloudinary";
-
-// lista fechada de formatos aceitos para material de apoio (conferida pela extensão)
-const EXTENSOES_ACEITAS = [".pdf", ".doc", ".docx", ".xls", ".xlsx", ".csv"];
-
-// 10 MB; o limite global de 50 MB do server.ts continua valendo para as outras rotas
-const TAMANHO_MAXIMO = 10 * 1024 * 1024;
 
 interface MaterialRequest {
     id_aluno: number;
@@ -46,20 +41,7 @@ class CreateMaterialService {
             throw new AppError("O arquivo do material é obrigatório (campo file)", 400);
         }
 
-        if (Array.isArray(file)) {
-            throw new AppError("Envie apenas um arquivo no campo file", 400);
-        }
-
-        // ".PDF" e ".pdf" valem igual
-        const extensao = path.extname(file.name).toLowerCase();
-
-        if (!EXTENSOES_ACEITAS.includes(extensao)) {
-            throw new AppError("Formato não aceito. Envie um arquivo .pdf, .doc, .docx, .xls, .xlsx ou .csv", 400);
-        }
-
-        if (file.size > TAMANHO_MAXIMO) {
-            throw new AppError("O arquivo deve ter no máximo 10 MB", 400);
-        }
+        validarArquivoDocumento(file);
 
         // vínculo de tutor ativo do aluno logado nesta sala (mesma consulta do isTutorAtivo,
         // mas aqui precisamos do id_tutor_sala para gravar o material).
@@ -82,7 +64,7 @@ class CreateMaterialService {
 
         // o middleware já barrou quem não é tutor ativo; fica aqui por segurança
         if (!tutorSala) {
-            throw new AppError("Você não tem permissão para acessar esta sala", 403);
+            throw new AppError(MENSAGEM_SEM_PERMISSAO_SALA, 403);
         }
 
         // RN14 / UC17 02A: só anexa quem tem pelo menos uma tutoria ativa nesta sala

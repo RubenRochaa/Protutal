@@ -1,0 +1,9 @@
+.filtro{
+    width: 240px;
+}
+
+@media (max-width: 768px){
+    .filtro{
+        width: 100%;
+    }
+}

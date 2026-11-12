@@ -4,9 +4,10 @@
     gap: 12px;
     min-height: 60px;
     padding: 10px 20px 10px 16px;
-    border-radius: var(--radius-card);
+    // Linha com borda fina, sem sombra (fica dentro do card branco)
+    border: 1px solid var(--gray-300);
+    border-radius: var(--radius-item);
     background-color: var(--white);
-    box-shadow: var(--shadow-card);
 }
 
 .bolinha{
@@ -30,7 +31,7 @@
     align-items: center;
 }
 
-@media (max-width: 375px){
+@media (max-width: 480px){
     .item{
         gap: 10px;
         padding: 10px 12px;

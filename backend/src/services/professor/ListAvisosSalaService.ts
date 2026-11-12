@@ -1,5 +1,7 @@
 import prismaClient from "../../prisma";
 import { AppError } from "../../errors/AppError";
+import { MENSAGEM_SEM_PERMISSAO_SALA } from "../../helpers/buscarSalaDoProfessor";
+import { validarId } from "../../helpers/validarId";
 
 interface ListAvisosSalaRequest {
     id_sala: number;
@@ -12,9 +14,7 @@ class ListAvisosSalaService {
 
         // a rota usa só o isAuthenticated: a permissão é conferida aqui,
         // porque a rota é acessada tanto pelo aluno quanto pelo professor
-        if (!Number.isInteger(id_sala) || id_sala <= 0) {
-            throw new AppError("O id da sala deve ser um número inteiro", 400);
-        }
+        validarId(id_sala, "O id da sala deve ser um número inteiro");
 
         const sala = await prismaClient.sala.findUnique({
             where: {
@@ -32,7 +32,7 @@ class ListAvisosSalaService {
 
         // sem email no token não dá para conferir (e o Prisma ignoraria o filtro email: undefined)
         if (!email) {
-            throw new AppError("Você não tem permissão para acessar esta sala", 403);
+            throw new AppError(MENSAGEM_SEM_PERMISSAO_SALA, 403);
         }
 
         // Professor e Aluno são tabelas separadas e os ids podem se repetir,
@@ -50,7 +50,7 @@ class ListAvisosSalaService {
         if (professor) {
             // o professor só vê os avisos das próprias salas
             if (sala.id_professor !== professor.id_professor) {
-                throw new AppError("Você não tem permissão para acessar esta sala", 403);
+                throw new AppError(MENSAGEM_SEM_PERMISSAO_SALA, 403);
             }
         } else {
             // o aviso é visível a todos os alunos da sala (RN10), inclusive o tutor, que também é matriculado.
@@ -69,7 +69,7 @@ class ListAvisosSalaService {
             });
 
             if (!matricula) {
-                throw new AppError("Você não tem permissão para acessar esta sala", 403);
+                throw new AppError(MENSAGEM_SEM_PERMISSAO_SALA, 403);
             }
         }
 

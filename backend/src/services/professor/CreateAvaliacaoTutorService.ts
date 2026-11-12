@@ -1,5 +1,8 @@
 import prismaClient from "../../prisma";
 import { AppError } from "../../errors/AppError";
+import { validarFaixaNota } from "../../helpers/validarNota";
+import { MENSAGEM_SEM_PERMISSAO_SALA } from "../../helpers/buscarSalaDoProfessor";
+import { validarId } from "../../helpers/validarId";
 
 interface AvaliacaoTutorRequest {
     id_tutor_sala: number;
@@ -14,23 +17,14 @@ class CreateAvaliacaoTutorService {
         // 1) validação do id da URL e do corpo (400), antes de qualquer consulta ao banco
 
         // o id do vínculo vem da URL (/tutores-sala/:id/avaliacoes) e precisa ser um inteiro positivo
-        if (!Number.isInteger(id_tutor_sala) || id_tutor_sala <= 0) {
-            throw new AppError("O id do tutor da sala deve ser um número inteiro", 400);
-        }
+        validarId(id_tutor_sala, "O id do tutor da sala deve ser um número inteiro");
 
         // nota é obrigatória e precisa ser número de verdade no JSON (não texto)
         if (typeof nota !== "number" || !Number.isFinite(nota)) {
             throw new AppError("O campo nota é obrigatório e deve ser um número", 400);
         }
 
-        if (nota < 0 || nota > 10) {
-            throw new AppError("A nota deve estar entre 0 e 10", 400);
-        }
-
-        // a coluna é Decimal(4,2): com mais casas o banco arredondaria sem avisar
-        if (Number(nota.toFixed(2)) !== nota) {
-            throw new AppError("A nota deve ter no máximo 2 casas decimais", 400);
-        }
+        validarFaixaNota(nota, "A nota");
 
         // comentario é obrigatório no schema: não aceita vazio nem só espaços
         if (typeof comentario !== "string" || comentario.trim() === "") {
@@ -59,7 +53,7 @@ class CreateAvaliacaoTutorService {
         // 3) mesmo critério da revogação (P8): só o professor dono da sala (403).
         // tutor revogado também pode ser avaliado, e o mesmo tutor pode ter várias avaliações
         if (tutorSala.sala.id_professor !== id_professor) {
-            throw new AppError("Você não tem permissão para acessar esta sala", 403);
+            throw new AppError(MENSAGEM_SEM_PERMISSAO_SALA, 403);
         }
 
         // data fica com o default do banco (now())

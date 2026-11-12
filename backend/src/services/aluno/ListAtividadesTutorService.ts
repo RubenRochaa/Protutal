@@ -1,5 +1,6 @@
 import prismaClient from "../../prisma";
 import { AppError } from "../../errors/AppError";
+import { parseEtapaOpcional } from "../../helpers/validarEtapa";
 import { parseIdOpcional } from "../../helpers/parseIdOpcional";
 import { selectAtividadeResumo, camposAtividadeResumo, contagensAtividade } from "../../helpers/atividadeResumo";
 
@@ -17,15 +18,7 @@ class ListAtividadesTutorService {
     async execute({ id_aluno, email, id_sala, id_conteudo, etapa }: ListAtividadesTutorRequest) {
 
         // filtros opcionais da query string: se vierem, precisam ser válidos (400)
-        let etapaFiltro: number | undefined;
-
-        if (etapa !== undefined) {
-            etapaFiltro = Number(etapa);
-
-            if (![1, 2, 3].includes(etapaFiltro)) {
-                throw new AppError("A etapa deve ser 1, 2 ou 3", 400);
-            }
-        }
+        const etapaFiltro = parseEtapaOpcional(etapa);
 
         const idSalaFiltro = parseIdOpcional(id_sala, "O id da sala deve ser um número inteiro");
         const idConteudoFiltro = parseIdOpcional(id_conteudo, "O id do conteúdo deve ser um número inteiro");
