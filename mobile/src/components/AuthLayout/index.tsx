@@ -37,7 +37,8 @@ export function AuthLayout({ aba, onEntrar, onCadastrar, children }: AuthLayoutP
         <EvitarTeclado style={styles.container}>
             <RolagemTeclado contentContainerStyle={[styles.scroll, { paddingBottom: insets.bottom + spacing.xxl }]}>
                 <View style={[styles.painel, { paddingTop: insets.top + spacing.xl }]}>
-                    {/* Telas públicas: o botão fica no canto da faixa vermelha */}
+                    {/* Telas públicas: o botão fica no canto da faixa vermelha,
+                        na mesma altura e margem da linha de cima do Header das áreas logadas */}
                     <View style={[styles.botaoAcessibilidade, { top: insets.top + spacing.sm }]}>
                         <BotaoAcessibilidade />
                     </View>
@@ -106,7 +107,7 @@ const makeStyles = ({ daltonico, colors, fontSizes, fs }: TemaAtual) => StyleShe
     },
     botaoAcessibilidade:{
         position: "absolute",
-        right: spacing.lg,
+        right: spacing.md,
         zIndex: 1
     },
     logo:{

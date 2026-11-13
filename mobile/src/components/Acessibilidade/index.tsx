@@ -135,7 +135,7 @@ export function BotaoAcessibilidade(){
             accessibilityRole="button"
             accessibilityLabel={ROTULO_ACESSIBILIDADE}
             accessibilityState={{ expanded: aberto }}
-            hitSlop={6}
+            hitSlop={8}
             >
                 <MaterialCommunityIcons name="human-handsup" size={24} color={colors.textoSobreDestaque} />
             </TouchableOpacity>
@@ -153,9 +153,10 @@ export function BotaoAcessibilidade(){
 }
 
 const makeStyles = ({ colors, fontSizes, fs }: TemaAtual) => StyleSheet.create({
+    // Mesma caixa dos ícones do Header: 28 px + hitSlop de 8 px = área de toque de 44 px
     botaoIcone:{
-        minWidth: 32,
-        minHeight: 32,
+        width: 28,
+        height: 28,
         alignItems: "center",
         justifyContent: "center"
     },
