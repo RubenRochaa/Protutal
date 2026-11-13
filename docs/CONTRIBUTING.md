@@ -1,3 +1,7 @@
+<h1 align="center">
+  <img src="banner_contributing.svg" alt="Guia de contribuição do Protutal" width="100%">
+</h1>
+
 Este documento descreve o workflow de branches, as regras de pull request, o padrão de commits e as convenções de código adotados pelo grupo no repositório do Protutal.
 
 ## Workflow de branches
@@ -89,7 +93,7 @@ O code freeze é o congelamento do código para a entrega final. A partir dele o
 
 | Item | Regra |
 | --- | --- |
-| Data do congelamento | [DATA] |
+| Data do congelamento | 12/11/2026 |
 | O que entra depois da data | Somente correções de bugs, em branches `fix-*` |
 | O que não entra depois da data | Funcionalidades novas (`feature-*`), mudanças de escopo e refatorações que não corrigem um bug |
 | Versão final | O commit da `main` que representa a entrega recebe a tag `v1.0.0` |

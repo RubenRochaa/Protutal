@@ -1,4 +1,6 @@
-# 👨‍🏫Protutal
+<h1 align="center">
+  <img src="docs/banner_readme.svg" alt="Protutal - Tutoria entre alunos da rede SESI" width="100%">
+</h1>
 
 Protutal conectando o professor e estimulando o aluno a ser tutor..
 
