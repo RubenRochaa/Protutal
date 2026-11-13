@@ -21,6 +21,10 @@ type AuthContextData = {
     // Área mostrada para o aluno que é tutor ("aluno" ou "tutor")
     area: Area;
     trocarArea: () => Promise<void>;
+    // Só para aluno: confere de novo se virou (ou deixou de ser) tutor. Chamada pelo ProvedorContadores
+    conferirTutor: () => Promise<void>;
+    // Bolinha no ícone de troca: pedido de tutoria aceito e o aluno ainda não abriu a área do tutor
+    bolinhaTroca: boolean;
 }
 
 type UserProps = {
@@ -49,9 +53,43 @@ const ROTA_SESSAO = {
 
 const STORAGE_USER = "@protutal";
 const STORAGE_AREA = "@protutal:area";
+// Último estado de tutor conhecido, por id do aluno (ex.: "@protutal:tutor:12").
+// Não é apagado no signOut: assim o aviso de pedido aceito aparece uma vez só, mesmo saindo e entrando
+const STORAGE_TUTOR = "@protutal:tutor:";
 
 // Resposta das rotas do tutor quando o vínculo foi revogado (middleware isTutor do back)
 const MSG_SEM_VINCULO = "Acesso permitido somente para tutores com vínculo ativo";
+
+// Aviso informativo (não é erro) quando o vínculo acaba com a área do tutor aberta
+const MSG_VINCULO_ENCERRADO = "Seu vínculo de tutor foi encerrado. Você voltou para a área do aluno.";
+
+const MSG_TUTORIA_ACEITA ="Seu pedido de tutoria foi aceito! Toque no ícone de troca para acessar a área do tutor.";
+
+// O que fica salvo em STORAGE_TUTOR
+type EstadoTutor = {
+    tutor: boolean;
+    // true até o aluno abrir a área do tutor pela primeira vez depois do aceite
+    bolinha: boolean;
+}
+
+async function lerEstadoTutor(id: number): Promise<EstadoTutor | null> {
+    try {
+        const salvo = JSON.parse(await AsyncStorage.getItem(STORAGE_TUTOR + id) || "null");
+        if(salvo && typeof salvo.tutor === "boolean") return { tutor: salvo.tutor, bolinha: !!salvo.bolinha };
+    } catch {
+        // Valor inválido ou falha na leitura: trata como "nada salvo"
+    }
+
+    return null;
+}
+
+async function gravarEstadoTutor(id: number, estado: EstadoTutor){
+    try {
+        await AsyncStorage.setItem(STORAGE_TUTOR + id, JSON.stringify(estado));
+    } catch {
+        // Sem como guardar: vale só enquanto o app estiver aberto
+    }
+}
 
 const USER_VAZIO: UserProps = {
     id: 0,
@@ -64,15 +102,21 @@ const USER_VAZIO: UserProps = {
 export const AuthContext = createContext({} as AuthContextData);
 
 // Tutor não é perfil de login: ele entra como aluno, e a rota T1 diz se ele é tutor
-// (200, mesmo com lista vazia) ou não (403). Erro de rede ou 500: tratado como "não é tutor",
-// igual ao site (o ícone de troca fica escondido).
-async function verificarTutor(): Promise<boolean> {
+// (200, mesmo com lista vazia) ou não (403). Erro de rede ou 500: null (não deu para saber)
+async function consultarTutor(): Promise<boolean | null> {
     try {
         await api.get("/tutores/me/tutorias");
         return true;
-    } catch {
-        return false;
+    } catch(err) {
+        if(isAxiosError(err) && err.response?.status === 403) return false;
+        return null;
     }
+}
+
+// No login e ao reabrir o app, "não deu para saber" vale como "não é tutor",
+// igual ao site (o ícone de troca fica escondido).
+async function verificarTutor(): Promise<boolean> {
+    return (await consultarTutor()) ?? false;
 }
 
 export function AuthProvider({children}: AuthProviderProps){
@@ -81,6 +125,7 @@ export function AuthProvider({children}: AuthProviderProps){
     const [user, setUser] = useState<UserProps>(USER_VAZIO)
     const [ehTutor, setEhTutor] = useState(false)
     const [area, setArea] = useState<Area>("aluno")
+    const [bolinhaTroca, setBolinhaTroca] = useState(false)
 
     const [loadingAuth, setLoadingAuth] = useState(false)
     const [loading, setLoading] = useState(true)
@@ -91,8 +136,14 @@ export function AuthProvider({children}: AuthProviderProps){
     const areaRef = useRef<Area>("aluno");
     areaRef.current = area;
 
+    // Id do usuário logado agora: uma conferência que termina depois de sair (ou trocar de conta) é descartada
+    const idRef = useRef(0);
+    idRef.current = user.id;
+    const conferindo = useRef(false);
+
     const signOut = useCallback(async () => {
-        // Remove só as chaves do Protutal (o AsyncStorage.clear apagaria tudo do app)
+        // Remove só as chaves do Protutal (o AsyncStorage.clear apagaria tudo do app).
+        // O último estado de tutor (STORAGE_TUTOR) fica, para o aviso não se repetir
         await AsyncStorage.multiRemove([STORAGE_USER, STORAGE_AREA]);
 
         delete api.defaults.headers.common["Authorization"];
@@ -100,7 +151,63 @@ export function AuthProvider({children}: AuthProviderProps){
         setUser(USER_VAZIO);
         setEhTutor(false);
         setArea("aluno");
+        setBolinhaTroca(false);
     }, [])
+
+    // Pedido de tutoria aceito (ou vínculo revogado) com o app aberto. Roda junto com a busca dos contadores
+    // da área do aluno (ao abrir a área, ao focar as telas e a cada 60 s com o app em primeiro plano).
+    // Não existe rota para o aluno ver os próprios pedidos: só o aceite é percebido, pela mesma rota do login
+    const conferirTutor = useCallback(async () => {
+        const id = user.id;
+        if(user.perfil !== "aluno" || !id || conferindo.current) return;
+
+        conferindo.current = true;
+
+        try {
+            const tutor = await consultarTutor();
+            // Sem conexão ou erro do servidor: não muda nada
+            if(tutor === null || idRef.current !== id) return;
+
+            const salvo = await lerEstadoTutor(id);
+            if(idRef.current !== id) return;
+
+            setEhTutor(tutor);
+
+            // Primeira vez neste aparelho: só guarda o estado atual, sem aviso
+            if(!salvo){
+                await gravarEstadoTutor(id, { tutor, bolinha: false });
+                setBolinhaTroca(false);
+                return;
+            }
+
+            // Não era tutor e agora é: o professor aceitou o pedido
+            if(tutor && !salvo.tutor){
+                await gravarEstadoTutor(id, { tutor: true, bolinha: true });
+                setBolinhaTroca(true);
+                showToast("sucesso", MSG_TUTORIA_ACEITA);
+                return;
+            }
+
+            // Era tutor e não é mais: vínculo revogado. Na área do aluno, sem aviso;
+            // na área do tutor, volta para a do aluno com o mesmo aviso informativo do interceptor
+            if(!tutor && salvo.tutor){
+                await gravarEstadoTutor(id, { tutor: false, bolinha: false });
+                setBolinhaTroca(false);
+
+                if(areaRef.current === "tutor"){
+                    await AsyncStorage.setItem(STORAGE_AREA, "aluno");
+                    setArea("aluno");
+                    showToast("sucesso", MSG_VINCULO_ENCERRADO);
+                }
+                return;
+            }
+
+            // Nada mudou: mantém a bolinha que estava salva (ex.: reabriu o app sem ter trocado de área)
+            setBolinhaTroca(tutor && salvo.bolinha);
+        } finally {
+            conferindo.current = false;
+        }
+    }, [user.id, user.perfil, showToast])
 
     // Reabrindo o app: recupera o usuário salvo e confere de novo se ainda é tutor
     useEffect(() => {
@@ -154,7 +261,7 @@ export function AuthProvider({children}: AuthProviderProps){
                 }
 
                 // Vínculo de tutor revogado com a área do tutor aberta: volta para a área do aluno,
-                // como o site faz (redirect para /aluno no layout do tutor)
+                // como o site faz (redirect para /aluno no layout do tutor), com um aviso informativo
                 if(
                     isAxiosError(err) &&
                     err.response?.status === 403 &&
@@ -164,7 +271,7 @@ export function AuthProvider({children}: AuthProviderProps){
                     await AsyncStorage.setItem(STORAGE_AREA, "aluno");
                     setEhTutor(false);
                     setArea("aluno");
-                    showToast("erro", MSG_SEM_VINCULO);
+                    showToast("sucesso", MSG_VINCULO_ENCERRADO);
                 }
 
                 return Promise.reject(err);
@@ -226,6 +333,12 @@ export function AuthProvider({children}: AuthProviderProps){
 
         await AsyncStorage.setItem(STORAGE_AREA, nova);
         setArea(nova);
+
+        // Primeira ida para a área do tutor depois do aceite: apaga a bolinha do ícone de troca
+        if(nova === "tutor" && bolinhaTroca){
+            setBolinhaTroca(false);
+            await gravarEstadoTutor(user.id, { tutor: true, bolinha: false });
+        }
     }
 
     return(
@@ -239,7 +352,9 @@ export function AuthProvider({children}: AuthProviderProps){
             signOut,
             ehTutor,
             area,
-            trocarArea
+            trocarArea,
+            conferirTutor,
+            bolinhaTroca
             }}>
             {children}
         </AuthContext.Provider>

@@ -26,8 +26,8 @@ export function useTabOpcoes(){
             }
         }
 
-        // Ícone e rótulo de uma aba. O rótulo quebra em até 2 linhas,
-        // para os nomes do menu do site caberem sem ser cortados (ex.: "Minhas atividades")
+        // Ícone e rótulo de uma aba. Rótulo de uma palavra, em uma linha só: se não couber
+        // (ex.: 5 abas do tutor com a fonte em 150%), a fonte diminui um pouco em vez de cortar o texto
         function tabOptions(label: string, icon: IconName): BottomTabNavigationOptions {
             return {
                 title: label,
@@ -35,7 +35,9 @@ export function useTabOpcoes(){
                 tabBarIcon: ({ color, size }) => <Feather name={icon} size={size - 2} color={color} />,
                 tabBarLabel: ({ color }) => (
                     <Text
-                    numberOfLines={2}
+                    numberOfLines={1}
+                    adjustsFontSizeToFit
+                    minimumFontScale={0.75}
                     style={{
                         color,
                         fontFamily: fonts.medium,

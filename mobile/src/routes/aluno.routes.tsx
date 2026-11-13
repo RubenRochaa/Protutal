@@ -119,10 +119,10 @@ function AbasAluno() {
         // tabBarHideOnKeyboard: no Android a barra some com o teclado aberto (campo do chat e formulários)
         <Tab.Navigator screenOptions={{ ...tabScreenOptions, popToTopOnBlur: true, tabBarHideOnKeyboard: true }}>
             <Tab.Screen name="Inicio" component={InicioStack} options={tabOptions("Início", "home")} />
-            <Tab.Screen name="Atividades" component={AtividadesStack} options={{ ...tabOptions("Minhas atividades", "book"), ...badgeAba(menu.atividades) }} />
+            <Tab.Screen name="Atividades" component={AtividadesStack} options={{ ...tabOptions("Atividades", "book"), ...badgeAba(menu.atividades) }} />
             {/* Chat e avisos ficam dentro da Tutoria: o contador soma os dois */}
             <Tab.Screen name="Tutoria" component={TutoriaStack} options={{ ...tabOptions("Tutoria", "message-circle"), ...badgeAba(menu.tutoria) }} />
-            <Tab.Screen name="Desempenho" component={DesempenhoStack} options={{ ...tabOptions("Meu desempenho", "trending-up"), ...badgeAba(menu.desempenho) }} />
+            <Tab.Screen name="Desempenho" component={DesempenhoStack} options={{ ...tabOptions("Desempenho", "trending-up"), ...badgeAba(menu.desempenho) }} />
         </Tab.Navigator>
     )
 }
