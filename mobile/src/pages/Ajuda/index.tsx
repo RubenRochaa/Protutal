@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useRef, useState, useMemo } from "react";
 import {
     View,
     Text,
@@ -15,6 +15,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { Header } from "../../components/Header";
+import { BotaoAcessibilidade } from "../../components/Acessibilidade";
 import { Card } from "../../components/Card";
 import { AuthContext } from "../../contexts/AuthContext";
 import { ToastContext } from "../../contexts/ToastContext";
@@ -30,7 +31,8 @@ import {
 } from "../../lib/rodapeLinks";
 import { LOGO_MODO_ESCURO } from "../../lib/mascotes";
 import { AuthStackParamsList } from "../../routes/auth.routes";
-import { colors, fonts, fontSizes, radius, spacing } from "../../styles/theme";
+import { useTema, type TemaAtual } from "../../lib/useTema";
+import { fonts, radius, spacing } from "../../styles/theme";
 
 type IconeFeather = React.ComponentProps<typeof Feather>["name"];
 
@@ -47,6 +49,9 @@ const CONTATOS: { icone: IconeFeather; texto: string; url: string }[] = [
 // vê também as seções do próprio perfil (SECOES_POR_PERFIL). No fim, "Fale conosco" com o
 // conteúdo do rodapé do site
 export default function Ajuda(){
+    const temaAtual = useTema();
+    const styles = useMemo(() => makeStyles(temaAtual), [temaAtual]);
+    const { colors } = temaAtual;
     // A tela fica em várias pilhas: o tipo das rotas públicas só é usado no "Voltar para o login"
     const navigation = useNavigation<NativeStackNavigationProp<AuthStackParamsList>>();
     const insets = useSafeAreaInsets();
@@ -81,7 +86,10 @@ export default function Ajuda(){
                     resizeMode="contain"
                     accessibilityLabel="Protutal"
                     />
-                    <Text style={styles.tituloFaixa} accessibilityRole="header">Ajuda</Text>
+                    <View style={styles.linhaTituloFaixa}>
+                        <Text style={styles.tituloFaixa} accessibilityRole="header">Ajuda</Text>
+                        <BotaoAcessibilidade />
+                    </View>
                 </View>
             )}
 
@@ -132,6 +140,9 @@ export default function Ajuda(){
 // Uma pergunta do FAQ (acordeão): começa fechada, abre e fecha com um toque
 // e a seta gira, como o <details> do site
 function ItemFaq({ item }: { item: PerguntaFaq }){
+    const temaAtual = useTema();
+    const styles = useMemo(() => makeStyles(temaAtual), [temaAtual]);
+    const { colors } = temaAtual;
     const [aberto, setAberto] = useState(false);
     const giro = useRef(new Animated.Value(0)).current;
 
@@ -167,13 +178,19 @@ function ItemFaq({ item }: { item: PerguntaFaq }){
     )
 }
 
-const styles = StyleSheet.create({
+const makeStyles = ({ daltonico, colors, fontSizes, fs }: TemaAtual) => StyleSheet.create({
     container:{
         flex: 1,
-        backgroundColor: colors.white
+        backgroundColor: colors.fundoPagina
+    },
+    linhaTituloFaixa:{
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+        gap: spacing.sm
     },
     faixa:{
-        backgroundColor: colors.red700,
+        backgroundColor: colors.destaque,
         paddingHorizontal: spacing.lg,
         paddingBottom: spacing.md,
         gap: spacing.sm
@@ -184,8 +201,8 @@ const styles = StyleSheet.create({
     },
     tituloFaixa:{
         fontFamily: fonts.semibold,
-        fontSize: 20,
-        color: colors.white
+        fontSize: fs(20),
+        color: colors.textoSobreDestaque
     },
     conteudo:{
         flexGrow: 1,
@@ -199,6 +216,7 @@ const styles = StyleSheet.create({
         gap: spacing.sm
     },
     textoVoltar:{
+        textDecorationLine: daltonico ? "underline" : "none",
         fontFamily: fonts.medium,
         fontSize: fontSizes.base,
         color: colors.red700
@@ -220,19 +238,19 @@ const styles = StyleSheet.create({
     textoPergunta:{
         flex: 1,
         fontFamily: fonts.medium,
-        fontSize: 15,
+        fontSize: fs(15),
         color: colors.black
     },
     resposta:{
         paddingHorizontal: spacing.md,
         paddingBottom: spacing.md,
         fontFamily: fonts.regular,
-        fontSize: 14,
+        fontSize: fs(14),
         color: colors.gray700
     },
     identificacao:{
         fontFamily: fonts.regular,
-        fontSize: 13,
+        fontSize: fs(13),
         color: colors.gray700
     },
     contato:{
@@ -241,9 +259,10 @@ const styles = StyleSheet.create({
         gap: spacing.sm
     },
     textoContato:{
+        textDecorationLine: daltonico ? "underline" : "none",
         flex: 1,
         fontFamily: fonts.medium,
-        fontSize: 14,
+        fontSize: fs(14),
         color: colors.red700
     }
 })

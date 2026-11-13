@@ -20,6 +20,7 @@ export function Mascote({ imagem, className, preload = false }: Props){
         height={TAMANHO_MASCOTE_PX}
         className={className}
         preload={preload}
+        data-mascote
         />
     )
 }

@@ -4,6 +4,7 @@ import { getCookieServer, getNomeServer, getPerfilServer } from '@/lib/cookieSer
 import { getAutenticado } from '@/lib/apiServer'
 import { sessaoExpiradaNaPagina } from '@/lib/sessaoExpirada'
 import { MENU_ALUNO, MENU_PROFESSOR } from '@/lib/menus'
+import { BotaoAcessibilidade } from '@/components/acessibilidade'
 
 // Moldura da página de Ajuda. Ela fica fora das áreas /professor e /aluno,
 // então o menu do Header é escolhido aqui pelo cookie "perfil".
@@ -14,7 +15,13 @@ export default async function AjudaLayout({ children }: { children: React.ReactN
     const perfil = await getPerfilServer()
 
     if(!token || !perfil){
-        return <AreaComRodape>{children}</AreaComRodape>
+        return (
+            <AreaComRodape>
+                {/* Sem Header: o botão de Acessibilidade fica no canto superior direito */}
+                <BotaoAcessibilidade />
+                {children}
+            </AreaComRodape>
+        )
     }
 
     const nome = await getNomeServer()

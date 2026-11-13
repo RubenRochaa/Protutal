@@ -1,8 +1,9 @@
-import React, { ComponentProps, useState } from "react";
+import React, { ComponentProps, useState, useMemo } from "react";
 import { View, Text, TextInput, TextInputProps, StyleSheet, TouchableOpacity } from "react-native";
 import { Feather } from "@expo/vector-icons";
 
-import { colors, fonts, fontSizes, radius, sizes, spacing } from "../../styles/theme";
+import { useTema, type TemaAtual } from "../../lib/useTema";
+import { fonts, radius, sizes, spacing } from "../../styles/theme";
 
 interface InputProps extends TextInputProps {
     label: string;
@@ -13,6 +14,9 @@ interface InputProps extends TextInputProps {
 // Campo de formulário com o rótulo em cima, como no site.
 // Com secureTextEntry, mostra o botão de olho para ver a senha.
 export function Input({ label, icon, secureTextEntry, style, onFocus, onBlur, ...rest }: InputProps){
+    const temaAtual = useTema();
+    const styles = useMemo(() => makeStyles(temaAtual), [temaAtual]);
+    const { colors } = temaAtual;
     const [focado, setFocado] = useState(false);
     const [senhaVisivel, setSenhaVisivel] = useState(false);
 
@@ -47,7 +51,7 @@ export function Input({ label, icon, secureTextEntry, style, onFocus, onBlur, ..
     )
 }
 
-const styles = StyleSheet.create({
+const makeStyles = ({ colors, fontSizes, fs }: TemaAtual) => StyleSheet.create({
     campo:{
         width: "100%",
         gap: spacing.xs
@@ -61,7 +65,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         gap: spacing.sm,
-        height: sizes.input,
+        minHeight: sizes.input,
         paddingHorizontal: spacing.md,
         borderWidth: 1,
         borderColor: colors.borderInput,
@@ -73,10 +77,11 @@ const styles = StyleSheet.create({
     },
     input:{
         flex: 1,
-        height: "100%",
+        alignSelf: "stretch",
+        minHeight: sizes.input - 2,
         paddingVertical: 0,
         fontFamily: fonts.regular,
-        fontSize: 15,
+        fontSize: fs(15),
         color: colors.black
     }
 })

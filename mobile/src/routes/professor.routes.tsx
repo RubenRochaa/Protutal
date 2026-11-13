@@ -16,7 +16,7 @@ import Ajuda from "../pages/Ajuda";
 import { SubAbaSala } from "../pages/professor/Sala/abas";
 import { StatusContestacao } from "../lib/types";
 import { ProvedorContadores } from "../lib/useContadores";
-import { tabOptions, tabScreenOptions } from "./tabOptions";
+import { useTabOpcoes } from "./tabOptions";
 
 // Telas da área do professor (menu do site em design/src/lib/menus.ts).
 // Cada aba tem a sua pilha; as telas abertas de mais de uma aba (sala, notificações...)
@@ -107,6 +107,8 @@ function DesempenhoStack(){
 }
 
 function ProfessorRoutes() {
+    const { tabScreenOptions, tabOptions } = useTabOpcoes();
+
     return(
         // Contador do sino do Header (pedidos + contestações pendentes)
         <ProvedorContadores area="professor">

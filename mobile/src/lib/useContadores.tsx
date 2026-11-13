@@ -101,7 +101,7 @@ interface Props {
 // Header, abas e telas leem o mesmo resultado: nenhuma tela faz chamada extra para os contadores.
 // Ao trocar de área ou sair, o provider desmonta: o intervalo para e os contadores somem da memória
 export function ProvedorContadores({ area, children }: Props){
-    const { user } = useContext(AuthContext);
+    const { user, conferirTutor } = useContext(AuthContext);
     // Mesmo id do "sub" do token, que o site usa na chave (id_aluno ou id_professor)
     const idUsuario = user.id ? String(user.id) : null;
 
@@ -118,6 +118,10 @@ export function ProvedorContadores({ area, children }: Props){
     const buscar = useCallback(async () => {
         const numero = ++ultimaBusca.current;
         inicioUltimaBusca.current = Date.now();
+
+        // Na área do aluno, aproveita a mesma hora para ver se o pedido de tutoria foi aceito
+        // (na área do tutor, a revogação do vínculo já é tratada pelo interceptor do AuthContext)
+        if(area === "aluno") conferirTutor();
 
         try {
             const resposta = await buscarDadosContadores(area);
@@ -145,7 +149,7 @@ export function ProvedorContadores({ area, children }: Props){
         } catch {
             // API fora ou sem conexão: mantém os últimos contadores, sem toast
         }
-    }, [area, idUsuario])
+    }, [area, idUsuario, conferirTutor])
 
     // Foco de uma tela (equivale à troca de página do site) e abertura da área.
     // A tela em foco roda o efeito antes do provider: as duas chamadas viram uma busca só

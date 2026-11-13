@@ -25,29 +25,29 @@ export function Footer(){
                 <p className={styles.identificacao}>{IDENTIFICACAO}</p>
 
                 <address className={styles.bloco}>
-                    <a href={EMAIL_SUPORTE_URL} className={styles.link}>
+                    <a href={EMAIL_SUPORTE_URL} className={`${styles.link} link-texto`}>
                         <Mail size={16} aria-hidden="true" />
                         {EMAIL_SUPORTE}
                     </a>
 
-                    <a href={WHATSAPP_URL} {...EXTERNO} className={styles.link}>
+                    <a href={WHATSAPP_URL} {...EXTERNO} className={`${styles.link} link-texto`}>
                         <MessageCircle size={16} aria-hidden="true" />
                         WhatsApp {WHATSAPP_TEXTO}
                     </a>
                 </address>
 
                 <nav aria-label="Links do rodapé" className={styles.bloco}>
-                    <Link href={AJUDA_URL} className={styles.link}>
+                    <Link href={AJUDA_URL} className={`${styles.link} link-texto`}>
                         <CircleQuestionMark size={16} aria-hidden="true" />
                         Perguntas frequentes
                     </Link>
 
-                    <a href={GITHUB_URL} {...EXTERNO} className={styles.link}>
+                    <a href={GITHUB_URL} {...EXTERNO} className={`${styles.link} link-texto`}>
                         <FolderGit2 size={16} aria-hidden="true" />
                         Repositório no GitHub
                     </a>
 
-                    <a href={FORM_MELHORIA_URL} {...EXTERNO} className={styles.link}>
+                    <a href={FORM_MELHORIA_URL} {...EXTERNO} className={`${styles.link} link-texto`}>
                         <MessageSquareHeart size={16} aria-hidden="true" />
                         Nos ajude a melhorar
                     </a>

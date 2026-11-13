@@ -63,7 +63,7 @@ export default async function SalaLayout({ children, params }: Props){
                 {/* Barra e as duas linhas de abas ficam juntas, num bloco só */}
                 <div className={styles.topoSala}>
                     <div className={styles.barra}>
-                        <Link href="/professor#salas" className={styles.voltar}>
+                        <Link href="/professor#salas" className={`${styles.voltar} link-texto`}>
                             <ArrowLeft size={20} aria-hidden="true" />
                             Minhas salas
                         </Link>

@@ -3,6 +3,7 @@
 import styles from './styles.module.scss'
 import { useEffect, useId, useRef } from 'react'
 import { X } from 'lucide-react'
+import { ToasterModal } from '@/components/acessibilidade/toasterTema'
 
 interface Props {
     aberto: boolean;
@@ -54,7 +55,7 @@ export function Modal({ aberto, onFechar, titulo, children, acoes }: Props){
                     <h2 id={tituloId} className={styles.titulo}>{titulo}</h2>
 
                     <button type="button" className={styles.fechar} onClick={onFechar} aria-label="Fechar">
-                        <X size={24} />
+                        <X size={24} aria-hidden="true" />
                     </button>
                 </div>
 
@@ -64,6 +65,9 @@ export function Modal({ aberto, onFechar, titulo, children, acoes }: Props){
 
                 {acoes && <div className={styles.acoes}>{acoes}</div>}
             </div>
+
+            {/* Toast por cima do modal (o do layout fica atrás do dialog, na top layer) */}
+            <ToasterModal aberto={aberto} />
         </dialog>
     )
 }

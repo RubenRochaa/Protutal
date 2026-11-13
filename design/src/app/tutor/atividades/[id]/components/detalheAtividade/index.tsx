@@ -28,7 +28,7 @@ function Indisponivel(){
             <EmptyState
             imagem={MASCOTES.badRequest}
             mensagem="Atividade não encontrada ou você não tem acesso a ela."
-            acao={<Link href="/tutor/atividades" className={lista.voltar}>Ir para Atividades</Link>}
+            acao={<Link href="/tutor/atividades" className={`${lista.voltar} link-texto`}>Ir para Atividades</Link>}
             />
         </Card>
     )

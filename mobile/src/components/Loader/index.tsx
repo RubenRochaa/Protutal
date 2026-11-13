@@ -1,7 +1,7 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useMemo } from "react";
 import { View, Animated, Easing, StyleSheet } from "react-native";
 
-import { colors } from "../../styles/theme";
+import { useTema, type TemaAtual } from "../../lib/useTema";
 
 interface LoaderProps {
     // "pequeno" = dentro de botões; "medio" = seções e cards; "grande" = tela inteira
@@ -18,6 +18,9 @@ const MEDIDAS = {
 
 // Anel de carregamento igual ao do site: trilha bem clara e o arco de cima girando.
 export function Loader({ size = "medio", variant = "vermelho" }: LoaderProps){
+    const temaAtual = useTema();
+    const styles = useMemo(() => makeStyles(temaAtual), [temaAtual]);
+    const { colors } = temaAtual;
     const giro = useRef(new Animated.Value(0)).current;
 
     useEffect(() => {
@@ -35,7 +38,7 @@ export function Loader({ size = "medio", variant = "vermelho" }: LoaderProps){
     }, [giro]);
 
     const { tamanho, borda } = MEDIDAS[size];
-    const cor = variant === "branco" ? colors.white : colors.red700;
+    const cor = variant === "branco" ? colors.textoSobreDestaque : colors.red700;
     const rotate = giro.interpolate({ inputRange: [0, 1], outputRange: ["0deg", "360deg"] });
 
     const anel = {
@@ -62,7 +65,7 @@ export function Loader({ size = "medio", variant = "vermelho" }: LoaderProps){
     )
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (_tema: TemaAtual) => StyleSheet.create({
     anel:{
         position: "absolute",
         top: 0,

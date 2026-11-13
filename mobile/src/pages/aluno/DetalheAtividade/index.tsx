@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useMemo } from "react";
 import {
     View,
     Text,
@@ -27,7 +27,8 @@ import { formatarData, formatarDataHora, formatarNota, rotuloTipo } from "../../
 import { MASCOTES } from "../../../lib/mascotes";
 import { AtividadeDetalhe, AtividadeDetalheAluno, TipoAtividadeOpcao } from "../../../lib/types";
 import { AlunoScreenProps } from "../../../routes/aluno.routes";
-import { colors, fonts, fontSizes, radius, spacing } from "../../../styles/theme";
+import { useTema, type TemaAtual } from "../../../lib/useTema";
+import { fonts, radius, spacing } from "../../../styles/theme";
 
 // Respostas da A2 que significam "esta atividade não pode ser aberta":
 // 400 (id inválido), 403 (não é destinatário) e 404 (não existe). Estado da tela, sem toast
@@ -40,6 +41,9 @@ interface Dados {
 
 // Linha com ícone, rótulo e valor (bloco de informações do Figma)
 function Info({ icone, rotulo, valor, destaque }: { icone: React.ComponentProps<typeof Feather>["name"]; rotulo: string; valor: string; destaque?: boolean }){
+    const temaAtual = useTema();
+    const styles = useMemo(() => makeStyles(temaAtual), [temaAtual]);
+    const { colors } = temaAtual;
     return (
         <View style={styles.info}>
             <Feather name={icone} size={18} color={destaque ? colors.red700 : colors.gray700} />
@@ -54,6 +58,9 @@ function Info({ icone, rotulo, valor, destaque }: { icone: React.ComponentProps<
 // Tela "Detalhe da atividade" (rotas A2, T8 e A14). Embaixo dos dados da atividade, o que o aluno pode fazer:
 // enviar a resposta, ver a resposta e a correção (com o botão de contestar) ou o aviso de tutoria finalizada
 export default function DetalheAtividade({ navigation, route }: AlunoScreenProps<"DetalheAtividade">){
+    const temaAtual = useTema();
+    const styles = useMemo(() => makeStyles(temaAtual), [temaAtual]);
+    const { colors } = temaAtual;
     const { id_atividade } = route.params;
 
     // A atividade (A2) e os rótulos dos tipos (T8) ao mesmo tempo. Se só a T8 falhar, o tipo aparece sem rótulo
@@ -206,10 +213,10 @@ export default function DetalheAtividade({ navigation, route }: AlunoScreenProps
     )
 }
 
-const styles = StyleSheet.create({
+const makeStyles = ({ daltonico, colors, fontSizes, fs }: TemaAtual) => StyleSheet.create({
     container:{
         flex: 1,
-        backgroundColor: colors.white
+        backgroundColor: colors.fundoPagina
     },
     conteudo:{
         flexGrow: 1,
@@ -234,7 +241,7 @@ const styles = StyleSheet.create({
     },
     infoValor:{
         fontFamily: fonts.medium,
-        fontSize: 15,
+        fontSize: fs(15),
         color: colors.black
     },
     vencido:{
@@ -245,7 +252,7 @@ const styles = StyleSheet.create({
         borderTopWidth: 1,
         borderTopColor: colors.gray300,
         fontFamily: fonts.regular,
-        fontSize: 15,
+        fontSize: fs(15),
         color: colors.black
     },
     arquivo:{
@@ -258,8 +265,9 @@ const styles = StyleSheet.create({
         borderRadius: radius.item
     },
     arquivoTexto:{
+        textDecorationLine: daltonico ? "underline" : "none",
         fontFamily: fonts.medium,
-        fontSize: 15,
+        fontSize: fs(15),
         color: colors.red700
     },
     bloco:{
@@ -267,7 +275,7 @@ const styles = StyleSheet.create({
     },
     texto:{
         fontFamily: fonts.regular,
-        fontSize: 15,
+        fontSize: fs(15),
         color: colors.black
     },
     nota:{

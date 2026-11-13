@@ -17,7 +17,7 @@ import Feedbacks from "../pages/tutor/Feedbacks";
 import Desempenho from "../pages/tutor/Desempenho";
 import Ajuda from "../pages/Ajuda";
 import { ProvedorContadores, useContadores } from "../lib/useContadores";
-import { badgeAba, tabOptions, tabScreenOptions } from "./tabOptions";
+import { useTabOpcoes } from "./tabOptions";
 
 // Telas da área do tutor (menu do site em design/src/app/tutor/layout.tsx).
 // Cada aba tem a sua pilha; as telas usadas por mais de uma aba são registradas em cada pilha,
@@ -124,6 +124,7 @@ function DesempenhoStack(){
 // O de Contestações, que não é aba, aparece no card do Início
 function AbasTutor() {
     const { menu } = useContadores();
+    const { tabScreenOptions, tabOptions, badgeAba } = useTabOpcoes();
 
     return(
         // Mesmo comportamento da área do aluno: a aba que ficou para trás volta para a primeira tela

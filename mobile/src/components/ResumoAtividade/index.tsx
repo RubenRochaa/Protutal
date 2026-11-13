@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { Feather } from "@expo/vector-icons";
 
-import { colors, fonts, fontSizes, radius, shadows, spacing } from "../../styles/theme";
+import { useTema, type TemaAtual } from "../../lib/useTema";
+import { fonts, radius, shadows, spacing } from "../../styles/theme";
 
 interface ResumoAtividadeProps {
     titulo: string;
@@ -13,10 +14,13 @@ interface ResumoAtividadeProps {
 // Card do topo das telas de envio de resposta e de contestação (Figma):
 // ícone de documento, "Atividade: título" e a linha de detalhe
 export function ResumoAtividade({ titulo, detalhe }: ResumoAtividadeProps){
+    const temaAtual = useTema();
+    const styles = useMemo(() => makeStyles(temaAtual), [temaAtual]);
+    const { colors } = temaAtual;
     return (
         <View style={styles.card}>
             <View style={styles.icone}>
-                <Feather name="file-text" size={24} color={colors.white} />
+                <Feather name="file-text" size={24} color={colors.textoSobreDestaque} />
             </View>
 
             <View style={styles.dados}>
@@ -30,7 +34,7 @@ export function ResumoAtividade({ titulo, detalhe }: ResumoAtividadeProps){
     )
 }
 
-const styles = StyleSheet.create({
+const makeStyles = ({ colors, fontSizes }: TemaAtual) => StyleSheet.create({
     card:{
         flexDirection: "row",
         alignItems: "center",

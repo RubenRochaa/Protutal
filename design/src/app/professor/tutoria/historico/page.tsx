@@ -24,7 +24,7 @@ export default async function HistoricoTutoriaPage(){
             <PageBanner titulo="Anos Passados" />
 
             <div className={pagina.conteudo}>
-                <Link href="/professor/tutoria" className={lista.voltar}>
+                <Link href="/professor/tutoria" className={`${lista.voltar} link-texto`}>
                     <ArrowLeft size={18} aria-hidden="true" /> Anos de Tutoria
                 </Link>
 

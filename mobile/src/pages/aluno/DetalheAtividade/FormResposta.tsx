@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useMemo } from "react";
 import { Text, StyleSheet } from "react-native";
 
 import { Card } from "../../../components/Card";
@@ -9,7 +9,8 @@ import { ToastContext } from "../../../contexts/ToastContext";
 
 import { api } from "../../../services/api";
 import { getErrorMessage, getErrorStatus } from "../../../lib/getErrorMessage";
-import { colors, fonts, spacing } from "../../../styles/theme";
+import { useTema, type TemaAtual } from "../../../lib/useTema";
+import { fonts, spacing } from "../../../styles/theme";
 
 interface FormRespostaProps {
     idAtividade: number;
@@ -24,6 +25,8 @@ const MSG_SEM_ARQUIVO = "Escolha o arquivo da resposta antes de enviar.";
 // Card "Envie sua resposta" (rota A14 - POST /atividades/:id/respostas):
 // arquivo obrigatório e comentário opcional, como no site. O aluno responde uma vez só
 export function FormResposta({ idAtividade, vencida, onEnviada }: FormRespostaProps){
+    const temaAtual = useTema();
+    const styles = useMemo(() => makeStyles(temaAtual), [temaAtual]);
     const { showToast } = useContext(ToastContext);
 
     const [arquivo, setArquivo] = useState<ArquivoEscolhido | null>(null);
@@ -89,13 +92,13 @@ export function FormResposta({ idAtividade, vencida, onEnviada }: FormRespostaPr
     )
 }
 
-const styles = StyleSheet.create({
+const makeStyles = ({ colors, fs }: TemaAtual) => StyleSheet.create({
     aviso:{
         padding: spacing.md,
         borderRadius: 6,
         backgroundColor: colors.gray100,
         fontFamily: fonts.medium,
-        fontSize: 14,
+        fontSize: fs(14),
         color: colors.red700
     }
 })

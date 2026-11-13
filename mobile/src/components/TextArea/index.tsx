@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { View, Text, TextInput, StyleSheet, TextInputProps } from "react-native";
 
-import { colors, fonts, fontSizes, radius, spacing } from "../../styles/theme";
+import { MensagemErro } from "../MensagemErro";
+import { useTema, type TemaAtual } from "../../lib/useTema";
+import { fonts, radius, spacing } from "../../styles/theme";
 
 interface TextAreaProps extends TextInputProps {
     label: string;
@@ -12,6 +14,9 @@ interface TextAreaProps extends TextInputProps {
 
 // Campo de texto de várias linhas (textarea do site), com a mesma borda do Input
 export function TextArea({ label, obrigatorio, erro, style, onFocus, onBlur, ...rest }: TextAreaProps){
+    const temaAtual = useTema();
+    const styles = useMemo(() => makeStyles(temaAtual), [temaAtual]);
+    const { colors } = temaAtual;
     const [focado, setFocado] = useState(false);
 
     return (
@@ -32,12 +37,12 @@ export function TextArea({ label, obrigatorio, erro, style, onFocus, onBlur, ...
             {...rest}
             />
 
-            {erro && <Text style={styles.erro} accessibilityRole="alert">{erro}</Text>}
+            {erro && <MensagemErro mensagem={erro} />}
         </View>
     )
 }
 
-const styles = StyleSheet.create({
+const makeStyles = ({ daltonico, colors, fontSizes, fs }: TemaAtual) => StyleSheet.create({
     campo:{
         width: "100%",
         gap: spacing.xs
@@ -58,18 +63,14 @@ const styles = StyleSheet.create({
         borderRadius: radius.input,
         backgroundColor: colors.white,
         fontFamily: fonts.regular,
-        fontSize: 15,
+        fontSize: fs(15),
         color: colors.black
     },
     inputFocado:{
         borderColor: colors.red700
     },
     inputErro:{
-        borderColor: colors.red700
-    },
-    erro:{
-        fontFamily: fonts.regular,
-        fontSize: 13,
-        color: colors.red700
+        borderColor: colors.red700,
+        borderWidth: daltonico ? 2 : 1
     }
 })

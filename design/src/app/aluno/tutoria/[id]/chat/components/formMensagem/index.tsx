@@ -1,6 +1,7 @@
 "use client"
 
 import styles from './styles.module.scss'
+import { CircleAlert } from 'lucide-react'
 import { useActionState, useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { Button } from '@/components/button'
@@ -57,7 +58,7 @@ export function FormMensagem({ idTutoria }: Props){
                 className={styles.textarea}
                 />
 
-                {erro && <p id="erro-mensagem" className={styles.erro} role="alert">{erro}</p>}
+                {erro && <p id="erro-mensagem" className={styles.erro} role="alert"><CircleAlert className="icone-daltonico" aria-hidden="true" />{erro}</p>}
             </div>
 
             <div className={styles.enviar}>

@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { View, StyleSheet } from "react-native";
-import Svg, { Line, Circle, Text as SvgText, G } from "react-native-svg";
+import Svg, { Line, Circle, Polygon, Text as SvgText, G } from "react-native-svg";
 
 import { MediaEtapa } from "../../lib/types";
-import { colors, fonts } from "../../styles/theme";
+import { useTema, type TemaAtual } from "../../lib/useTema";
+import { fonts } from "../../styles/theme";
 
 interface GraficoEtapasProps {
     // As 3 etapas da rota A6; media null = etapa ainda sem nota
@@ -34,6 +35,9 @@ function formatarMedia(media: number){
 // Gráfico de linha das médias por etapa, desenhado com react-native-svg (sem biblioteca de gráfico).
 // Etapa sem nota não ganha ponto, e a linha só liga etapas vizinhas que têm nota
 export function GraficoEtapas({ etapas }: GraficoEtapasProps){
+    const temaAtual = useTema();
+    const styles = useMemo(() => makeStyles(temaAtual), [temaAtual]);
+    const { colors, daltonico, fs } = temaAtual;
     const pontos = etapas.map((item, i) => ({
         ...item,
         x: posicaoX(i, etapas.length),
@@ -51,8 +55,15 @@ export function GraficoEtapas({ etapas }: GraficoEtapasProps){
                 {/* Linhas de referência: notas 0, 5 e 10 */}
                 {[0, 5, 10].map((nota) => (
                     <G key={nota}>
-                        <Line x1={24} x2={LARGURA - 8} y1={posicaoY(nota)} y2={posicaoY(nota)} stroke={colors.gray300} strokeWidth={1} />
-                        <SvgText x={18} y={posicaoY(nota) + 4} fontSize={10} fill={colors.gray700} textAnchor="end" fontFamily={fonts.regular}>
+                        <Line
+                        x1={28} x2={LARGURA - 8} y1={posicaoY(nota)} y2={posicaoY(nota)}
+                        stroke={daltonico ? colors.gray500 : colors.gray300}
+                        strokeWidth={1}
+                        // Modo daltônico: 0 e 10 pontilhadas, 5 tracejada
+                        strokeDasharray={daltonico ? (nota === 5 ? "6 4" : "1 4") : undefined}
+                        strokeLinecap={daltonico ? (nota === 5 ? "butt" : "round") : undefined}
+                        />
+                        <SvgText x={22} y={posicaoY(nota) + 4} fontSize={fs(10)} fill={colors.gray700} textAnchor="end" fontFamily={fonts.regular}>
                             {nota}
                         </SvgText>
                     </G>
@@ -62,26 +73,36 @@ export function GraficoEtapas({ etapas }: GraficoEtapasProps){
                     const anterior = pontos[i]
                     if(anterior.y === null || p.y === null) return null
 
-                    return <Line key={p.etapa} x1={anterior.x} y1={anterior.y} x2={p.x} y2={p.y} stroke={colors.red700} strokeWidth={2.5} />
+                    return <Line key={p.etapa} x1={anterior.x} y1={anterior.y} x2={p.x} y2={p.y} stroke={colors.red700} strokeWidth={daltonico ? 3.5 : 2.5} />
                 })}
 
                 {pontos.map((p) => (
                     <G key={p.etapa}>
                         {p.y !== null && p.media !== null && (
                             <>
-                                <Circle cx={p.x} cy={p.y} r={5} fill={colors.red700} />
-                                <SvgText x={p.x} y={p.y - 12} fontSize={12} fill={colors.black} textAnchor="middle" fontFamily={fonts.semibold}>
+                                {daltonico ? (
+                                    // Modo daltônico: o ponto vira losango
+                                    <Polygon
+                                    points={`${p.x},${p.y - 7} ${p.x + 7},${p.y} ${p.x},${p.y + 7} ${p.x - 7},${p.y}`}
+                                    fill={colors.red700}
+                                    stroke={colors.black}
+                                    strokeWidth={1.5}
+                                    />
+                                ) : (
+                                    <Circle cx={p.x} cy={p.y} r={5} fill={colors.red700} />
+                                )}
+                                <SvgText x={p.x} y={p.y - 12} fontSize={fs(12)} fill={colors.black} textAnchor="middle" fontFamily={fonts.semibold}>
                                     {formatarMedia(p.media)}
                                 </SvgText>
                             </>
                         )}
 
-                        <SvgText x={p.x} y={BASE + 20} fontSize={11} fill={colors.gray700} textAnchor="middle" fontFamily={fonts.medium}>
+                        <SvgText x={p.x} y={BASE + 20} fontSize={fs(11)} fill={colors.gray700} textAnchor="middle" fontFamily={fonts.medium}>
                             {`${p.etapa}ª etapa`}
                         </SvgText>
 
                         {p.media === null && (
-                            <SvgText x={p.x} y={BASE + 34} fontSize={10} fill={colors.gray500} textAnchor="middle" fontFamily={fonts.regular}>
+                            <SvgText x={p.x} y={BASE + 34} fontSize={fs(10)} fill={colors.gray500} textAnchor="middle" fontFamily={fonts.regular}>
                                 sem nota
                             </SvgText>
                         )}
@@ -92,7 +113,7 @@ export function GraficoEtapas({ etapas }: GraficoEtapasProps){
     )
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (_tema: TemaAtual) => StyleSheet.create({
     quadro:{
         width: "100%"
     }

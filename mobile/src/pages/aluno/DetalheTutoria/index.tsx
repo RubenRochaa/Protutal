@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useMemo } from "react";
 import { View, Text, StyleSheet, ScrollView, RefreshControl, TouchableOpacity } from "react-native";
 import { Feather } from "@expo/vector-icons";
 
@@ -20,7 +20,8 @@ import { formatarData, formatarNota } from "../../../lib/formatacao";
 import { MASCOTES } from "../../../lib/mascotes";
 import { AvisoSala, DesempenhoAluno, NotaAluno, TutoriaAluno } from "../../../lib/types";
 import { AlunoScreenProps } from "../../../routes/aluno.routes";
-import { colors, fonts, fontSizes, radius, spacing } from "../../../styles/theme";
+import { useTema, type TemaAtual } from "../../../lib/useTema";
+import { fonts, radius, spacing } from "../../../styles/theme";
 
 interface Dados {
     // null = o id não está na lista do aluno (não existe ou não é dele)
@@ -34,6 +35,9 @@ interface Dados {
 // Não existe rota de detalhe de tutoria: procura o id na lista do aluno (A3).
 // Com a sala da tutoria, busca a última correção (A6 ?id_sala=) e os avisos (A4)
 export default function DetalheTutoria({ navigation, route }: AlunoScreenProps<"DetalheTutoria">){
+    const temaAtual = useTema();
+    const styles = useMemo(() => makeStyles(temaAtual), [temaAtual]);
+    const { colors } = temaAtual;
     const { id_tutoria } = route.params;
 
     const buscar = useCallback(async (): Promise<Dados> => {
@@ -129,7 +133,7 @@ export default function DetalheTutoria({ navigation, route }: AlunoScreenProps<"
                 onPress={() => navigation.navigate("ConteudosAprendidos", { id_sala: tutoria.sala.id_sala, nome_sala: tutoria.sala.nome })}
                 accessibilityRole="button"
                 >
-                    <Feather name="check-circle" size={22} color={colors.green500} />
+                    <Feather name="check-circle" size={22} color={colors.sucessoIcone} />
                     <View style={styles.bloco}>
                         <Text style={styles.tituloAtalho}>Conteúdos aprendidos</Text>
                         <Text style={styles.textoSecundario}>O que você já domina e o que precisa reforçar nesta sala</Text>
@@ -196,10 +200,10 @@ export default function DetalheTutoria({ navigation, route }: AlunoScreenProps<"
     )
 }
 
-const styles = StyleSheet.create({
+const makeStyles = ({ daltonico, colors, fontSizes, fs }: TemaAtual) => StyleSheet.create({
     container:{
         flex: 1,
-        backgroundColor: colors.white
+        backgroundColor: colors.fundoPagina
     },
     conteudo:{
         flexGrow: 1,
@@ -221,12 +225,12 @@ const styles = StyleSheet.create({
     },
     texto:{
         fontFamily: fonts.regular,
-        fontSize: 14,
+        fontSize: fs(14),
         color: colors.black
     },
     textoSecundario:{
         fontFamily: fonts.regular,
-        fontSize: 13,
+        fontSize: fs(13),
         color: colors.gray700
     },
     tutor:{
@@ -246,7 +250,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: colors.gray300,
         borderLeftWidth: 4,
-        borderLeftColor: colors.green500,
+        borderLeftColor: colors.sucessoIcone,
         borderRadius: radius.cardSm,
         backgroundColor: colors.white
     },
@@ -257,7 +261,7 @@ const styles = StyleSheet.create({
     },
     tituloItem:{
         fontFamily: fonts.semibold,
-        fontSize: 15,
+        fontSize: fs(15),
         color: colors.black
     },
     link:{
@@ -268,8 +272,9 @@ const styles = StyleSheet.create({
         marginTop: spacing.xs
     },
     textoLink:{
+        textDecorationLine: daltonico ? "underline" : "none",
         fontFamily: fonts.medium,
-        fontSize: 14,
+        fontSize: fs(14),
         color: colors.red700
     }
 })

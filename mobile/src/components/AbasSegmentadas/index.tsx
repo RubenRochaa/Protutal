@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
 
-import { colors, fonts, radius, spacing } from "../../styles/theme";
+import { useTema, type TemaAtual } from "../../lib/useTema";
+import { fonts, radius, spacing } from "../../styles/theme";
 
 export interface OpcaoAba<T extends string> {
     valor: T;
@@ -20,6 +21,8 @@ interface AbasSegmentadasProps<T extends string> {
 // Seletor em pílula do Figma (ex.: "Pendentes | Realizadas", "Dúvidas | Materiais"):
 // a opção escolhida fica vermelha, as outras cinza
 export function AbasSegmentadas<T extends string>({ opcoes, valor, onChange, rolavel = false }: AbasSegmentadasProps<T>){
+    const temaAtual = useTema();
+    const styles = useMemo(() => makeStyles(temaAtual), [temaAtual]);
     const abas = opcoes.map((opcao) => {
         const ativa = opcao.valor === valor;
 
@@ -59,7 +62,7 @@ export function AbasSegmentadas<T extends string>({ opcoes, valor, onChange, rol
     )
 }
 
-const styles = StyleSheet.create({
+const makeStyles = ({ colors, fs }: TemaAtual) => StyleSheet.create({
     container:{
         flexDirection: "row",
         padding: spacing.xs,
@@ -81,14 +84,14 @@ const styles = StyleSheet.create({
         paddingHorizontal: spacing.lg
     },
     abaAtiva:{
-        backgroundColor: colors.red700
+        backgroundColor: colors.destaque
     },
     texto:{
         fontFamily: fonts.medium,
-        fontSize: 14,
+        fontSize: fs(14),
         color: colors.gray700
     },
     textoAtivo:{
-        color: colors.white
+        color: colors.textoSobreDestaque
     }
 })
