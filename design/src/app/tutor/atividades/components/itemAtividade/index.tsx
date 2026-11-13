@@ -25,7 +25,7 @@ export function ItemAtividade({ atividade, tipos }: Props){
     ].filter(Boolean).join(" · ")
 
     const icone = corrigida
-        ? <Check color="var(--green-500)" role="img" aria-label="Corrigida" />
+        ? <Check color="var(--sucesso-icone)" role="img" aria-label="Corrigida" />
         : <CircleAlert color="var(--red-700)" role="img" aria-label="Falta nota" />
 
     return (

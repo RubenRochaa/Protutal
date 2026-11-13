@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useMemo } from "react";
 import { View, Text, StyleSheet, Alert } from "react-native";
 import { Feather } from "@expo/vector-icons";
 
@@ -9,7 +9,8 @@ import { ToastContext } from "../../../contexts/ToastContext";
 import { api } from "../../../services/api";
 import { getErrorMessage, getErrorStatus } from "../../../lib/getErrorMessage";
 import { SalaAluno } from "../../../lib/types";
-import { colors, fonts, fontSizes, radius, shadows, spacing } from "../../../styles/theme";
+import { useTema, type TemaAtual } from "../../../lib/useTema";
+import { fonts, radius, shadows, spacing } from "../../../styles/theme";
 
 interface CardSalaProps {
     sala: SalaAluno;
@@ -38,6 +39,9 @@ function formatarTempo(ms: number): string {
 // A API diz se o aluno pode pedir (pode_pedir_tutoria) e, se não puder, o motivo.
 // Pedido recusado há menos de 2h: botão desabilitado com timer, que se libera sozinho
 export function CardSala({ sala, onAtualizar }: CardSalaProps){
+    const temaAtual = useTema();
+    const styles = useMemo(() => makeStyles(temaAtual), [temaAtual]);
+    const { colors } = temaAtual;
     const { showToast } = useContext(ToastContext);
 
     const [restanteMs, setRestanteMs] = useState(() => calcularRestante(sala.liberado_em));
@@ -99,7 +103,7 @@ export function CardSala({ sala, onAtualizar }: CardSalaProps){
         <View style={styles.card}>
             <View style={styles.topo}>
                 <View style={styles.icone}>
-                    <Feather name="user-plus" size={22} color={colors.white} />
+                    <Feather name="user-plus" size={22} color={colors.textoSobreDestaque} />
                 </View>
 
                 <View style={styles.dados}>
@@ -144,7 +148,7 @@ export function CardSala({ sala, onAtualizar }: CardSalaProps){
     )
 }
 
-const styles = StyleSheet.create({
+const makeStyles = ({ colors, fontSizes, fs }: TemaAtual) => StyleSheet.create({
     card:{
         gap: spacing.md,
         padding: spacing.lg,
@@ -165,7 +169,7 @@ const styles = StyleSheet.create({
         borderRadius: 24,
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: colors.red700
+        backgroundColor: colors.destaque
     },
     dados:{
         flex: 1
@@ -192,7 +196,7 @@ const styles = StyleSheet.create({
     },
     valor:{
         fontFamily: fonts.medium,
-        fontSize: 15,
+        fontSize: fs(15),
         color: colors.black
     },
     motivo:{
@@ -205,7 +209,7 @@ const styles = StyleSheet.create({
     textoMotivo:{
         flex: 1,
         fontFamily: fonts.regular,
-        fontSize: 14,
+        fontSize: fs(14),
         color: colors.gray700
     },
     tempo:{

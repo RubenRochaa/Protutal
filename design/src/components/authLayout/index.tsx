@@ -3,6 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { Mascote } from '../mascote'
 import { MASCOTES } from '@/lib/mascotes'
+import { BotaoAcessibilidade } from '../acessibilidade'
 
 interface Props {
     // sem aba (ex.: esqueci a senha e redefinir senha): as duas abas aparecem sem destaque
@@ -21,6 +22,9 @@ const MARCA_DAGUA = Array.from({ length: 80 });
 export function AuthLayout({ aba, mascotePrioritario = false, children }: Props){
     return (
         <main className={styles.container}>
+            {/* Botão de Acessibilidade no canto superior direito, em todas as larguras */}
+            <BotaoAcessibilidade />
+
             <section className={styles.painel}>
                 <div className={styles.marcaDagua} aria-hidden="true">
                     {MARCA_DAGUA.map((_, i) => <span key={i}>PROTUTAL</span>)}
@@ -63,7 +67,7 @@ export function AuthLayout({ aba, mascotePrioritario = false, children }: Props)
                     {children}
 
                     {/* Ajuda pública (seção "Geral" do FAQ): para quem não consegue entrar */}
-                    <Link href="/ajuda" className={styles.ajuda}>
+                    <Link href="/ajuda" className={`${styles.ajuda} link-texto`}>
                         Precisa de ajuda?
                     </Link>
                 </div>

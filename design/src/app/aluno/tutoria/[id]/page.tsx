@@ -21,7 +21,7 @@ export default async function DetalheTutoriaPage({ params }: Props){
             <PageBanner titulo="Tutoria" />
 
             <div className={styles.conteudo}>
-                <Link href="/aluno/tutoria" className={styles.voltar}>
+                <Link href="/aluno/tutoria" className={`${styles.voltar} link-texto`}>
                     <ArrowLeft size={20} aria-hidden="true" />
                     Voltar para Minhas tutorias
                 </Link>

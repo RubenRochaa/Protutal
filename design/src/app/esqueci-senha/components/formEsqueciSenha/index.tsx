@@ -81,7 +81,7 @@ export function FormEsqueciSenha(){
             />
 
             <p className={styles.rodape}>
-                Lembrou a senha? <Link href="/" className={styles.link}>Voltar para o login</Link>
+                Lembrou a senha? <Link href="/" className={`${styles.link} link-texto`}>Voltar para o login</Link>
             </p>
         </form>
     )

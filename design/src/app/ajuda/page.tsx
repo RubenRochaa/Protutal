@@ -25,7 +25,7 @@ export default async function AjudaPage(){
 
             <div className={styles.conteudo}>
                 {!logado && (
-                    <Link href="/" className={styles.voltar}>
+                    <Link href="/" className={`${styles.voltar} link-texto`}>
                         <ArrowLeft size={20} aria-hidden="true" />
                         Voltar para o login
                     </Link>

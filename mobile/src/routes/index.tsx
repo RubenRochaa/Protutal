@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useMemo } from "react";
 
 import { View, StyleSheet } from "react-native";
 
@@ -9,9 +9,11 @@ import TutorRoutes from "./tutor.routes";
 
 import { AuthContext } from "../contexts/AuthContext";
 import { Loader } from "../components/Loader";
-import { colors } from "../styles/theme";
+import { useTema, type TemaAtual } from "../lib/useTema";
 
 function Routes() {
+    const temaAtual = useTema();
+    const styles = useMemo(() => makeStyles(temaAtual), [temaAtual]);
     const { isAuthenticated, loading, user, area } = useContext(AuthContext);
 
     // Enquanto lê o AsyncStorage (e confere se o aluno é tutor): fundo vermelho com o anel branco
@@ -31,10 +33,10 @@ function Routes() {
     return area === "tutor" ? <TutorRoutes/> : <AlunoRoutes/>;
 }
 
-const styles = StyleSheet.create({
+const makeStyles = ({ colors }: TemaAtual) => StyleSheet.create({
     loading:{
         flex: 1,
-        backgroundColor: colors.red700,
+        backgroundColor: colors.destaque,
         justifyContent: "center",
         alignItems: "center"
     }

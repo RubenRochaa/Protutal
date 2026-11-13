@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Linking } from "react-native";
 import { Feather } from "@expo/vector-icons";
 
 import { MaterialSala } from "../../lib/types";
-import { colors, fonts, radius, shadows, spacing } from "../../styles/theme";
+import { useTema, type TemaAtual } from "../../lib/useTema";
+import { fonts, radius, shadows, spacing } from "../../styles/theme";
 
 interface ItemMaterialProps {
     material: MaterialSala;
@@ -24,6 +25,9 @@ function iconeMaterial(url: string): { nome: React.ComponentProps<typeof Feather
 
 // Material de apoio da sala (rota A5): tocar abre o arquivo no navegador do celular
 export function ItemMaterial({ material, detalhe }: ItemMaterialProps){
+    const temaAtual = useTema();
+    const styles = useMemo(() => makeStyles(temaAtual), [temaAtual]);
+    const { colors } = temaAtual;
     const icone = iconeMaterial(material.arquivo);
     // Materiais antigos (do seed) guardam um caminho local em vez da URL: não há o que abrir (igual ao site)
     const linkWeb = /^https?:\/\//i.test(material.arquivo);
@@ -37,7 +41,7 @@ export function ItemMaterial({ material, detalhe }: ItemMaterialProps){
         accessibilityLabel={linkWeb ? `Abrir ${material.titulo}` : `${material.titulo}: arquivo indisponível`}
         >
             <View style={styles.icone}>
-                <Feather name={icone.nome} size={22} color={colors.white} />
+                <Feather name={icone.nome} size={22} color={colors.textoSobreDestaque} />
             </View>
 
             <View style={styles.dados}>
@@ -52,7 +56,7 @@ export function ItemMaterial({ material, detalhe }: ItemMaterialProps){
     )
 }
 
-const styles = StyleSheet.create({
+const makeStyles = ({ colors, fs }: TemaAtual) => StyleSheet.create({
     material:{
         flexDirection: "row",
         alignItems: "center",
@@ -70,7 +74,7 @@ const styles = StyleSheet.create({
         borderRadius: radius.item,
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: colors.red700
+        backgroundColor: colors.destaque
     },
     dados:{
         flex: 1,
@@ -78,17 +82,17 @@ const styles = StyleSheet.create({
     },
     titulo:{
         fontFamily: fonts.semibold,
-        fontSize: 15,
+        fontSize: fs(15),
         color: colors.black
     },
     texto:{
         fontFamily: fonts.regular,
-        fontSize: 14,
+        fontSize: fs(14),
         color: colors.black
     },
     textoSecundario:{
         fontFamily: fonts.regular,
-        fontSize: 13,
+        fontSize: fs(13),
         color: colors.gray700
     }
 })

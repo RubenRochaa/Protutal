@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { View, Text, Image, StyleSheet } from "react-native";
 
 import { Button } from "../Button";
 import { MASCOTES } from "../../lib/mascotes";
-import { colors, fonts, spacing } from "../../styles/theme";
+import { useTema, type TemaAtual } from "../../lib/useTema";
+import { fonts, spacing } from "../../styles/theme";
 
 interface ErrorStateProps {
     message: string;
@@ -13,6 +14,8 @@ interface ErrorStateProps {
 // Falha ao carregar (sem conexão, erro 500...): mascote, a mensagem e "Tentar novamente".
 // O toast com o mesmo erro já foi mostrado pelo useBuscar
 export function ErrorState({ message, onRetry }: ErrorStateProps){
+    const temaAtual = useTema();
+    const styles = useMemo(() => makeStyles(temaAtual), [temaAtual]);
     return (
         <View style={styles.container}>
             <Image source={MASCOTES.badRequest} style={styles.mascote} resizeMode="contain" accessibilityIgnoresInvertColors />
@@ -24,7 +27,7 @@ export function ErrorState({ message, onRetry }: ErrorStateProps){
     )
 }
 
-const styles = StyleSheet.create({
+const makeStyles = ({ colors, fs }: TemaAtual) => StyleSheet.create({
     container:{
         alignItems: "center",
         gap: spacing.md,
@@ -37,7 +40,7 @@ const styles = StyleSheet.create({
     },
     mensagem:{
         fontFamily: fonts.medium,
-        fontSize: 15,
+        fontSize: fs(15),
         color: colors.black,
         textAlign: "center"
     },

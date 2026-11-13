@@ -1,24 +1,39 @@
-import React, { ReactNode } from "react";
-import { View, Text, StyleSheet, Modal, TouchableOpacity } from "react-native";
+import React, { ReactNode, useMemo } from "react";
+import { View, Text, StyleSheet, Modal, Pressable, TouchableOpacity } from "react-native";
 import { Feather } from "@expo/vector-icons";
 
 import { EvitarTeclado, RolagemTeclado } from "../EvitarTeclado";
 import { ToastHost } from "../../contexts/ToastContext";
-import { colors, fonts, fontSizes, radius, spacing } from "../../styles/theme";
+import { useTema, type TemaAtual } from "../../lib/useTema";
+import { fonts, radius, spacing } from "../../styles/theme";
 
 interface JanelaProps {
     visivel: boolean;
     titulo: string;
     onClose: () => void;
     children: ReactNode;
+    // Toque na parte escura de fora fecha a janela (usado no painel de Acessibilidade)
+    fecharAoTocarFora?: boolean;
 }
 
 // Janela que sobe de baixo (o Modal do site), com título, botão de fechar e rolagem.
 // Mesma moldura do ModalResolverContestacao; o EvitarTeclado mantém os campos visíveis
-export function Janela({ visivel, titulo, onClose, children }: JanelaProps){
+export function Janela({ visivel, titulo, onClose, children, fecharAoTocarFora = false }: JanelaProps){
+    const temaAtual = useTema();
+    const styles = useMemo(() => makeStyles(temaAtual), [temaAtual]);
+    const { colors } = temaAtual;
     return (
         <Modal visible={visivel} animationType="slide" transparent onRequestClose={onClose}>
             <EvitarTeclado style={styles.fundo}>
+                {fecharAoTocarFora && (
+                    <Pressable
+                    style={StyleSheet.absoluteFill}
+                    onPress={onClose}
+                    accessibilityRole="button"
+                    accessibilityLabel="Fechar"
+                    />
+                )}
+
                 <View style={styles.janela}>
                     <View style={styles.cabecalho}>
                         <Text style={styles.titulo} accessibilityRole="header">{titulo}</Text>
@@ -39,11 +54,11 @@ export function Janela({ visivel, titulo, onClose, children }: JanelaProps){
     )
 }
 
-const styles = StyleSheet.create({
+const makeStyles = ({ colors, fontSizes }: TemaAtual) => StyleSheet.create({
     fundo:{
         flex: 1,
         justifyContent: "flex-end",
-        backgroundColor: "rgba(0,0,0,0.4)"
+        backgroundColor: colors.overlay
     },
     janela:{
         maxHeight: "90%",

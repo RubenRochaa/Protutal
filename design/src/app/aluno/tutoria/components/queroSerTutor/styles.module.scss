@@ -47,12 +47,12 @@
 
 // Mesmo botão do BotaoPedirTutoria, apagado
 .desabilitado{
-    height: 44px;
+    min-height: 44px;
     padding: 0 20px;
     border: 0;
     border-radius: var(--radius-input);
-    background-color: var(--red-700);
-    color: var(--white);
+    background-color: var(--destaque);
+    color: var(--texto-sobre-destaque);
     font-weight: 500;
     white-space: nowrap;
     opacity: 0.5;

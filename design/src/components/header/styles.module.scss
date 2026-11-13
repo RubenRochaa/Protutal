@@ -1,5 +1,49 @@
+@use "sass:math";
+
 // Desktop (1280): logo, links, ícone e "Sair" na mesma linha.
 // Tablet e celular (até 768): links escondidos; o botão de menu abre a lista embaixo do header.
+// Fonte aumentada no painel de Acessibilidade (115% e 130%): o menu compacto entra antes,
+// porque media query em px não acompanha o font-size do <html>.
+
+// Logo do tema escuro (logo_modoEscuro.png, 890 x 280): o texto ocupa 90 px de altura e a imagem
+// tem margem transparente em volta. A altura e as margens negativas deixam o texto do mesmo tamanho da logo clara
+@mixin logoEscura($alturaTexto){
+    $altura: math.div($alturaTexto * 280, 90);
+
+    .logoEscura{
+        height: $altura;
+        margin: math.div(-$altura * 100, 280) math.div(-$altura * 80, 280) math.div(-$altura * 90, 280) math.div(-$altura * 100, 280);
+    }
+}
+
+// Menu compacto: links escondidos atrás do botão de menu, abrindo a lista embaixo do header
+@mixin menuCompacto{
+    .botaoMenu{
+        display: flex;
+    }
+
+    .nav{
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+        background-color: var(--white);
+        box-shadow: var(--shadow-card);
+    }
+
+    .navAberto{
+        display: flex;
+    }
+
+    .link, .linkAtivo, .linkEmBreve{
+        padding: 14px 16px;
+        border-top: 1px solid var(--gray-300);
+    }
+}
 
 .header{
     position: relative;
@@ -13,7 +57,7 @@
     align-items: center;
     gap: 32px;
     max-width: 1280px;
-    height: 84px;
+    min-height: 84px;
     margin: 0 auto;
     padding: 0 24px;
 }
@@ -30,6 +74,60 @@
     height: 22px;
 }
 
+.logoEscura{
+    display: none;
+}
+
+:global([data-tema="escuro"]){
+    .logoClara{
+        display: none;
+    }
+
+    .logoEscura{
+        display: block;
+    }
+}
+
+@include logoEscura(22px);
+
+// Ícone de Acessibilidade na barra: mesmo visual do sino (.atalho), num <button>
+.acessibilidadeBarra{
+    padding: 0;
+    border: 0;
+    background: transparent;
+}
+
+// Item "Acessibilidade" no topo do menu: só no celular (ver @media 480)
+.acessibilidadeMenu{
+    display: none;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 16px;
+    border: 0;
+    background: transparent;
+    color: var(--black);
+    font-weight: 600;
+    font-size: var(--fonte-menu-header);
+    text-align: left;
+
+    svg{
+        width: 24px;
+        height: 24px;
+        flex-shrink: 0;
+    }
+
+    &:hover{
+        color: var(--red-700);
+    }
+}
+
+// Painel de Acessibilidade embaixo do header, alinhado à direita do conteúdo
+// (.header na frente para valer sobre a posição padrão do painel)
+.header .painelAcessibilidade{
+    top: calc(100% + 8px);
+    right: max(16px, calc((100% - 1280px) / 2 + 24px));
+}
+
 .nav{
     flex: 1;
     display: flex;
@@ -43,7 +141,7 @@
     align-items: center;
     gap: 6px;
     font-weight: 600;
-    font-size: 1.05rem;
+    font-size: var(--fonte-menu-header);
     white-space: nowrap;
 }
 
@@ -66,7 +164,7 @@
     gap: 6px;
     color: var(--gray-500);
     font-weight: 600;
-    font-size: 1.05rem;
+    font-size: var(--fonte-menu-header);
     white-space: nowrap;
     cursor: not-allowed;
 }
@@ -145,13 +243,13 @@
     padding: 6px 18px;
     border: 0;
     border-radius: var(--radius-pill);
-    background-color: var(--red-700);
-    color: var(--white);
+    background-color: var(--destaque);
+    color: var(--texto-sobre-destaque);
     font-weight: 600;
     transition: background-color 0.2s;
 
     &:hover:not(:disabled){
-        background-color: var(--red-900);
+        background-color: var(--destaque-hover);
     }
 
     &:disabled{
@@ -175,16 +273,38 @@
     color: var(--black);
 }
 
+// Fonte aumentada: os links do menu usam uma fonte um pouco menor (--fonte-menu-header no globals.scss)
+// para continuar na barra; o menu compacto só entra quando nem assim cabem
+@media (max-width: 1100px){
+    :global(html[data-fonte="115"]){
+        @include menuCompacto;
+    }
+}
+
+@media (max-width: 1200px){
+    :global(html[data-fonte="130"]),
+    :global(html[data-fonte="150"]){
+        @include menuCompacto;
+    }
+}
+
 @media (max-width: 768px){
+    @include menuCompacto;
+
+    // Se os ícones não couberem ao lado da logo (ex.: fonte em 150% no celular de 360 px),
+    // eles descem para uma segunda linha em vez de sair da tela
     .conteudo{
+        flex-wrap: wrap;
         gap: 12px;
-        height: 64px;
+        min-height: 64px;
         padding: 0 16px;
     }
 
     .logoImagem{
         height: 18px;
     }
+
+    @include logoEscura(18px);
 
     .usuario{
         width: 36px;
@@ -200,36 +320,33 @@
         gap: 10px;
     }
 
-    .botaoMenu{
-        display: flex;
-    }
-
-    // Lista de links que abre embaixo do header
-    .nav{
-        display: none;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        right: 0;
-        flex-direction: column;
-        align-items: stretch;
-        gap: 0;
-        background-color: var(--white);
-        box-shadow: var(--shadow-card);
-    }
-
-    .navAberto{
-        display: flex;
-    }
-
-    .link, .linkAtivo, .linkEmBreve{
-        padding: 14px 16px;
-        border-top: 1px solid var(--gray-300);
-    }}
+}
 
 @media (max-width: 480px){
     .logoImagem{
         height: 15px;
+    }
+
+    @include logoEscura(15px);
+
+    // O ícone da barra some; Acessibilidade vira o primeiro item do menu
+    .acessibilidadeBarra{
+        display: none;
+    }
+
+    .acessibilidadeMenu{
+        display: flex;
+    }
+
+    // Painel com a largura da tela, logo abaixo do header
+    .header .painelAcessibilidade{
+        top: 100%;
+        left: 0;
+        right: 0;
+        width: auto;
+        max-width: none;
+        border-radius: 0;
+        border-width: 1px 0;
     }
 
     // Na barra ficam só os ícones, o avatar e o menu; o "Sair" vai para o fim do menu
@@ -259,5 +376,26 @@
         min-width: var(--largura-selo-sm);
         padding: 0 8px;
         font-size: var(--fonte-selo-sm);
+    }
+
+    // Fonte aumentada (115% e 130%): o selo cresce junto com o texto. Espaços menores
+    // entre os itens para a barra continuar cabendo em 360 px
+    :global(html[data-fonte="115"]),
+    :global(html[data-fonte="130"]),
+    :global(html[data-fonte="150"]){
+        .conteudo{
+            gap: 8px;
+            padding-top: 8px;
+            padding-bottom: 8px;
+        }
+
+        .acoes{
+            gap: 4px;
+        }
+
+        .selo > span{
+            min-width: 0;
+            padding: 0 6px;
+        }
     }
 }

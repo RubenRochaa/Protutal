@@ -46,9 +46,19 @@
 .barra{
     height: 100%;
     border-radius: var(--radius-pill);
-    background-color: var(--green-500);
+    background-color: var(--sucesso);
 }
 
 .barraBaixa{
-    background-color: var(--red-700);
+    background-color: var(--destaque);
+}
+
+// Modo daltônico: "com dificuldade" fica listrada e as outras sólidas (não depende só da cor).
+// A média já está escrita ao lado de cada conteúdo
+:global([data-daltonico="true"]) .barraBaixa{
+    background-image: repeating-linear-gradient(
+        -45deg,
+        transparent 0 4px,
+        var(--texto-sobre-destaque) 4px 7px
+    );
 }

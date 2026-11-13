@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useMemo } from "react";
 import { View, Text, StyleSheet } from "react-native";
 
 import { Header } from "../../../components/Header";
@@ -13,7 +13,8 @@ import { api } from "../../../services/api";
 import { getErrorMessage } from "../../../lib/getErrorMessage";
 import { formatarNota } from "../../../lib/formatacao";
 import { AlunoScreenProps } from "../../../routes/aluno.routes";
-import { colors, fonts, fontSizes, radius, spacing } from "../../../styles/theme";
+import { useTema, type TemaAtual } from "../../../lib/useTema";
+import { fonts, radius, spacing } from "../../../styles/theme";
 
 const MSG_SEM_JUSTIFICATIVA = "Escreva a justificativa da contestação.";
 
@@ -21,6 +22,8 @@ const MSG_SEM_JUSTIFICATIVA = "Escreva a justificativa da contestação.";
 // só a justificativa, obrigatória. A API recusa com 403 se a tutoria foi finalizada
 // e com 409 se a nota já foi contestada; a mensagem dela vai para o toast
 export default function ContestarNota({ navigation, route }: AlunoScreenProps<"ContestarNota">){
+    const temaAtual = useTema();
+    const styles = useMemo(() => makeStyles(temaAtual), [temaAtual]);
     const { id_nota, titulo, detalhe, valor } = route.params;
     const { showToast } = useContext(ToastContext);
 
@@ -86,10 +89,10 @@ export default function ContestarNota({ navigation, route }: AlunoScreenProps<"C
     )
 }
 
-const styles = StyleSheet.create({
+const makeStyles = ({ colors, fontSizes, fs }: TemaAtual) => StyleSheet.create({
     container:{
         flex: 1,
-        backgroundColor: colors.white
+        backgroundColor: colors.fundoPagina
     },
     conteudo:{
         gap: spacing.lg,
@@ -110,7 +113,7 @@ const styles = StyleSheet.create({
         borderRadius: radius.item,
         backgroundColor: colors.gray100,
         fontFamily: fonts.regular,
-        fontSize: 14,
+        fontSize: fs(14),
         color: colors.gray700
     }
 })

@@ -1,17 +1,17 @@
 // Mesmo vermelho do Button
 .botao{
-    height: 44px;
+    min-height: 44px;
     padding: 0 20px;
     border: 0;
     border-radius: var(--radius-input);
-    background-color: var(--red-700);
-    color: var(--white);
+    background-color: var(--destaque);
+    color: var(--texto-sobre-destaque);
     font-weight: 500;
     white-space: nowrap;
     transition: background-color 0.2s;
 
     &:hover:not(:disabled){
-        background-color: var(--red-900);
+        background-color: var(--destaque-hover);
     }
 
     &:disabled{
@@ -53,7 +53,7 @@
 }
 
 .cancelar{
-    height: 44px;
+    min-height: 44px;
     padding: 0 24px;
     border: 1px solid var(--gray-500);
     border-radius: var(--radius-input);
@@ -67,7 +67,7 @@
 }
 
 .enviar{
-    width: 200px;
+    min-width: 200px;
 }
 
 @media (max-width: 480px){

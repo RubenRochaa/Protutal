@@ -1,9 +1,10 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode, useMemo } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Feather } from "@expo/vector-icons";
 
 import { Contador } from "../Contador";
-import { colors, fonts, fontSizes, radius, shadows, spacing } from "../../styles/theme";
+import { useTema, type TemaAtual } from "../../lib/useTema";
+import { fonts, radius, shadows, spacing } from "../../styles/theme";
 
 interface CardResumoProps {
     icone: React.ComponentProps<typeof Feather>["name"];
@@ -18,11 +19,14 @@ interface CardResumoProps {
 // Card das telas de Início (aluno e tutor) no layout do Figma:
 // ícone, título, resumo e a seta para a tela completa
 export function CardResumo({ icone, titulo, subtitulo, onPress, children, contador }: CardResumoProps){
+    const temaAtual = useTema();
+    const styles = useMemo(() => makeStyles(temaAtual), [temaAtual]);
+    const { colors } = temaAtual;
     return (
         <View style={styles.card}>
             <TouchableOpacity style={styles.cabecalho} onPress={onPress} accessibilityRole="button" accessibilityLabel={`${titulo}. ${subtitulo ?? ""}`}>
                 <View style={styles.icone}>
-                    <Feather name={icone} size={24} color={colors.white} />
+                    <Feather name={icone} size={24} color={colors.textoSobreDestaque} />
                 </View>
 
                 <View style={styles.dados}>
@@ -41,7 +45,7 @@ export function CardResumo({ icone, titulo, subtitulo, onPress, children, contad
     )
 }
 
-const styles = StyleSheet.create({
+const makeStyles = ({ colors, fontSizes, fs }: TemaAtual) => StyleSheet.create({
     card:{
         gap: spacing.md,
         padding: spacing.lg,
@@ -81,7 +85,7 @@ const styles = StyleSheet.create({
     },
     subtitulo:{
         fontFamily: fonts.regular,
-        fontSize: 14,
+        fontSize: fs(14),
         color: colors.gray700
     }
 })

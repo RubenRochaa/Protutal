@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useMemo } from "react";
 import { View, Text, StyleSheet, Modal, TouchableOpacity } from "react-native";
 import { Feather } from "@expo/vector-icons";
 
@@ -14,7 +14,9 @@ import { getErrorMessage } from "../../lib/getErrorMessage";
 import { formatarNota } from "../../lib/formatacao";
 import { validarNota } from "../../lib/validacao";
 import { ContestacaoTutor } from "../../lib/types";
-import { colors, fonts, fontSizes, radius, spacing } from "../../styles/theme";
+import { MensagemErro } from "../MensagemErro";
+import { useTema, type TemaAtual } from "../../lib/useTema";
+import { fonts, radius, spacing } from "../../styles/theme";
 
 export type Decisao = "aceita" | "recusada";
 
@@ -32,6 +34,9 @@ interface ModalResolverProps {
 // Aceitar exige a nova nota, que SUBSTITUI a atual; recusar não muda a nota.
 // A decisão (explicação ao aluno) é obrigatória nos dois casos
 export function ModalResolverContestacao({ contestacao, decisao, onClose, onResolvida }: ModalResolverProps){
+    const temaAtual = useTema();
+    const styles = useMemo(() => makeStyles(temaAtual), [temaAtual]);
+    const { colors } = temaAtual;
     const { showToast } = useContext(ToastContext);
 
     const [novaNota, setNovaNota] = useState("");
@@ -155,7 +160,7 @@ export function ModalResolverContestacao({ contestacao, decisao, onClose, onReso
                             editable={!enviando}
                             />
 
-                            {erro && <Text style={styles.erro} accessibilityRole="alert">{erro}</Text>}
+                            {erro && <MensagemErro mensagem={erro} />}
 
                             <Button
                             title={aceitar ? "Aceitar e substituir nota" : "Recusar contestação"}
@@ -175,11 +180,11 @@ export function ModalResolverContestacao({ contestacao, decisao, onClose, onReso
     )
 }
 
-const styles = StyleSheet.create({
+const makeStyles = ({ colors, fontSizes, fs }: TemaAtual) => StyleSheet.create({
     fundo:{
         flex: 1,
         justifyContent: "flex-end",
-        backgroundColor: "rgba(0,0,0,0.4)"
+        backgroundColor: colors.overlay
     },
     janela:{
         maxHeight: "90%",
@@ -218,12 +223,7 @@ const styles = StyleSheet.create({
         borderRadius: radius.item,
         backgroundColor: colors.gray100,
         fontFamily: fonts.medium,
-        fontSize: 14,
+        fontSize: fs(14),
         color: colors.black
-    },
-    erro:{
-        fontFamily: fonts.regular,
-        fontSize: 13,
-        color: colors.red700
     }
 })

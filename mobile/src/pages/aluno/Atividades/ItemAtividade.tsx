@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Feather } from "@expo/vector-icons";
 
 import { Badge } from "../../../components/Badge";
 import { formatarData } from "../../../lib/formatacao";
 import { AtividadeAluno } from "../../../lib/types";
-import { colors, fonts, fontSizes, radius, shadows, spacing } from "../../../styles/theme";
+import { useTema, type TemaAtual } from "../../../lib/useTema";
+import { fonts, radius, shadows, spacing } from "../../../styles/theme";
 
 interface ItemAtividadeProps {
     atividade: AtividadeAluno;
@@ -15,6 +16,9 @@ interface ItemAtividadeProps {
 // Uma atividade da lista (card do Figma) com as mesmas informações e selos do site:
 // título, conteúdo · etapa, prazo, ícone de entregue/atrasada, "Entregue com atraso" e "Encerrada"
 export function ItemAtividade({ atividade, onPress }: ItemAtividadeProps){
+    const temaAtual = useTema();
+    const styles = useMemo(() => makeStyles(temaAtual), [temaAtual]);
+    const { colors } = temaAtual;
     const realizada = atividade.status !== "pendente";
     const prazo = formatarData(atividade.data_entrega);
     const vencida = !realizada && new Date(atividade.data_entrega) < new Date();
@@ -28,7 +32,7 @@ export function ItemAtividade({ atividade, onPress }: ItemAtividadeProps){
     return (
         <TouchableOpacity style={styles.card} onPress={onPress} accessibilityRole="button">
             <View style={styles.icone}>
-                <Feather name="file-text" size={22} color={colors.white} />
+                <Feather name="file-text" size={22} color={colors.textoSobreDestaque} />
             </View>
 
             <View style={styles.dados}>
@@ -54,7 +58,7 @@ export function ItemAtividade({ atividade, onPress }: ItemAtividadeProps){
 
             <View style={styles.direita}>
                 {realizada && (
-                    <Feather name="check-circle" size={20} color={colors.green500} accessibilityLabel="Entregue" />
+                    <Feather name="check-circle" size={20} color={colors.sucessoIcone} accessibilityLabel="Entregue" />
                 )}
                 {vencida && (
                     <Feather name="alert-circle" size={20} color={colors.red700} accessibilityLabel="Atrasada" />
@@ -65,7 +69,7 @@ export function ItemAtividade({ atividade, onPress }: ItemAtividadeProps){
     )
 }
 
-const styles = StyleSheet.create({
+const makeStyles = ({ colors, fontSizes }: TemaAtual) => StyleSheet.create({
     card:{
         flexDirection: "row",
         alignItems: "center",

@@ -26,7 +26,7 @@ $largura-visivel: 0.66;
     overflow: hidden;
     display: flex;
     min-height: 96px;
-    background: linear-gradient(90deg, var(--red-500) 0%, var(--red-700) 45%, var(--wine-800) 100%);
+    background: linear-gradient(90deg, var(--red-500) 0%, var(--destaque) 45%, var(--wine-800) 100%);
 }
 
 // Mesma largura máxima e padding lateral das páginas: o título começa alinhado com os cards
@@ -46,7 +46,7 @@ $largura-visivel: 0.66;
 }
 
 .titulo{
-    color: var(--white);
+    color: var(--texto-sobre-destaque);
     font-size: 2.25rem;
     font-weight: 600;
 }

@@ -8,8 +8,8 @@
     height: 18px;
     padding: 0 5px;
     border-radius: var(--radius-pill);
-    background-color: var(--red-700);
-    color: var(--white);
+    background-color: var(--destaque);
+    color: var(--texto-sobre-destaque);
     font-size: 0.7rem;
     font-weight: 700;
     line-height: 1;
@@ -26,8 +26,8 @@
 
 // Dentro de botão vermelho (ex.: "Abrir chat")
 .claro{
-    background-color: var(--white);
-    color: var(--red-700);
+    background-color: var(--texto-sobre-destaque);
+    color: var(--destaque);
 }
 
 // Texto só para leitor de tela

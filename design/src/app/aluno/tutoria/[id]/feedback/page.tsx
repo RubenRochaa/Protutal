@@ -55,7 +55,7 @@ export default async function FeedbackTutorPage({ params }: Props){
             <PageBanner titulo={TITULO} />
 
             <div className={styles.conteudo}>
-                <Link href={`/aluno/tutoria/${encodeURIComponent(id)}`} className={styles.voltar}>
+                <Link href={`/aluno/tutoria/${encodeURIComponent(id)}`} className={`${styles.voltar} link-texto`}>
                     <ArrowLeft size={20} aria-hidden="true" />
                     Voltar para a tutoria
                 </Link>

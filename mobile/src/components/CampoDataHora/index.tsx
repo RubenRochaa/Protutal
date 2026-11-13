@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Platform } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import DateTimePicker, { DateTimePickerAndroid, DateTimePickerEvent } from "@react-native-community/datetimepicker";
 
 import { formatarDataHora } from "../../lib/formatacao";
-import { colors, fonts, fontSizes, radius, sizes, spacing } from "../../styles/theme";
+import { MensagemErro } from "../MensagemErro";
+import { useTema, type TemaAtual } from "../../lib/useTema";
+import { fonts, radius, sizes, spacing } from "../../styles/theme";
 
 interface CampoDataHoraProps {
     label: string;
@@ -18,6 +20,9 @@ interface CampoDataHoraProps {
 // Campo de data e hora (datetime-local do site), com o seletor nativo do celular.
 // No Android abre a data e depois a hora; no iOS mostra o seletor compacto
 export function CampoDataHora({ label, value, onChange, disabled, erro }: CampoDataHoraProps){
+    const temaAtual = useTema();
+    const styles = useMemo(() => makeStyles(temaAtual), [temaAtual]);
+    const { colors, tema } = temaAtual;
     const inicial = value ?? new Date();
 
     function abrirAndroid(){
@@ -57,6 +62,8 @@ export function CampoDataHora({ label, value, onChange, disabled, erro }: CampoD
                     display="compact"
                     minimumDate={new Date()}
                     locale="pt-BR"
+                    themeVariant={tema === "escuro" ? "dark" : "light"}
+                    accentColor={colors.destaque}
                     disabled={disabled}
                     onChange={(_evento, data) => data && onChange(data)}
                     />
@@ -77,12 +84,12 @@ export function CampoDataHora({ label, value, onChange, disabled, erro }: CampoD
                 </TouchableOpacity>
             )}
 
-            {erro && <Text style={styles.erro} accessibilityRole="alert">{erro}</Text>}
+            {erro && <MensagemErro mensagem={erro} />}
         </View>
     )
 }
 
-const styles = StyleSheet.create({
+const makeStyles = ({ daltonico, colors, fontSizes, fs }: TemaAtual) => StyleSheet.create({
     campo:{
         gap: spacing.xs
     },
@@ -103,7 +110,8 @@ const styles = StyleSheet.create({
         backgroundColor: colors.white
     },
     caixaErro:{
-        borderColor: colors.red700
+        borderColor: colors.red700,
+        borderWidth: daltonico ? 2 : 1
     },
     desabilitado:{
         opacity: 0.6
@@ -111,15 +119,10 @@ const styles = StyleSheet.create({
     valor:{
         flex: 1,
         fontFamily: fonts.regular,
-        fontSize: 15,
+        fontSize: fs(15),
         color: colors.black
     },
     placeholder:{
         color: colors.gray500
-    },
-    erro:{
-        fontFamily: fonts.regular,
-        fontSize: 13,
-        color: colors.red700
     }
 })

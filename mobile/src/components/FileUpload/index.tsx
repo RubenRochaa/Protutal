@@ -1,10 +1,12 @@
-import React, { useContext } from "react";
+import React, { useContext, useMemo } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import * as DocumentPicker from "expo-document-picker";
 
 import { ToastContext } from "../../contexts/ToastContext";
-import { colors, fonts, fontSizes, radius, spacing } from "../../styles/theme";
+import { MensagemErro } from "../MensagemErro";
+import { useTema, type TemaAtual } from "../../lib/useTema";
+import { fonts, radius, spacing } from "../../styles/theme";
 
 // Mesmas regras do FileUpload do site e do back-end (resposta, rubrica e material)
 const EXTENSOES = [".pdf", ".doc", ".docx", ".xls", ".xlsx", ".csv"];
@@ -59,6 +61,9 @@ interface FileUploadProps {
 
 // Área de upload de UM arquivo: tocar abre o seletor de documentos do celular
 export function FileUpload({ arquivo, onChange, disabled, erro }: FileUploadProps){
+    const temaAtual = useTema();
+    const styles = useMemo(() => makeStyles(temaAtual), [temaAtual]);
+    const { colors } = temaAtual;
     const { showToast } = useContext(ToastContext);
 
     async function escolher(){
@@ -111,12 +116,12 @@ export function FileUpload({ arquivo, onChange, disabled, erro }: FileUploadProp
                 )}
             </TouchableOpacity>
 
-            {erro && <Text style={styles.erro} accessibilityRole="alert">{erro}</Text>}
+            {erro && <MensagemErro mensagem={erro} />}
         </View>
     )
 }
 
-const styles = StyleSheet.create({
+const makeStyles = ({ daltonico, colors, fontSizes, fs }: TemaAtual) => StyleSheet.create({
     campo:{
         gap: spacing.xs
     },
@@ -132,14 +137,15 @@ const styles = StyleSheet.create({
         backgroundColor: colors.gray100
     },
     quadroErro:{
-        borderColor: colors.red700
+        borderColor: colors.red700,
+        borderWidth: daltonico ? 2 : 1
     },
     desabilitado:{
         opacity: 0.6
     },
     texto:{
         fontFamily: fonts.regular,
-        fontSize: 14,
+        fontSize: fs(14),
         color: colors.gray700,
         textAlign: "center"
     },
@@ -163,12 +169,7 @@ const styles = StyleSheet.create({
     nomeArquivo:{
         flexShrink: 1,
         fontFamily: fonts.medium,
-        fontSize: 14,
-        color: colors.red700
-    },
-    erro:{
-        fontFamily: fonts.regular,
-        fontSize: 13,
+        fontSize: fs(14),
         color: colors.red700
     }
 })

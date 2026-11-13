@@ -21,7 +21,7 @@ export default async function AtividadeTutorPage({ params }: Props){
             <PageBanner titulo="Atividade" />
 
             <div className={pagina.conteudo}>
-                <Link href="/tutor/atividades" className={lista.voltar}>
+                <Link href="/tutor/atividades" className={`${lista.voltar} link-texto`}>
                     <ArrowLeft size={20} aria-hidden="true" /> Voltar para Atividades
                 </Link>
 

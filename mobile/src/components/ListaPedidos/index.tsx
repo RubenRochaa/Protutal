@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { View, Text, StyleSheet, Alert } from "react-native";
 
 import { Janela } from "../Janela";
@@ -9,7 +9,8 @@ import { api } from "../../services/api";
 import { useAcao } from "../../lib/useAcao";
 import { formatarData } from "../../lib/formatacao";
 import { PedidoTutoria } from "../../lib/types";
-import { colors, fonts, fontSizes, radius, shadows, spacing } from "../../styles/theme";
+import { useTema, type TemaAtual } from "../../lib/useTema";
+import { fonts, radius, shadows, spacing } from "../../styles/theme";
 
 // Pedidos pendentes para ser tutor (site: professor/components/listaPedidos), usados na aba
 // Tutoria > Pedidos da sala e nas Notificações. A lista fica na FlatList de cada tela;
@@ -23,6 +24,8 @@ interface ItemPedidoProps {
 }
 
 export function ItemPedido({ pedido, mostrarSala = false, onVer }: ItemPedidoProps){
+    const temaAtual = useTema();
+    const styles = useMemo(() => makeStyles(temaAtual), [temaAtual]);
     return (
         <View style={styles.item}>
             <View style={styles.linha}>
@@ -51,6 +54,8 @@ interface ModalPedidoProps {
 // "Pedido para se tornar tutor de: (nome)" com Aceitar (P27) e Recusar (P28).
 // Aceitar cria o tutor na sala (sem confirmação, como no site); recusar pede confirmação
 export function ModalPedido({ pedido, onClose, onDecidido }: ModalPedidoProps){
+    const temaAtual = useTema();
+    const styles = useMemo(() => makeStyles(temaAtual), [temaAtual]);
     const { executando, executar } = useAcao();
 
     async function aceitar(){
@@ -125,7 +130,7 @@ export function ModalPedido({ pedido, onClose, onDecidido }: ModalPedidoProps){
     )
 }
 
-const styles = StyleSheet.create({
+const makeStyles = ({ colors, fontSizes, fs }: TemaAtual) => StyleSheet.create({
     item:{
         gap: spacing.md,
         padding: spacing.lg,
@@ -150,7 +155,7 @@ const styles = StyleSheet.create({
     },
     detalhe:{
         fontFamily: fonts.regular,
-        fontSize: 13,
+        fontSize: fs(13),
         color: colors.gray700
     },
     dado:{
@@ -163,7 +168,7 @@ const styles = StyleSheet.create({
     },
     valor:{
         fontFamily: fonts.regular,
-        fontSize: 15,
+        fontSize: fs(15),
         color: colors.black
     }
 })
