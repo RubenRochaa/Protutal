@@ -22,13 +22,13 @@ interface HeaderProps {
     onNotificacoes?: () => void;
 }
 
-// Faixa vermelha das áreas logadas: logo, selo do perfil (com troca aluno/tutor),
-// ajuda ("?"), sino (professor), "Sair" e, embaixo, o título da tela.
+// Faixa vermelha das áreas logadas. Linha de cima: logo, selo do perfil (com troca aluno/tutor),
+// ajuda ("?"), sino (professor), acessibilidade e "Sair". Embaixo: voltar e o título da tela.
 export function Header({ title, onBack, onNotificacoes }: HeaderProps){
     const temaAtual = useTema();
     const styles = useMemo(() => makeStyles(temaAtual), [temaAtual]);
     const { colors } = temaAtual;
-    const { user, ehTutor, area, trocarArea, signOut } = useContext(AuthContext);
+    const { user, ehTutor, area, trocarArea, signOut, bolinhaTroca } = useContext(AuthContext);
     const insets = useSafeAreaInsets();
     // A tela "Ajuda" existe em todas as pilhas logadas (professor, aluno e tutor) com o mesmo nome
     const navigation = useNavigation<NativeStackNavigationProp<{ Ajuda: undefined }>>();
@@ -51,12 +51,17 @@ export function Header({ title, onBack, onNotificacoes }: HeaderProps){
 
                 <View style={styles.acoes}>
                     {user.perfil && (
-                        <SeloPerfil rotulo={rotulo} onTrocar={ehTutor ? trocarArea : undefined} />
+                        <SeloPerfil
+                        rotulo={rotulo}
+                        onTrocar={ehTutor ? trocarArea : undefined}
+                        bolinha={bolinhaTroca && area === "aluno"}
+                        />
                     )}
 
                     {/* Ajuda/FAQ: registrada em todas as pilhas logadas; some na própria tela de Ajuda */}
                     {route.name !== "Ajuda" && (
                         <TouchableOpacity
+                        style={styles.icone}
                         onPress={() => navigation.navigate("Ajuda")}
                         accessibilityRole="button"
                         accessibilityLabel="Ajuda"
@@ -68,6 +73,7 @@ export function Header({ title, onBack, onNotificacoes }: HeaderProps){
 
                     {onNotificacoes && (
                         <TouchableOpacity
+                        style={styles.icone}
                         onPress={onNotificacoes}
                         accessibilityRole="button"
                         accessibilityLabel={notificacoes > 0 ? `Notificações (${descricaoContador(notificacoes)})` : "Notificações"}
@@ -79,7 +85,10 @@ export function Header({ title, onBack, onNotificacoes }: HeaderProps){
                         </TouchableOpacity>
                     )}
 
+                    <BotaoAcessibilidade />
+
                     <TouchableOpacity
+                    style={styles.icone}
                     onPress={signOut}
                     accessibilityRole="button"
                     accessibilityLabel="Sair"
@@ -103,34 +112,44 @@ export function Header({ title, onBack, onNotificacoes }: HeaderProps){
                 )}
 
                 <Text style={styles.titulo} numberOfLines={1} accessibilityRole="header">{title}</Text>
-
-                {/* Na linha do título há espaço livre; a linha de cima já está cheia no professor e no tutor */}
-                <BotaoAcessibilidade />
             </View>
         </View>
     )
 }
 
 const makeStyles = ({ colors, fs }: TemaAtual) => StyleSheet.create({
+    // Laterais de 12 px: a linha de cima precisa caber em 360 px no professor (com o sino) e com a fonte em 150%
     header:{
         backgroundColor: colors.destaque,
-        paddingHorizontal: spacing.lg,
+        paddingHorizontal: spacing.md,
         paddingBottom: spacing.md,
         gap: spacing.sm
     },
     linha:{
         flexDirection: "row",
         alignItems: "center",
-        justifyContent: "space-between"
+        justifyContent: "space-between",
+        gap: spacing.sm
     },
+    // A logo encolhe sozinha se faltar espaço; os ícones nunca vão para outra linha
     logo:{
-        width: 130,
-        height: 36
+        width: 100,
+        height: 28,
+        minWidth: 72,
+        flexShrink: 1
     },
     acoes:{
         flexDirection: "row",
         alignItems: "center",
-        gap: spacing.lg
+        flexShrink: 0,
+        gap: spacing.sm
+    },
+    // Caixa de 28 px + hitSlop de 8 px de cada lado = área de toque de 44 px
+    icone:{
+        width: 28,
+        height: 28,
+        alignItems: "center",
+        justifyContent: "center"
     },
     linhaTitulo:{
         flexDirection: "row",
