@@ -1,5 +1,5 @@
 <h1 align="center">
-  <img src="banner_contributing.svg" alt="Guia de contribuição do Protutal" width="100%">
+  <img src="docs/banner_contributing.svg" alt="Guia de contribuição do Protutal" width="100%">
 </h1>
 
 Este documento descreve o workflow de branches, as regras de pull request, o padrão de commits e as convenções de código adotados pelo grupo no repositório do Protutal.
